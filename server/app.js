@@ -10,6 +10,7 @@ const APP = {
         if(user && ovner && !ovner.curentCall) {
             user.curentCall = ovner.peerId;
             ovner.curentCall = user.peerId;
+            user.start();
             // инициация вызова на стороне клиента
             user.emit('call', {
                 peerId: ovner.peerId,
@@ -23,9 +24,11 @@ const APP = {
     },
     start(myPeerId) {
         const user = online.online[myPeerId];
+        user?.stop();
 
-        if(user) {
+        if(user && (user?.time + user?.bonusTime) > 0) {
             const filter = Object.keys(online.online).filter((elem)=> elem !== myPeerId);
+            
 
             if(filter.length > 1) {
                 const ovnerId = rand.getRandom(0, filter.length - 1);
@@ -43,12 +46,14 @@ const APP = {
         if(user) {
             const ovner = online.online[user.curentCall];
             user.emit('endCall', {});
-            delete user.curentCall;
+            user.stop();
 
             if(ovner) {
                 ovner.emit('endCall', {});
                 delete ovner.curentCall;
             }
+            
+            delete user.curentCall;
         }
     },
     forvard(myPeerId, login) {
@@ -83,6 +88,10 @@ const APP = {
                 });
             }
         }
+    },
+    exit(myPeerId) {
+        this.finish(myPeerId);
+        online.exit(myPeerId)
     }
 }
 

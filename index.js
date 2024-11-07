@@ -45,7 +45,7 @@ app.post("/reg", (req, res)=> {
     });
 });
 app.post("/exit", (req, res)=> {
-    if(req.body.peerId) online.exit(req.body.peerId);
+    if(req.body.peerId) APP.exit(req.body.peerId);
 });
 
 

@@ -3,6 +3,7 @@ import globalState from "../global.state";
 import { useHookstate } from '@hookstate/core';
 import { Button } from 'primereact/button';
 import "../css/header.css";
+import { useIntervalWhen } from 'rooks';
 
 const Test =({val, setVal, useCall})=> (
     <React.Fragment>
@@ -15,7 +16,7 @@ const Test =({val, setVal, useCall})=> (
 );
 
 
-
+//* сделать расчет времени
 export default function({useCall}) { 
     const userState = useHookstate(globalState.user);
     const [val, setVal] = React.useState();
@@ -42,8 +43,11 @@ export default function({useCall}) {
         if(hours === '00') return(min + ':' + sec);
         else return(hours + ':' + min + ':' + sec);
     }
-    console.log(window.gurl + userState.avatar.get())
+    useIntervalWhen(()=> {
 
+    }, 1000, globalThis.peerCall ? true : false);
+
+    
     return(
         <React.Fragment>
             <div className='AvatarContainer'>
@@ -58,7 +62,10 @@ export default function({useCall}) {
                     Время: 
                 </div>
                 <div className='Time' style={{color: 'red'}}>
-                    { userState.time.get() ?? `00:00` }
+                    { userState.time.get() 
+                        ? useTime(userState.time.get()) 
+                        : useTime(userState.bonusTime.get()) ?? `00:00`
+                    }
                 </div>
             </div>
         </React.Fragment>

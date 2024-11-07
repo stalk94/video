@@ -8,13 +8,16 @@ class User {
      */
     sex = undefined
     permision = 0                           // 0 - 4
+    time = 0                                // время для просмотра чата платное
+    bonusTime = 5 * (60 * 1000)             // время для просмотра чата free
     token = ''                              // для сессий
     peerId = ''                             // идентификатор для связи
     status = 'free'
-    forvards = []
+    forvards = []                           // избранные контакты (логины)
+    galery = []                             // файлы пользователя
     socket = Socket.prototype
     curentCall = undefined                  // peerId текушего сеанса
-    avatar = 'src/img/non-avatar.jpg'
+    avatar = 'img/non-avatar.jpg'
 
     /**
      * 
@@ -42,10 +45,42 @@ class User {
         Object.keys(data).forEach((key)=> {
             this[key] = data[key];
         });
+
+        this.bonusTime = data.bonusTime ?? 5 * (60 * 1000);
+        this.time = data.time ?? 0;
+        this.status = data.status ?? 'free';
+        this.forvards = data.forvards ?? [];
+        this.galery = data.galery ?? [];
     }
     // отправка по сокету
     emit(eventName, data) {
         this.socket.emit(eventName, data);
+    }
+
+    // --- timers ---
+    start() {
+        this._timeStartChat = Date.now();
+    }
+    stop() {
+        if(this.curentCall && this._timeStartChat) {
+            if(this.time) {
+                if(Date.now() <= (this._timeStartChat + this.time)) {
+                    this.time = 0;
+                }
+                else this.time -= (Date.now() - this._timeStartChat);
+            }
+            else {
+                if(Date.now() <= (this._timeStartChat + this.bonusTime)) {
+                    this.bonusTime = 0;
+                }
+                else this.bonusTime -= (Date.now() - this._timeStartChat);
+            }
+
+            delete this._timeStartChat;
+            this.emit('refreshed', {
+                time: this.time
+            });
+        }
     }
 
     dump() {
