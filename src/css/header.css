@@ -1,0 +1,18 @@
+.AvatarContainer {
+    margin-left: 3px;
+}
+.Avatar {
+    border-radius: 45%;
+}
+
+.TimeContainer {
+    display: flex;
+    flex-direction: row;
+    padding-top: 10px;
+    margin-left: 5%;
+}
+.Time {
+    display: flex;
+    flex-direction: row;
+    margin-left: 10%;
+}

@@ -1,0 +1,33 @@
+
+.myVideo-container {
+    position: fixed;
+    z-index: 2;
+    top: 7%;
+    left: 80%;
+    background-color: rgba(0, 0, 0, 0.507);
+    border: 1px solid rgba(255, 166, 0, 0.233);
+}
+
+#ovnerVideo {
+    -o-object-fit: cover;
+    object-fit: cover;
+    background-color: rgba(0, 0, 0, 0.507);
+    margin-left: 5%;
+}
+#myVideo {
+    
+}
+.chat-container {
+    position: fixed;
+    z-index: 2;
+    top: 44%;
+    left: 0%;
+    height: 40%;
+    width: 25%;
+    overflow-y: auto;
+    opacity: 0.5;
+}
+
+.chat-container::-webkit-scrollbar {
+    width: 0;
+}
