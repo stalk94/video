@@ -8,6 +8,13 @@
     width: 50%;
     margin-right: 20px;
 }
+.TestCallOverlay {
+    margin-left: 30px;
+    margin-top: 50px;
+    border-radius: 5px;
+    background-color: rgb(81, 81, 81);
+    padding: 20px;
+}
 
 
 .Logo {
@@ -15,7 +22,6 @@
     color: aliceblue;
     font-size: 30px;
 }
-
 .CoinsContainer {
     display: flex;
     margin-left: 30%;
@@ -27,6 +33,7 @@
     border-radius: 10px;
     background-color: aliceblue;
 }
+
 
 #ls {
     margin-left: auto;

@@ -8,6 +8,7 @@ exports.getPasswordHash =(hashPass)=> {
     return CryptoJS.AES.decrypt(hashPass, 'xa4ikxa4ik').toString(CryptoJS.enc.Utf8)
 }
 
+
 exports.scheme = {
     data: {
         login: RegExp(/^[A-Za-z0-9_-]{3,21}$/),

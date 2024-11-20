@@ -13,7 +13,7 @@ import "../../css/loader.css";
 export default function({useAuth}: {useAuth: (login: string, password: string)=> void}) {
     const [sex, setSex] = React.useState('m');
     const [alarms, setAlarm] = React.useState(false);
-    const [mod, setMod] = React.useState<'auth'|'reg'|'init'|'alarm'>('alarm');
+    const [mod, setMod] = React.useState<'auth'|'reg'|'init'|'alarm'>('init');
 
     const useSetSex =(type: 'm'|'fem')=> {
         setSex(type);

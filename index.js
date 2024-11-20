@@ -70,6 +70,9 @@ io.on('connection', (socket)=> {
                         token: data.token
                     });
                 }
+                else {
+                    socket.emit('autorize.filed', {});
+                }
             });
         }
     });

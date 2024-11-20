@@ -61,7 +61,7 @@ class User {
             this[key] = data[key];
         });
 
-        this.bonusTime = data.bonusTime ?? 5 * (60 * 1000);
+        //this.bonusTime = data.bonusTime ?? 5 * (60 * 1000);
         this.money = data.money ?? 0;
         this.status = data.status ?? 'free';
         this.forvards = data.forvards ?? [];

@@ -14,6 +14,7 @@ import { useDidMount } from "rooks";
 import { Toast } from 'primereact/toast';
 import Base from "./modules/main/index";
 import Loader from "./modules/load";
+import Admin from "./modules/admin/index";
 import "./css/index.css";
 
 
@@ -31,7 +32,7 @@ function App() {
     const state = useHookstate(globalState);
     const toast = React.useRef(null);
     const [peerID, setPeerId] = React.useState<string>();
-    const [view, setView] = React.useState<'base'|'load'>('base');
+    const [view, setView] = React.useState<'base'|'load'|'admin'>('base');
 
     const showToast =(type:'error'|'success'|'warn', title:string, text:string)=> {
         toast.current.clear();
@@ -84,7 +85,7 @@ function App() {
     // проверим сессию
     const chekSessionToken =(socket, peerId: string)=> {
         const token = window.localStorage.getItem('TOKEN');
-    
+        
         if(token) {
             // пробуем вытащить сессию
             socket.emit('session', {
@@ -103,6 +104,7 @@ function App() {
             showToast('success', 'Успешно!', data.text);
         });
         
+        
         socket.on('data.ovner', (data)=> {
             state.ovner.set(data.userData);
         });
@@ -110,6 +112,11 @@ function App() {
             setView('base');
             window.localStorage.setItem('TOKEN', data.token);
             state.user.set(data.user);
+        });
+        // сессия не совпадает
+        socket.on('autorize.filed', (data)=> {
+            setView('load');
+            localStorage.removeItem('TOKEN');
         });
         socket.on('refreshed', (data)=> {
             state.user.set((oldState)=> {
@@ -120,6 +127,7 @@ function App() {
                 return oldState;
             });
         });
+
 
         peer.on('open', (peerID)=> {
             globalThis.peerId = peerID;
@@ -143,6 +151,7 @@ function App() {
                     }} 
                     ref={toast} 
                 />
+                { view==='admin' && <Admin />}
                 { view==='base' && <Base peerId={peerID} /> }
                 { view==='load' && <Loader useAuth={useAuth} /> }
             </React.Fragment>
