@@ -1,22 +1,26 @@
 const { db } = require('./db');
 const { Socket } = require("socket.io");
 
-
+/**
+ * status === premium = пол выбираеться, money > 50 = пол выбираеться, else = пол не выбираеться
+ * активация супер поиска = 10 на 60 мин - ревалентность 100%
+ * нет свободных идешь сосyт болт
+ */
 class User {
     /**
      * @type {'m'|'f'}
      */
     sex = undefined
-    permision = 0                           // 0 - 4
-    time = 0                                // время для просмотра чата платное
-    bonusTime = 5 * (60 * 1000)             // время для просмотра чата free
+    permision = 0                           // 0 - 2
+    money = 0
+    status = 'free'
     token = ''                              // для сессий
     peerId = ''                             // идентификатор для связи
-    status = 'free'
     forvards = []                           // избранные контакты (логины)
     galery = []                             // файлы пользователя
     socket = Socket.prototype
     curentCall = undefined                  // peerId текушего сеанса
+    timeSuperFind = undefined               // если активирован супер поиск
     avatar = 'img/non-avatar.jpg'
 
     /**
@@ -38,6 +42,17 @@ class User {
 
         return data;
     }
+    getRevality() {
+        if(this.timeSuperFind) {
+            return 100;
+        }
+        else if(this.status === 'premium') {
+            return 60;
+        }
+        else {
+            return 20;
+        }
+    }
     _create() {
 
     }
@@ -47,40 +62,52 @@ class User {
         });
 
         this.bonusTime = data.bonusTime ?? 5 * (60 * 1000);
-        this.time = data.time ?? 0;
+        this.money = data.money ?? 0;
         this.status = data.status ?? 'free';
         this.forvards = data.forvards ?? [];
         this.galery = data.galery ?? [];
+    }
+    // чекалка возможности выбрать пол
+    _chekSexActivate() {
+        if(this.status === 'premium' || this.money >= 50) {
+            return true;
+        }
     }
     // отправка по сокету
     emit(eventName, data) {
         this.socket.emit(eventName, data);
     }
 
-    // --- timers ---
     start() {
-        this._timeStartChat = Date.now();
+        
     }
     stop() {
-        if(this.curentCall && this._timeStartChat) {
-            if(this.time) {
-                if(Date.now() <= (this._timeStartChat + this.time)) {
-                    this.time = 0;
-                }
-                else this.time -= (Date.now() - this._timeStartChat);
-            }
-            else {
-                if(Date.now() <= (this._timeStartChat + this.bonusTime)) {
-                    this.bonusTime = 0;
-                }
-                else this.bonusTime -= (Date.now() - this._timeStartChat);
-            }
+        if(this.curentCall) {
 
-            delete this._timeStartChat;
+        }
+    }
+    activateSuperFind() {
+        if(this.money - 10 >= 0 && !this.timeSuperFind) {
+            this.money -= 10;
+            this.timeSuperFind = 60 * (60 * 1000);          //?
+
             this.emit('refreshed', {
-                time: this.time
+                money: this.money,
+                timeSuperFind: this.timeSuperFind
             });
         }
+    }
+    addMoney(value) {
+        if(value >= 150) {
+            this.status = 'premium'
+            this._statusTimeActivate = Date.now();
+        }
+
+        this.money += value;
+        this.emit('refreshed', {
+            money: this.money,
+            status: this.status
+        });
     }
 
     dump() {

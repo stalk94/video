@@ -12,6 +12,7 @@
     "build": "vite build src --outDir=../dist --watch --sourcemap"
   },
   "dependencies": {
+    "@mantine/core": "^7.14.1",
     "@types/express": "^4.17.21",
     "better-sqlite3": "^9.4.1",
     "better-sqlite3-session-store": "^0.1.0",

@@ -24,18 +24,19 @@ const APP = {
     },
     start(myPeerId) {
         const user = online.online[myPeerId];
-        user?.stop();
 
-        if(user && (user?.time + user?.bonusTime) > 0) {
-            const filter = Object.keys(online.online).filter((elem)=> elem !== myPeerId);
+        if(user) {
+            const revality = user.getRevality();
+            const chekSex = user._chekSexActivate();
+            user?.stop();
+            const filter = Object.values(online.online).filter((elem)=> elem.peerId !== myPeerId);
             
-
-            if(filter.length > 1) {
+            if(filter.length >= 1) {
                 const ovnerId = rand.getRandom(0, filter.length - 1);
-                const ovner = online.online[ovnerId];
+                const ovner = Object.values(filter)[ovnerId];
 
-                if(!ovner.curentCall && ovner.sex !== user.sex) {
-                    this.call(myPeerId, ovnerId);
+                if(!ovner.curentCall) {
+                    this.call(myPeerId, ovner.peerId);
                 }
             }
         }

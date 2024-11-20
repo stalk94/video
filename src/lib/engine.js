@@ -1,7 +1,7 @@
 import EventEmiter from "./emiter";
 import store, { useLocalStorage } from "./rxStorage";
 
-
+// http://localhost:3000/ https://intimalive.com/
 window.gurl = 'http://localhost:3000/';
 export const EVENT = new EventEmiter();
 

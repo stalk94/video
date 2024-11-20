@@ -1,4 +1,5 @@
 require('dotenv').config();
+const fs = require('fs');
 const uuid = require('uuid');
 const http = require('http');
 const express = require('express');
@@ -22,6 +23,12 @@ const io = new Server(server, {
         methods: ["GET", "POST"],
         credentials: true
     }
+});
+process.on('uncaughtException', (err)=> {
+    fs.appendFileSync("dead.log", JSON.stringify({
+        massage: err.message,
+        stack: err.stack
+    })+"\n", {encoding:"utf-8"});
 });
 
 
@@ -99,6 +106,7 @@ io.on('connection', (socket)=> {
 });
 
 
+app.use('/', express.static(path.join(__dirname, '/src')));
 app.use('/', express.static(path.join(__dirname, '/dist')));
 app.use(favicon(path.join(__dirname, 'src/img/fav', 'favicon.ico')));
 server.listen(3000, ()=> console.log("start 3000"));

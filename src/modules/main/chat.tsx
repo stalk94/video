@@ -1,9 +1,9 @@
 import React from 'react';
-import globalState from "../global.state";
+import globalState from "../../global.state";
 import { Button } from 'primereact/button';
 import { ScrollPanel } from 'primereact/scrollpanel';
 import { useDidMount, useWillUnmount } from 'rooks';
-import "../css/chat.css";
+import "../../css/chat.css";
 
 const test = [
     {login: 'test12', text: 'Сделать это не сложно, достаточно написать следующее свойство!'},
@@ -13,6 +13,9 @@ const test = [
     {login: 'test12', text: '⌛ ⌛ достаточно написать следующее свойство'},
     {login: 'test11', text: 'Скрыть полосу прокрутки можно как у отдельного элемента на странице, так и у всей страницы целиком. Сделать это не сложно, достаточно написать следующее свойство'},
     {login: 'test12', text: 'xxxxxxxxxxx'},
+    {login: 'test11', text: 'xxxxxxxxxxx'},
+    {login: 'test12', text: 'xxxxxxxxxxx'},
+    {login: 'test11', text: 'xxxxxxxxxxx'},
     {login: 'test11', text: 'xxxxxxxxxxx'},
     {login: 'test12', text: 'xxxxxxxxxxx'},
     {login: 'test11', text: 'xxxxxxxxxxx'},
@@ -48,7 +51,7 @@ export default function() {
 
 
     return(
-        <React.Fragment>
+        <div className='Chat'>
             { massages && massages.map((msg, index)=> 
                 <div key={index} className='MassageContainer'>
                     <div className='MassageHeader'
@@ -61,6 +64,6 @@ export default function() {
                     </div>
                 </div>
             )}
-        </React.Fragment>
+        </div>
     );
 }

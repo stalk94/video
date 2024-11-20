@@ -1,3 +1,24 @@
+.Chat {
+    position: fixed;
+    z-index: 2;
+    overflow-y: auto;
+    opacity: 0.5;
+    top: 36%;
+    width: 30%;
+    height: 50%;
+}
+.Chat::-webkit-scrollbar {
+    width: 0;
+}
+
+.input {
+    background-color: #ede1b4;
+    border: 1px solid black;
+    padding: 20px;
+}
+
+
+/* Собшения */
 .MassageContainer {
     display: flex;
     flex-direction: row;
@@ -9,7 +30,7 @@
     background-color: rgba(0, 0, 0, 0.4);
     border: 1px solid rgba(255, 255, 255, 0.066);
     border-radius: 5%;
-    font-family: 'Comic Sans MS', cursive, sans-serif;
+    background-color: #b3b5a3;
 }
 
 .MassageHeader {

@@ -1,20 +1,25 @@
-.Footer-1 {
-    padding-top: 5px;
-    padding-bottom: 5px;
-    padding-left: 1%;
-    padding-right: 1%;
-    display: flex;
-    flex-direction: row;
+/* подарки и  */
+.PanelFooter {
+    width: 15%;
+    padding: 0.5%;
+}
+#negift {
+    
+}
+#gift {
+    margin-left: 10px;
 }
 
-.Footer-2 {
-    width: 100%;
-    height: 100%;
+
+
+.InputChatContainer {
     display: flex;
-    padding-top: 5px;
-    padding-bottom: 40px;
-    padding-left: 1%;
-    padding-right: 1%;
     flex-direction: row;
-    background-color: rgba(0, 0, 0, 0.507);
+    width: 100%;
+    padding: 0.5%;
+}
+.InputChat {
+    width: 90%;
+    border: 1px solid rgba(0, 0, 0, 0.512);
+    border-radius: 10px;
 }

@@ -6,5 +6,7 @@ export default hookstate({
     user: {
         forvards: []
     },
-    ovner: {}
+    ovner: {
+        
+    }
 });
