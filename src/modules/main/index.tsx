@@ -46,18 +46,17 @@ const Buttons =({start, useStart})=> {
             { start &&
                 <div style={{ marginLeft: '40%', display: 'flex', flexDirection: 'row' }}>
                     <Button className="button"
-                        style={{ marginRight: '10px' }}
-                        label='EXIT'
-                        icon="pi pi-sign-out"
+                        style={{ marginRight: '10px', paddingLeft: '12px' }}
+                        icon="pi pi-stop-circle"
                         onClick={()=> useStart(false)}
                     />
                     <Button className="button"
+                        style={{ paddingLeft: '12px' }}
                         icon={`pi ${chek(ovnerState.get()) ? 'pi-minus' : 'pi-plus'}`}
                         onClick={()=> useForvard()}
                     />
                     <Button className="button"
                         style={{ marginLeft: '10px' }}
-                        label='NEXT'
                         icon="pi pi-forward"
                         onClick={()=> useStart(true)}
                     />
@@ -177,26 +176,24 @@ export default function({peerId}) {
             />
 
             <div className="Container">
-                <div className="VideoContainer">
-                    <div className="ovnerVideo-container">
-                        <video id='ovnerVideo'
-                            width={'100%'}
-                            height={'100%'}
-                        >
+                <div className="ovnerVideo-container">
+                    <video id='ovnerVideo'
+                        width={'100%'}
+                        height={'100%'}
+                    >
 
-                        </video>
-                        <BlurCanvas
-                            start={input}
-                        />
-                    </div>
-                    <div className="myVideo-container">
-                        <video id='myVideo'
-                            width={'100%'}
-                            height={'100%'}
-                        >
+                    </video>
+                    <BlurCanvas
+                        start={start}
+                    />
+                </div>
+                <div className="myVideo-container">
+                    <video id='myVideo'
+                        width={'100%'}
+                        height={'100%'}
+                    >
 
-                        </video>
-                    </div>
+                    </video>
                 </div>
                 <RightButtonsPanel />
                 <Buttons 
@@ -207,8 +204,7 @@ export default function({peerId}) {
             </div>
             
             <Footer
-                start={start}
-                useStart={useSetStart}
+                start={input}
             />
         </div>
     );

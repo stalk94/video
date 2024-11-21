@@ -79,16 +79,18 @@ export default function({useCall, peerId}) {
                 <div id="ls" >
                     <i className="pi pi-envelope" 
                         style={{
-                            fontSize: '1.7rem', 
+                            fontSize: '1.6rem', 
+                            marginTop: '1.5px',
+                            marginLeft: '1px'
                         }}
                     />
                 </div>
                 <div id="user" >
                     <i className="pi pi-user" 
                         style={{
-                            fontSize: '2rem', 
+                            fontSize: '1.9rem', 
                             marginTop: '3px',
-                            marginLeft: '3px'
+                            marginLeft: '4px'
                         }}
                     />
                 </div>

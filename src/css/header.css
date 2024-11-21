@@ -19,7 +19,7 @@
 
 .Logo {
     padding-left: 3%;
-    color: aliceblue;
+    color: #ffcccc;
     font-size: 30px;
 }
 .CoinsContainer {
@@ -27,7 +27,7 @@
     margin-left: 30%;
     margin-top: 10px;
     margin-bottom: 10px;
-    padding: 3px;
+    padding: 2px;
     padding-left: 20px;
     padding-right: 20px;
     border-radius: 10px;
@@ -35,25 +35,36 @@
 }
 
 
+/* Правые кнопки */
 #ls {
+    cursor: pointer;
     margin-left: auto;
     width: 50px;
     height: 100%;
     padding: 10px;
-    border: 1px solid rgba(206, 205, 205, 0.293);
+    border: 1px solid rgba(206, 205, 205, 0.3);
     background-color: #2b253a;
     color: aliceblue;
     font-size: 1.5rem;
     border-radius: 50%;
 }
+#ls:hover {
+    color: rgb(224, 248, 3);
+    border: 1px solid rgba(203, 237, 5, 0.3);
+}
 #user {
+    cursor: pointer;
     margin-left: 10px;
     width: 50px;
     height: 100%;
     padding: 5px;
-    border: 1px solid rgba(206, 205, 205, 0.293);
+    border: 1px solid rgba(206, 205, 205, 0.3);
     background-color: #2b253a;
     color: aliceblue;
     font-size: 1.5rem;
     border-radius: 50%;
+}
+#user:hover {
+    color: rgb(224, 248, 3);
+    border: 1px solid rgba(203, 237, 5, 0.3);
 }

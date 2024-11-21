@@ -7,8 +7,8 @@ import "../../css/footer.css";
 
 
 
-export default function({start, useStart}) {
-    const [text, setText] = React.useState();
+export default function({start}: {start: boolean}) {
+    const [text, setText] = React.useState<string>();
 
     const useSend =()=> {
         if(text.length >= 2 && text.length < 100) {
@@ -19,16 +19,23 @@ export default function({start, useStart}) {
             setText();
         }
     }
+    const useClickLike =()=> {
+
+    }
+    const useClickGift =()=> {
+        
+    }
 
 
     return(
         <footer>
             <div className='PanelFooter'>
-                <Button className="button" id="negift"
-                    icon="pi pi-send"
+                <Button className="button" id="like"
+                    icon="pi pi-heart"
+                    onClick={useClickLike}
                 />
                 <Button className="button" id="gift"
-                    icon="pi pi-send"
+                    icon="pi pi-gift"
                 />
             </div>
             <div className='InputChatContainer'>
@@ -37,7 +44,7 @@ export default function({start, useStart}) {
                     onChange={(e)=> setText(e.target.value)}
                     placeholder='max 100 simbol'
                 />
-                <Button style={{marginLeft: '10px', width: '10%'}}
+                <Button style={{marginLeft: '10px', width: '11%'}}
                     icon="pi pi-send"
                     label='Отправить'
                     disabled={!start}
