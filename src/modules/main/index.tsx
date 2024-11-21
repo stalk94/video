@@ -1,4 +1,5 @@
 import React from 'react';
+import { EVENT } from '../../lib/engine';
 import { Peer, MediaConnection } from "peerjs";
 import globalState from "../../global.state";
 import { useHookstate } from '@hookstate/core';
@@ -8,9 +9,10 @@ import Header from "./header";
 import Chat from "./chat";
 import { useDidMount, useIntervalWhen } from 'rooks';
 import RightButtonsPanel from "./buttons";
+import BlurCanvas from "./canvas";
 import "../../css/base.css";
 
-var peercall: MediaConnection;
+
 const Buttons =({start, useStart})=> {
     const forvards = useHookstate(globalState.user.forvards);
     const ovnerState = useHookstate(globalState.ovner);
@@ -66,9 +68,12 @@ const Buttons =({start, useStart})=> {
 }
 
 
+
 export default function({peerId}) {
+    const [input, setInput] = React.useState(false);
     const [start, setStart] = React.useState(false);
 
+    
     const useSetStart =(type: boolean)=> {
         const myVideo: HTMLVideoElement = document.querySelector('#myVideo');
         const ovnerVideo: HTMLVideoElement = document.querySelector('#ovnerVideo');
@@ -78,9 +83,9 @@ export default function({peerId}) {
         if(type) {
             navigator.mediaDevices.getUserMedia({ audio: true, video: true })
                 .then((mediaStream)=> {	
-                    myVideo.srcObject = mediaStream;
-                    myVideo.onloadedmetadata =(e)=> {
-                        myVideo.play();
+                    ovnerVideo.srcObject = mediaStream;
+                    ovnerVideo.onloadedmetadata =(e)=> {
+                        ovnerVideo.play();
                     };
                 })
 
@@ -98,7 +103,7 @@ export default function({peerId}) {
             });
         }
     }
-    // вызов
+    // вызов мы совершаем
     const useCall =(peerId)=> {
         const myVideo: HTMLVideoElement = document.querySelector('#myVideo');
         const ovnerVideo: HTMLVideoElement = document.querySelector('#ovnerVideo');
@@ -106,8 +111,7 @@ export default function({peerId}) {
         navigator.mediaDevices.getUserMedia({ audio: true, video: true })
             .then((mediaStream)=> {	
                 //звоним, указав peerId-партнера и передав свой mediaStream		  
-                peercall = peer.call(peerId, mediaStream);
-                globalThis.peerCall = peercall;
+                globalThis.peercall = peer.call(peerId, mediaStream);
                 peercall.on('stream', (stream)=> {
                     //нам ответили, получим стрим
                     setTimeout(()=> {
@@ -132,29 +136,38 @@ export default function({peerId}) {
         const myVideo: HTMLVideoElement = document.querySelector('#myVideo');
         const ovnerVideo: HTMLVideoElement = document.querySelector('#ovnerVideo');
         
-        if(peercall) {
-            peercall.close();
-            delete globalThis.peerCall;
+        if(globalThis.peercall) {
+            setInput(false);
+            globalThis.peercall.close();
+            delete globalThis.peercall;
             delete ovnerVideo.srcObject;
             delete myVideo.srcObject;
         }
-        state.ovner.set({});
+        globalState.ovner.set({});
     }
     useDidMount(()=> {
+        // нам найден собеседник (вызываем его)
         socket.on('call', (data) => {
+            console.log('SERVER SEARCH CLIENT');
             useCall(data.peerId);
             state.ovner.set(data.userData);
         });
+        // кто то разорвал звонок
         socket.on('endCall', (data) => {
             console.log('END CALL');
             useEndCall();
+        });
+        // видеопоток собеседника получен
+        EVENT.on('input.start', ()=> {
+            console.log('INPUT START');
+            setInput(true);
         });
     });
     useIntervalWhen(()=> {
         console.log('REFIND CHAT');
         socket.emit('start', {peerId: peerId});
     }, 1500, (globalThis.peerCall ? false : true) && start);
-
+    
 
     return(
         <div className="Base">
@@ -172,6 +185,9 @@ export default function({peerId}) {
                         >
 
                         </video>
+                        <BlurCanvas
+                            start={input}
+                        />
                     </div>
                     <div className="myVideo-container">
                         <video id='myVideo'

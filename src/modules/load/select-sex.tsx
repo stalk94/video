@@ -20,7 +20,7 @@ export default function({useInitSex}: {useInitSex: (type: 'm'|'fem')=> void}) {
             </div>
             <div className='SelectSex'>
                 <img className='ImageSex'
-                    style={{marginRight: '5%'}}
+                    style={{marginRight: '3%'}}
                     src={mSrc}
                     onMouseEnter={()=> setMsrc(mi)}
                     onMouseLeave={()=> setMsrc(m)}
@@ -28,14 +28,14 @@ export default function({useInitSex}: {useInitSex: (type: 'm'|'fem')=> void}) {
                 />
                 <div className='Border'/>
                 <img className='ImageSex'
-                    style={{marginLeft: '5%'}}
+                    style={{marginLeft: '3%'}}
                     src={femSrc}
                     onMouseEnter={()=> setFsrc(femi)}
                     onMouseLeave={()=> setFsrc(fem)}
                     onClick={()=> useInitSex('fem')}
                 />
             </div>
-            <div className='TextSelectSex' style={{opacity:'0.2'}}>
+            <div className='TextSelectSex' style={{color: '#996666'}}>
                 VIDEO CHAT
             </div>
         </div>

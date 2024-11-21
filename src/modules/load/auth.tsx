@@ -26,16 +26,13 @@ export default function({useAuth}) {
     return(
         <React.Fragment>
             <TextInput
-                description="Логин"
-                placeholder="min 6 simbol"
+                placeholder="Логин"
                 value={login}
                 onChange={(event)=> setLogin(event.currentTarget.value)}
-                rightSection={chekLogin()}
+                
             />
-            <PasswordInput style={{marginTop:'10px'}}
-                description="Пароль"
-                placeholder="min 6 simbol"
-                rightSection={chekPassword()}
+            <PasswordInput style={{marginTop:'20px'}}
+                placeholder="Пароль"
                 value={password}
                 onChange={(event)=> setPassword(event.currentTarget.value)}
                 

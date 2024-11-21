@@ -13,7 +13,7 @@ import "../../css/loader.css";
 export default function({useAuth}: {useAuth: (login: string, password: string)=> void}) {
     const [sex, setSex] = React.useState('m');
     const [alarms, setAlarm] = React.useState(false);
-    const [mod, setMod] = React.useState<'auth'|'reg'|'init'|'alarm'>('init');
+    const [mod, setMod] = React.useState<'auth'|'reg'|'init'|'alarm'>('auth');
 
     const useSetSex =(type: 'm'|'fem')=> {
         setSex(type);
@@ -38,7 +38,7 @@ export default function({useAuth}: {useAuth: (login: string, password: string)=>
         <div className='Loader'>
             { (mod === 'auth' ||  mod === 'reg') &&
                 <div className='Form' 
-                    style={{ marginTop: mod === 'reg' && '5%' }}
+                    style={{ marginTop: mod === 'reg' && '3%' }}
                 >
                     <div className='LabelAuth'>
                         INTIMALIVE

@@ -18,7 +18,7 @@ import Admin from "./modules/admin/index";
 import "./css/index.css";
 
 
-globalThis.peerCall;
+globalThis.peercall;
 globalThis.peerId;
 globalThis.peer = new Peer();
 const icon = {
@@ -74,6 +74,7 @@ function App() {
                     ovnerVideo.onloadedmetadata =(e)=> {
                         // и запускаем воспроизведение когда объект загружен
                         ovnerVideo.play();
+                        EVENT.emit('input.start', {});
                     };
                 }, 1500);
 

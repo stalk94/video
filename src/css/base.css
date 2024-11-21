@@ -1,7 +1,9 @@
 .Base {
     display: flex;
     flex-direction: column;
-    height: 100%;
+    margin-left: 15%;
+    width: 70%;
+    height: 80%;
 }
 
 header {   
@@ -42,7 +44,7 @@ footer {
     width: 19%;
     position: fixed;
     z-index: 2;
-    top: 7%;
+    top: 68%;
     left: 80%;
     background-color: rgba(0, 0, 0, 0.507);
     border: 1px solid rgba(255, 166, 0, 0.907);
@@ -50,11 +52,13 @@ footer {
 .ovnerVideo-container {
     display: inline-block;
     width: 100%;
+    height: 100%;
+    position: relative;
 }
 
 #ovnerVideo {
-    -o-object-fit: fill;
-    object-fit: fill;
+    z-index: 2;
+    position: absolute;
     height: 100%;
 }
 #myVideo {
@@ -65,7 +69,7 @@ footer {
 
 /* Кнопки старт, финиш */
 .PanelButtons {
-    position: fixed;
+    position: relative;
     z-index: 6;
     top: 82%;
     width: 100%;
@@ -85,4 +89,18 @@ footer {
     color: aliceblue;
     font-size: 1.5rem;
     border-radius: 40%;
+}
+
+
+@media screen and (max-width: 900px) {
+    header {   
+        display: flex;
+        flex-direction: row;
+        height: 6%;
+        width: 100%;
+        z-index: 5;
+        border: 1px solid rgb(31, 30, 30);
+        background-color: #de1025;
+        box-shadow: 0px 3px 3px rgba(2, 2, 2, 0.304);
+    }
 }

@@ -37,3 +37,7 @@ body {
 .IconFill {
     color: #8a717c;
 }
+
+@media only screen and (max-width: 900px) {
+    
+}

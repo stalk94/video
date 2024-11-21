@@ -1,6 +1,14 @@
 import { send } from "./lib/engine";
 
 
+export function getSizeElement(selector?: string) {
+    const container = document.querySelector(selector ?? ".ovnerVideo-container");
+    return {
+        height: container.clientHeight, 
+        width: container.clientWidth
+    }
+}
+
 
 const useTime =(time: number)=> {
     let hours = 0;

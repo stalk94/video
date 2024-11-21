@@ -80,8 +80,6 @@ export default function({useCall, peerId}) {
                     <i className="pi pi-envelope" 
                         style={{
                             fontSize: '1.7rem', 
-                            marginTop: '2px',
-                            marginLeft: '1px'
                         }}
                     />
                 </div>

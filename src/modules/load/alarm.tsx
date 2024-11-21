@@ -7,7 +7,7 @@ export default function({useInitALarm, value}) {
 
     return(
         <div className='AlarmContainer'>
-            <div className='LabelAuth LabelAlarm'>
+            <div className='LabelAlarm'>
                 ALARM +18
             </div>
             <div className='AlarmCard'>
