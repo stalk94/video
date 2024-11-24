@@ -40,6 +40,7 @@ export default function({start}: {start: boolean}) {
                 />
                 <Button className="button" id="gift"
                     icon="pi pi-gift"
+                    onClick={useClickGift}
                 />
             </div>
             <div className='InputChatContainer'>
@@ -48,7 +49,9 @@ export default function({start}: {start: boolean}) {
                     onChange={(e)=> setText(e.target.value)}
                     placeholder='max 100 simbol'
                 />
-                <Button style={{ width: '11%', marginLeft: '8%' }}
+            </div>
+            <div className='PanelFooterRight'>
+                <Button className='ButtonInputChat'
                     icon="pi pi-send"
                     label='Отправить'
                     disabled={!start}

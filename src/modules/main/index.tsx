@@ -59,9 +59,9 @@ export default function({peerId}) {
         if(type) {
             navigator.mediaDevices.getUserMedia({ audio: true, video: true })
                 .then((mediaStream)=> {	
-                    ovnerVideo.srcObject = mediaStream;
-                    ovnerVideo.onloadedmetadata =(e)=> {
-                        ovnerVideo.play();
+                    myVideo.srcObject = mediaStream;
+                    myVideo.onloadedmetadata =(e)=> {
+                        myVideo.play();
                     };
                 })
 
@@ -98,10 +98,12 @@ export default function({peerId}) {
                     }, 1500);	
                 });
                 //  peercall.on('close', onCallClose);
-                myVideo.srcObject = mediaStream;
-                myVideo.onloadedmetadata =(e)=> {
-                    myVideo.play();
-                };
+                if(!myVideo.srcObject) {
+                    myVideo.srcObject = mediaStream;
+                    myVideo.onloadedmetadata =(e)=> {
+                        myVideo.play();
+                    };
+                }
             })
             .catch((err)=> { 
                 console.log(err.name + ": " + err.message); 
@@ -154,7 +156,7 @@ export default function({peerId}) {
         socket.emit('start', {peerId: peerId});
     }, 1500, (globalThis.peerCall ? false : true) && start);
     
-
+    
     return(
         <div className="Base">
             <Header

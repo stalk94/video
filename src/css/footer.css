@@ -1,6 +1,13 @@
-/* подарки и  */
+/* подарки и лайки */
 .PanelFooter {
     width: 15%;
+    margin-left: 0.8%;
+}
+.PanelFooterRight {
+    width: 15%;
+    display: flex;
+    margin-left: 5%;
+    padding: 0.4%;
 }
 
 #like {
@@ -23,12 +30,29 @@
 .InputChatContainer {
     display: flex;
     flex-direction: row;
-    width: 100%;
+    width: 63%;
     padding: 0.5%;
 }
 /* поле ввода сообщения чата */
 .InputChat {
-    width: 80%;
+    width: 100%;
     border: 1px solid rgba(0, 0, 0, 0.512);
     border-radius: 10px;
+}
+
+
+.ButtonInputChat { 
+    border-radius: 15px;
+    background-color: #2b253a;
+    border: 1px solid rgba(206, 205, 205, 0.3);
+    color: silver;
+    width: 100%;
+    height: 100%;
+}
+.ButtonInputChat:hover {
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    background-color: #2b253a7a;
+}
+.p-disabled {
+    
 }

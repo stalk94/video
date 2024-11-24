@@ -1,18 +1,16 @@
 import React from 'react';
 import { getSizeElement } from "../../function";
-import { useDidMount, useWillUnmount } from 'rooks';
 let task;
 
 
 
 export default function BlurFrame({start}: {start: boolean}) {
-
     React.useEffect(()=> {
         if(start) {
             const video: HTMLVideoElement = document.querySelector('#ovnerVideo');
             const size = getSizeElement();
             const canvas: HTMLCanvasElement = document.querySelector('.BlurCanvas');
-            let ctx: CanvasRenderingContext2D = canvas.getContext('2d');;
+            const ctx: CanvasRenderingContext2D = canvas.getContext('2d');;
 
             canvas.width = video.videoWidth;
             canvas.height = video.videoHeight;

@@ -53,6 +53,13 @@ const Coins =({money})=> {
 export default function({useCall, peerId}) { 
     const userState = useHookstate(globalState.user);
 
+    const useClickUser =()=> {
+
+    }
+    const useClickLs =()=> {
+
+    }
+
 
     return(
         <header>
@@ -69,7 +76,7 @@ export default function({useCall, peerId}) {
                 <Coins 
                     money={userState.money.get()} 
                 />
-                <div id="ls" >
+                <div id="ls" onClick={useClickUser}>
                     <i className="pi pi-envelope" 
                         style={{
                             fontSize: '1.6rem', 
@@ -78,7 +85,7 @@ export default function({useCall, peerId}) {
                         }}
                     />
                 </div>
-                <div id="user" >
+                <div id="user" onClick={useClickLs}>
                     <i className="pi pi-user" 
                         style={{
                             fontSize: '1.9rem', 
