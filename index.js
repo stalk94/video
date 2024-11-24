@@ -42,7 +42,7 @@ app.post("/init", (req, res)=> {
 app.post("/reg", (req, res)=> {
     if(scheme.data.login.test(req.body.login) && scheme.data.password.test(req.body.password)) {
         if(req.body.sex === 'm' || req.body.sex === 'fem') {
-            registration(req.body.login, req.body.password, req.body.sex).then((data)=> {
+            registration(req.body.login, req.body.password, req.body.sex, req.body.ipData).then((data)=> {
                 res.send(data);
             });
         }
@@ -99,6 +99,17 @@ io.on('connection', (socket)=> {
     socket.on('favorite', (msg)=> {
         if(msg && msg.peerId && msg.forvardLogin) {
             APP.forvard(msg.peerId, msg.forvardLogin);
+        }
+    });
+    socket.on('like', (msg)=> {
+        if(msg && msg.peerId && msg.peerIdLike) {
+            const likeCount = APP.like(msg.peerId, msg.peerIdLike);
+            if(likeCount) socket.emit('ovner.refresh', {likes: likeCount});
+        }
+    });
+    socket.on('activate', (msg)=> {
+        if(msg && msg.peerId && msg.type) {
+            APP.activate(msg.peerId, msg.type);
         }
     });
     socket.on('send.massage', (msg)=> {

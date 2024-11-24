@@ -10,27 +10,13 @@ import Chat from "./chat";
 import { useDidMount, useIntervalWhen } from 'rooks';
 import RightButtonsPanel from "./buttons";
 import BlurCanvas from "./canvas";
+import Indicator from "./left-panel";
 import "../../css/base.css";
 
 
 const Buttons =({start, useStart})=> {
-    const forvards = useHookstate(globalState.user.forvards);
     const ovnerState = useHookstate(globalState.ovner);
 
-    const chek =(ovnerState)=> {
-        const curForv = forvards?.get({noproxy: true});
-        const find = curForv.find((elem)=> elem = ovnerState.login);
-
-        return find;
-    }
-    const useForvard =()=> {
-        const curState = ovnerState.get({noproxy: true});
-
-        if(curState?.login) socket.emit('favorite', {
-            peerId: globalThis.peerId,
-            forvardLogin: curState.login
-        });
-    }
 
 
     return(
@@ -44,27 +30,18 @@ const Buttons =({start, useStart})=> {
                 </div>
             }
             { start &&
-                <div style={{ marginLeft: '40%', display: 'flex', flexDirection: 'row' }}>
+                <div style={{ marginLeft: '46%', display: 'flex', flexDirection: 'row' }}>
                     <Button className="button"
                         style={{ marginRight: '10px', paddingLeft: '12px' }}
                         icon="pi pi-stop-circle"
                         onClick={()=> useStart(false)}
-                    />
-                    <Button className="button"
-                        style={{ paddingLeft: '12px' }}
-                        icon={`pi ${chek(ovnerState.get()) ? 'pi-minus' : 'pi-plus'}`}
-                        onClick={()=> useForvard()}
-                    />
-                    <Button className="button"
-                        style={{ marginLeft: '10px' }}
-                        icon="pi pi-forward"
-                        onClick={()=> useStart(true)}
                     />
                 </div>
             }
         </div>
     );
 }
+
 
 
 
@@ -151,6 +128,16 @@ export default function({peerId}) {
             useCall(data.peerId);
             state.ovner.set(data.userData);
         });
+        // обновились данные собеседника
+        socket.on('ovner.refresh', (data)=> {
+            state.ovner.set((old)=> {
+                Object.keys(data).forEach((key)=> {
+                    old[key] = data[key];
+                });
+
+                return old;
+            });
+        });
         // кто то разорвал звонок
         socket.on('endCall', (data) => {
             console.log('END CALL');
@@ -176,6 +163,7 @@ export default function({peerId}) {
             />
 
             <div className="Container">
+                <Indicator />
                 <div className="ovnerVideo-container">
                     <video id='ovnerVideo'
                         width={'100%'}
@@ -209,3 +197,12 @@ export default function({peerId}) {
         </div>
     );
 }
+
+
+/**
+ * <Button className="button"
+                        style={{ marginLeft: '10px' }}
+                        icon="pi pi-forward"
+                        onClick={()=> useStart(true)}
+                    />
+ */

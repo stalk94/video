@@ -57,6 +57,7 @@ const APP = {
             delete user.curentCall;
         }
     },
+    // deprecate
     forvard(myPeerId, login) {
         const user = online.online[myPeerId];
 
@@ -70,6 +71,33 @@ const APP = {
             user.emit('refreshed', {
                 forvards: user.forvards
             });
+        }
+    },
+    like(myPeerId, peerIdLike) {
+        const user = online.online[myPeerId];
+        const ovner = online.online[peerIdLike];
+
+        if(user && ovner) {
+            const find = user.story.find((login)=> login === ovner.login);
+
+            if(!find) {
+                ovner.likes++;
+            }
+            
+            return ovner.likes;
+        }
+    },
+    /**
+     * активация кнопки на панели слева
+     * @param {number} myPeerId 
+     * @param {'search'|'m'|'f'|'mf'} type 
+     */
+    activate(myPeerId, type) {
+        const user = online.online[myPeerId];
+
+        if(user) {
+
+            user.emit('refreshed', {activate: user.activate});
         }
     },
     sendMassage(myPeerId, text) {

@@ -1,7 +1,9 @@
 import React from 'react';
 import { EVENT } from "../../lib/engine";
+import { getIp } from "../../function";
 import { PasswordInput, TextInput } from '@mantine/core';
 import { Button } from 'primereact/button';
+import { useDidMount } from 'rooks';
 
 const statusIcon = {
     valid: <i className="pi pi-check" style={{color:'green'}}/>,
@@ -10,6 +12,7 @@ const statusIcon = {
 
 
 export default function({ useReg }) {
+    const [ipData, setIpData] = React.useState<any>();
     const [login, setLogin] = React.useState<string>();
     const [email, setEmail] = React.useState<string>();
     const [password, setPassword] = React.useState<string>();
@@ -20,6 +23,7 @@ export default function({ useReg }) {
                 email: email,
                 login: login,
                 password: password,
+                ipData: ipData
             });
             else EVENT.emit('error', {text: 'В пароле минимум 6 символов!'});
         }
@@ -37,6 +41,12 @@ export default function({ useReg }) {
         if(email && email.length > 5) return statusIcon.valid;
         else return statusIcon.invalid;
     }
+    useDidMount(()=> {
+        getIp((dataResponce)=> {
+            console.log(dataResponce);
+            if(dataResponce) setIpData(dataResponce);
+        });
+    });
 
 
     return(

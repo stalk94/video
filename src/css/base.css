@@ -41,6 +41,13 @@ footer {
 .VideoContainer {
     height: 100%;
 }
+/* Лквая панель инфо о собеседнике */
+.Indicator {
+    padding-left: 1%;
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+}
 
 .myVideo-container {
     display: inline-block;
@@ -49,7 +56,7 @@ footer {
     position: absolute;
     z-index: 2;
     top: 78%;
-    left: 80%;
+    left: 79%;
     background-color: rgba(0, 0, 0, 0.507);
     border: 1px solid rgba(255, 166, 0, 0.907);
 }

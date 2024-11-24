@@ -8,6 +8,7 @@ import "../../css/footer.css";
 
 
 export default function({start}: {start: boolean}) {
+    const ovnerState = useHookstate(globalState.ovner);
     const [text, setText] = React.useState<string>();
 
     const useSend =()=> {
@@ -20,7 +21,10 @@ export default function({start}: {start: boolean}) {
         }
     }
     const useClickLike =()=> {
-
+        if(ovnerState?.peerId?.get()) socket.emit('like', {
+            peerId: globalThis.peerId,
+            massage: ovnerState.peerId.get()
+        });
     }
     const useClickGift =()=> {
         
@@ -44,7 +48,7 @@ export default function({start}: {start: boolean}) {
                     onChange={(e)=> setText(e.target.value)}
                     placeholder='max 100 simbol'
                 />
-                <Button style={{marginLeft: '10px', width: '11%'}}
+                <Button style={{ width: '11%', marginLeft: '8%' }}
                     icon="pi pi-send"
                     label='Отправить'
                     disabled={!start}

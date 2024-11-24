@@ -4,7 +4,12 @@ import { hookstate } from '@hookstate/core';
 
 export default hookstate({
     user: {
-        forvards: []
+        activate: {
+            m: false,
+            f: false,
+            mf: false,
+            search: false
+        }
     },
     ovner: {
         

@@ -8,7 +8,16 @@ export function getSizeElement(selector?: string) {
         width: container.clientWidth
     }
 }
-
+/**
+ * Получает информацию о стране, ip и прочее
+ */
+export function getIp(clb: Function) {
+    fetch("https://ipinfo.io/json?token=1e6873fa773047").then(
+        (response)=> response.json()
+    ).then(
+        (jsonResponse)=> clb(jsonResponse)
+    );
+}
 
 const useTime =(time: number)=> {
     let hours = 0;

@@ -16,8 +16,18 @@ class User {
     status = 'free'
     token = ''                              // для сессий
     peerId = ''                             // идентификатор для связи
-    forvards = []                           // избранные контакты (логины)
+    likes = 0                               // лайкм от юзеров
     galery = []                             // файлы пользователя
+    story = []
+    info = {
+        country: 'RU'
+    }
+    activate = {
+        m: false,
+        f: false,
+        mf: false,
+        search: false
+    }
     socket = Socket.prototype
     curentCall = undefined                  // peerId текушего сеанса
     timeSuperFind = undefined               // если активирован супер поиск
@@ -52,6 +62,13 @@ class User {
         else {
             return 20;
         }
+    }
+    #addStory(login) {
+        if(this.story.length > 4) {
+            this.story.shift();
+        }
+
+        this.story.push(login);
     }
     _create() {
 

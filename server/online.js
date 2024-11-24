@@ -62,11 +62,12 @@ const online = {
 }
 
 
-const registration = async function(login, password, sex) {
+const registration = async function(login, password, sex, ipData) {
     if(await db.has("USERS." + login)) return { error: "Логин занят" };
     else {
         const user = new User(login, setPasswordHash(password));
         user.sex = sex;
+        if(ipData) user.info = ipData;
         user._create();
         await db.set('USERS.' + login, user.get());
 

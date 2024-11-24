@@ -39,14 +39,7 @@ const Test =({useCall, peerId})=> {
 const Coins =({money})=> {
     return(
         <div className='CoinsContainer'>
-            <i className="pi pi-star-fill"
-                style={{
-                    fontSize: '1.3rem',
-                    marginTop: '2px',
-                    marginLeft: '1px'
-                }}
-            />
-            <div style={{marginLeft:'5px'}}>
+            <div style={{}}>
                 COINS:
             </div>
             <div style={{marginLeft:'5px'}}>

@@ -6,7 +6,7 @@
     display: flex;
     margin: 1px;
     width: 50%;
-    margin-right: 20px;
+    margin-right: 1%;
 }
 .TestCallOverlay {
     margin-left: 30px;
@@ -18,7 +18,7 @@
 
 
 .Logo {
-    padding-left: 3%;
+    padding-left: 1%;
     color: #ffcccc;
     font-size: 30px;
 }
@@ -28,8 +28,8 @@
     margin-top: 10px;
     margin-bottom: 10px;
     padding: 2px;
-    padding-left: 20px;
-    padding-right: 20px;
+    padding-left: 8px;
+    padding-right: 8px;
     border-radius: 10px;
     background-color: aliceblue;
 }
