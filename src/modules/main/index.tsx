@@ -113,6 +113,7 @@ export default function({peerId}) {
     const useEndCall =()=> {
         const myVideo: HTMLVideoElement = document.querySelector('#myVideo');
         const ovnerVideo: HTMLVideoElement = document.querySelector('#ovnerVideo');
+        setStart(false);
         
         if(globalThis.peercall) {
             setInput(false);
@@ -128,11 +129,11 @@ export default function({peerId}) {
         socket.on('call', (data) => {
             console.log('SERVER SEARCH CLIENT');
             useCall(data.peerId);
-            state.ovner.set(data.userData);
+            globalState.ovner.set(data.userData);
         });
         // обновились данные собеседника
         socket.on('ovner.refresh', (data)=> {
-            state.ovner.set((old)=> {
+            globalState.ovner.set((old)=> {
                 Object.keys(data).forEach((key)=> {
                     old[key] = data[key];
                 });
@@ -148,6 +149,7 @@ export default function({peerId}) {
         // видеопоток собеседника получен
         EVENT.on('input.start', ()=> {
             console.log('INPUT START');
+            setStart(true);
             setInput(true);
         });
     });
@@ -164,7 +166,7 @@ export default function({peerId}) {
                 useCall={useCall}
             />
 
-            <div className="Container">
+            <div className="Container" id={start && "ovnerDark"}>
                 <Indicator />
                 <div className="ovnerVideo-container">
                     <video id='ovnerVideo'

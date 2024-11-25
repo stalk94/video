@@ -1,5 +1,8 @@
+const fs = require('fs');
 const { db } = require('./db');
 const { Socket } = require("socket.io");
+const pricesConfig = JSON.parse(fs.readFileSync('config/prices.json'));
+
 
 /**
  * status === premium = пол выбираеться, money > 50 = пол выбираеться, else = пол не выбираеться
@@ -11,6 +14,7 @@ class User {
      * @type {'m'|'f'}
      */
     sex = undefined
+    timeshtap = Date.now()
     permision = 0                           // 0 - 2
     money = 0
     status = 'free'
