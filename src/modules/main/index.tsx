@@ -14,7 +14,7 @@ import Indicator from "./left-panel";
 import "../../css/base.css";
 
 
-const Buttons =({start, useStart})=> {
+const Buttons =({start, useStart, useNext})=> {
     const ovnerState = useHookstate(globalState.ovner);
 
 
@@ -36,6 +36,11 @@ const Buttons =({start, useStart})=> {
                         icon="pi pi-stop-circle"
                         onClick={()=> useStart(false)}
                     />
+                    <Button className="button"
+                        style={{ marginLeft: '10px', paddingLeft: '12px' }}
+                        icon="pi pi-forward"
+                        onClick={()=> useNext()}
+                    />
                 </div>
             }
         </div>
@@ -47,15 +52,15 @@ const Buttons =({start, useStart})=> {
 
 export default function({peerId}) {
     const [input, setInput] = React.useState(false);
-    const [start, setStart] = React.useState(false);
+    const [start, setStart] = React.useState(false);        // нажата мной кнопка старт
 
     
+    // мы запускаем поиск
     const useSetStart =(type: boolean)=> {
         const myVideo: HTMLVideoElement = document.querySelector('#myVideo');
         const ovnerVideo: HTMLVideoElement = document.querySelector('#ovnerVideo');
         setStart(type);
 
-        // начинаем смотреть
         if(type) {
             navigator.mediaDevices.getUserMedia({ audio: true, video: true })
                 .then((mediaStream)=> {	
@@ -77,6 +82,20 @@ export default function({peerId}) {
             socket.emit('finish', {
                 peerId: globalThis.peerId
             });
+        }
+    }
+    const useCallBot =(data)=> {
+        globalState.ovner.set(data);
+        const ovnerVideo: HTMLVideoElement = document.querySelector('#ovnerVideo');
+        const curVideoSrc = data.videos[0];
+        const src = gurl + `upload/${data.login}/${curVideoSrc}`;
+        setStart(true);
+        setInput(true);
+
+        ovnerVideo.src = src;
+        ovnerVideo.loop = true;
+        ovnerVideo.onloadedmetadata =(e)=> {
+            ovnerVideo.play();
         }
     }
     // вызов мы совершаем
@@ -113,7 +132,6 @@ export default function({peerId}) {
     const useEndCall =()=> {
         const myVideo: HTMLVideoElement = document.querySelector('#myVideo');
         const ovnerVideo: HTMLVideoElement = document.querySelector('#ovnerVideo');
-        setStart(false);
         
         if(globalThis.peercall) {
             setInput(false);
@@ -122,7 +140,17 @@ export default function({peerId}) {
             delete ovnerVideo.srcObject;
             delete myVideo.srcObject;
         }
+        else {
+            setInput(false);
+            ovnerVideo.src = '';
+            delete myVideo.srcObject;
+        }
         globalState.ovner.set({});
+    }
+    const useNext =()=> {
+        if(start) socket.emit('next', {
+            peerId: globalThis.peerId
+        });
     }
     useDidMount(()=> {
         // нам найден собеседник (вызываем его)
@@ -131,8 +159,13 @@ export default function({peerId}) {
             useCall(data.peerId);
             globalState.ovner.set(data.userData);
         });
+        // ботяра показывает свои видео
+        socket.on('call.bot', (data)=> {
+            if(data.userData) useCallBot(data.userData);
+        });
         // обновились данные собеседника
         socket.on('ovner.refresh', (data)=> {
+            console.log('OVNER REFRESH');
             globalState.ovner.set((old)=> {
                 Object.keys(data).forEach((key)=> {
                     old[key] = data[key];
@@ -146,6 +179,11 @@ export default function({peerId}) {
             console.log('END CALL');
             useEndCall();
         });
+        // ботяра разрыв соединения
+        socket.on('endCall.bot', (data)=> {
+            console.log('END BOT CALL');
+            useEndCall();
+        });
         // видеопоток собеседника получен
         EVENT.on('input.start', ()=> {
             console.log('INPUT START');
@@ -154,8 +192,10 @@ export default function({peerId}) {
         });
     });
     useIntervalWhen(()=> {
-        console.log('REFIND CHAT');
-        socket.emit('start', {peerId: peerId});
+        if(!input) {
+            console.log('REFIND!!!');
+            socket.emit('start', {peerId: peerId});
+        }
     }, 1500, (globalThis.peerCall ? false : true) && start);
     
     
@@ -191,6 +231,7 @@ export default function({peerId}) {
                 <Buttons 
                     start={start}
                     useStart={useSetStart}
+                    useNext={useNext}
                 />
                 <Chat />
             </div>

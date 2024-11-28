@@ -15,15 +15,15 @@ export default function({start}: {start: boolean}) {
         if(text.length >= 2 && text.length < 100) {
             socket.emit('send.massage', {
                 peerId: globalThis.peerId,
-                massage: text
+                text: text
             });
-            setText();
+            setText('');
         }
     }
     const useClickLike =()=> {
         if(ovnerState?.peerId?.get()) socket.emit('like', {
             peerId: globalThis.peerId,
-            massage: ovnerState.peerId.get()
+            peerIdLike: ovnerState.peerId.get()
         });
     }
     const useClickGift =()=> {

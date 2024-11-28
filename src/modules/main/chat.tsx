@@ -23,7 +23,7 @@ const test = [
 
 
 export default function() { 
-    const [massages, setMassages] = React.useState(test);
+    const [massages, setMassages] = React.useState([]);
     
     const chek =(login: string)=> {
         const user = globalState.user.get();
@@ -31,20 +31,27 @@ export default function() {
         if(login !== user?.login) return true;
     }
     useDidMount(()=> {
+        console.log('MOUNT')
+        socket.on('call', ()=> setMassages([]));
+        socket.on('call.bot', ()=> setMassages([]));
         socket.on('endCall', ()=> setMassages([]));
+        socket.on('endCall.bot', ()=> setMassages([]));
         socket.on('massage', (data)=> {
+            console.log('new MASSAGE: ', data)
             setMassages((old)=> {
-                old.push(data);
-                return old;
+                return [...old, data];
             });
         });
     });
     useWillUnmount(()=> {
+        socket.off('call', ()=> setMassages([]));
+        socket.off('call.bot', ()=> setMassages([]));
         socket.off('endCall', ()=> setMassages([]));
+        socket.off('endCall.bot', ()=> setMassages([]));
         socket.off('massage', (data)=> {
+            console.log('new MASSAGE: ', data)
             setMassages((old)=> {
-                old.push(data);
-                return old;
+                return [...old, data];
             });
         });
     });
@@ -52,7 +59,7 @@ export default function() {
 
     return(
         <div className='Chat'>
-            { massages && massages.map((msg, index)=> 
+            { massages.map((msg, index)=> 
                 <div key={index} className='MassageContainer'>
                     <div className='MassageHeader'
                         style={{color: chek(msg.login) ? 'red' : 'green'}}

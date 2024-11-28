@@ -12,9 +12,10 @@ const Flag =({code})=> {
     );
 }
 const Likes =({count})=> {
+    
     return(
         <div>
-
+            { count }
         </div>
     );
 }

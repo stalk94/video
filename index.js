@@ -3,20 +3,31 @@ const fs = require('fs');
 const uuid = require('uuid');
 const http = require('http');
 const express = require('express');
+const multer  = require('multer');
 const favicon = require('serve-favicon');
 const { Server } = require("socket.io");
 const cors = require("cors");
 const path = require("path");
 const { scheme } = require('./server/function');
 const { online, autorize, registration } = require('./server/online');
+const botManager = require('./server/bot-manager');
 const APP = require('./server/app');
 
 
 const app = express();
 app.use(cors({origin:"http://localhost:3001"}));
-app.use(express.urlencoded({limit: '1mb'}));
+app.use(express.urlencoded({limit: '100mb'}));
 app.use(express.json({limit: '1mb'}));
 const server = http.createServer(app);
+const storage = multer.diskStorage({
+    destination: (req, file, cb)=> {
+        cb(null, __dirname + `/src/upload/${req.body.login}`)
+    },
+    filename: (req, file, cb)=> {
+        cb(null, req.body.name);
+    }
+});
+const upload = multer({ storage: storage });
 const io = new Server(server, {
     cors: {
         origin: "http://localhost:3001",
@@ -53,6 +64,14 @@ app.post("/reg", (req, res)=> {
 });
 app.post("/exit", (req, res)=> {
     if(req.body.peerId) APP.exit(req.body.peerId);
+});
+app.post("/getAllBot", async (req, res)=> {
+    res.send(await botManager.getAllBots());
+});
+// name, login
+app.post("/loadVideo", (req, res)=> {
+    botManager.loadVideo(req.body.login, req.body.name);
+    res.send('sucess');
 });
 
 
@@ -93,13 +112,11 @@ io.on('connection', (socket)=> {
     socket.on('start', (msg)=> {
         if(msg && msg.peerId) APP.start(msg.peerId);
     });
+    socket.on('next', (msg)=> {
+        if(msg && msg.peerId) APP.next(msg.peerId);
+    });
     socket.on('finish', (msg)=> {
         if(msg && msg.peerId) APP.finish(msg.peerId);
-    });
-    socket.on('favorite', (msg)=> {
-        if(msg && msg.peerId && msg.forvardLogin) {
-            APP.forvard(msg.peerId, msg.forvardLogin);
-        }
     });
     socket.on('like', (msg)=> {
         if(msg && msg.peerId && msg.peerIdLike) {
@@ -117,10 +134,27 @@ io.on('connection', (socket)=> {
             APP.sendMassage(msg.peerId, msg.text);
         }
     });
+
+    // -- admin --
+    // создать нового бота
+    socket.on('admin.botCreate', (msg)=> {
+        if(msg && msg.peerId && msg.data) {
+            botManager.create(msg.peerId, msg.data);
+        }
+    });
+    // изменить свойства бота
+    socket.on('admin.botRead', (msg)=> {
+        if(msg && msg.peerId && msg.data) {
+            botManager.edit(msg.peerId, msg.data);
+        }
+    });
 });
 
 
 app.use('/', express.static(path.join(__dirname, '/src')));
 app.use('/', express.static(path.join(__dirname, '/dist')));
 app.use(favicon(path.join(__dirname, 'src/img/fav', 'favicon.ico')));
-server.listen(3000, ()=> console.log("start 3000"));
+server.listen(3000, ()=> {
+    botManager.init();
+    console.log("start 3000");
+});

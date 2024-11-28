@@ -1,6 +1,6 @@
 const { online } = require('./online');
 const rand = require('random-percentage');
-
+``
 
 const APP = {
     call(myPeerId, ovnerPeerId) {
@@ -8,36 +8,125 @@ const APP = {
         const ovner = online.online[ovnerPeerId];
 
         if(user && ovner && !ovner.curentCall) {
-            user.curentCall = ovner.peerId;
-            ovner.curentCall = user.peerId;
-            user.start();
-            // инициация вызова на стороне клиента
-            user.emit('call', {
-                peerId: ovner.peerId,
-                userData: ovner.get()
-            });
-            // второй стороне отправим наши данные
-            ovner.emit('data.ovner', {
-                userData: user.get()
-            });
+            // собеседник человек
+            if(!ovner._bot) {
+                user.curentCall = ovner.peerId;
+                ovner.curentCall = user.peerId;
+                user.addStory(ovner.login)
+                // инициация вызова на стороне клиента
+                user.emit('call', {
+                    peerId: ovner.peerId,
+                    userData: ovner.get()
+                });
+                // второй стороне отправим наши данные
+                ovner.emit('data.ovner', {
+                    userData: user.get()
+                });
+            }
+            // ботяра
+            else {
+                user.curentCall = ovner.peerId;
+                ovner.curentCall = user.peerId;
+                user.addStory(ovner.login);
+
+                user.emit('call.bot', {
+                    userData: ovner.get()
+                });
+            }
         }
     },
     start(myPeerId) {
         const user = online.online[myPeerId];
+        
 
         if(user) {
             const revality = user.getRevality();
-            const chekSex = user._chekSexActivate();
-            user?.stop();
-            const filter = Object.values(online.online).filter((elem)=> elem.peerId !== myPeerId);
-            
-            if(filter.length >= 1) {
-                const ovnerId = rand.getRandom(0, filter.length - 1);
-                const ovner = Object.values(filter)[ovnerId];
+            const chekSex = user._chekSexActivate();        //? осталось тут сделать
+            user.start();
+            const filter = [];
 
-                if(!ovner.curentCall) {
+            // * алгоритм поиска
+            Object.values(online.online).forEach((elem)=> {
+                if(elem.peerId !== myPeerId && elem.onStart) {
+                    const data = {
+                        revality: 100,
+                        data: elem
+                    }
+                    // базовые кооэфициенты
+                    if(elem._bot) data.revality = 50;
+                    else data.revality = 100;
+
+                    // супер поск активен
+                    if(revality === 100) {
+                        if(elem._bot) data.revality = 10;
+                        else {
+                            if(elem.sex === 'fem') data.revality = 90;
+                        }
+                    }
+                    // статус премиум
+                    else if(revality === 60) {
+                        if(elem._bot) data.revality = 10;
+                        else {
+                            if(elem.sex === 'fem') data.revality = 60;
+                            else data.revality = 40;
+                        }
+                    }
+                    // нет ничего
+                    else if(revality === 20) {
+                        if(elem._bot) data.revality = 50;
+                        else {
+                            if(elem.sex === 'fem') data.revality = 20;
+                            else data.revality = 80;
+                        }
+                    }
+
+                    filter.push(data);
+                }
+            });
+            
+
+            if(filter.length >= 1) {
+                const ranging =()=> {
+                    // тестируемый акк (random)
+                    const ovnerIdFilter = rand.getRandom(0, filter.length - 1);
+                    const randomProcent = rand.getRandom(0, 100);
+
+                    if(filter[ovnerIdFilter].revality <= randomProcent) {
+                        return filter[ovnerIdFilter].data;
+                    }
+                }
+                const ovner = ranging();
+
+
+                if(ovner && !ovner.curentCall) {
                     this.call(myPeerId, ovner.peerId);
                 }
+            }
+        }
+    },
+    next(myPeerId) {
+        const user = online.online[myPeerId];
+
+        if(user) {
+            const ovner = online.online[user.curentCall];
+
+            // человек
+            if(ovner && !ovner._bot) {
+                user.emit('endCall', {});
+                ovner.emit('endCall', {});
+
+                delete ovner.curentCall;
+                delete user.curentCall;
+            }
+            // ботяра
+            else if(ovner && ovner._bot) {
+                user.emit('endCall.bot', {});
+                delete ovner.curentCall;
+                delete user.curentCall;
+            }
+            // ни с кем не говорили
+            else {
+                delete user.curentCall;
             }
         }
     },
@@ -46,31 +135,28 @@ const APP = {
 
         if(user) {
             const ovner = online.online[user.curentCall];
-            user.emit('endCall', {});
-            user.stop();
 
-            if(ovner) {
+            // человек
+            if(ovner && !ovner._bot) {
+                user.emit('endCall', {});
+                user.stop();
                 ovner.emit('endCall', {});
+
                 delete ovner.curentCall;
+                delete user.curentCall;
             }
-            
-            delete user.curentCall;
-        }
-    },
-    // deprecate
-    forvard(myPeerId, login) {
-        const user = online.online[myPeerId];
-
-        if(user) {
-            if(!user.forvards.find((elem)=> elem===login)) user.forvards.push(login);
+            // ботяра
+            else if(ovner && ovner._bot) {
+                user.stop();
+                user.emit('endCall.bot', {});
+                delete ovner.curentCall;
+                delete user.curentCall;
+            }
+            // ни с кем не говорили
             else {
-                const findIndex = user.forvards.findIndex((elem)=> elem===login);
-                user.forvards.splice(findIndex, 1);
+                user.stop();
+                delete user.curentCall;
             }
-
-            user.emit('refreshed', {
-                forvards: user.forvards
-            });
         }
     },
     like(myPeerId, peerIdLike) {
@@ -78,10 +164,14 @@ const APP = {
         const ovner = online.online[peerIdLike];
 
         if(user && ovner) {
-            const find = user.story.find((login)=> login === ovner.login);
+            const find = user.story.find((elem)=> {
+                if(elem[ovner.login]) return true;
+            });
 
+            //console.log(find)
             if(!find) {
                 ovner.likes++;
+                user.story.forEach((elem)=> elem[ovner.login] = true);
             }
             
             return ovner.likes;
@@ -105,9 +195,9 @@ const APP = {
 
         if(user && user.curentCall) {
             const ovner = online.online[user.curentCall];
-
+        
             if(ovner) {
-                ovner.emit('massage', {
+                if(!ovner._bot) ovner.emit('massage', {
                     login: user.login,
                     text: text
                 });
@@ -126,3 +216,24 @@ const APP = {
 
 
 module.exports = APP;
+
+
+
+/**
+ * // deprecate
+    forvard(myPeerId, login) {
+        const user = online.online[myPeerId];
+
+        if(user) {
+            if(!user.forvards.find((elem)=> elem===login)) user.forvards.push(login);
+            else {
+                const findIndex = user.forvards.findIndex((elem)=> elem===login);
+                user.forvards.splice(findIndex, 1);
+            }
+
+            user.emit('refreshed', {
+                forvards: user.forvards
+            });
+        }
+    },
+ */

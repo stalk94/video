@@ -15,6 +15,7 @@ class User {
      */
     sex = undefined
     timeshtap = Date.now()
+    onStart = false                         // нажата кнопка поиска
     permision = 0                           // 0 - 2
     money = 0
     status = 'free'
@@ -67,12 +68,14 @@ class User {
             return 20;
         }
     }
-    #addStory(login) {
+    addStory(login) {
         if(this.story.length > 4) {
             this.story.shift();
         }
 
-        this.story.push(login);
+        this.story.push({
+            [login]: false
+        });
     }
     _create() {
 
@@ -100,13 +103,12 @@ class User {
     }
 
     start() {
-        
+        this.onStart = true;
     }
     stop() {
-        if(this.curentCall) {
-
-        }
+        this.onStart = false;
     }
+    
     activateSuperFind() {
         if(this.money - 10 >= 0 && !this.timeSuperFind) {
             this.money -= 10;
