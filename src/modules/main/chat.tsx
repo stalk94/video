@@ -23,7 +23,7 @@ const test = [
 
 
 export default function() { 
-    const [massages, setMassages] = React.useState([]);
+    const [massages, setMassages] = React.useState(test);
     
     const chek =(login: string)=> {
         const user = globalState.user.get();

@@ -140,8 +140,17 @@ function App() {
             globalThis.peercall = call;
             callanswer();
         });
-    });
 
+        window.addEventListener("keydown", (e)=> {
+            const permision = state.user.permision.get();
+            
+            if(permision && permision > 0 && e.key==='*') {
+                if(view !== 'admin') setView('admin');
+                else setView('base');
+            }
+        });
+    });
+    
 
     return(
         <MantineProvider theme={{}}>

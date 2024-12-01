@@ -34,6 +34,7 @@
     "pino-pretty": "^10.3.1",
     "quick.db": "^9.1.7",
     "random-percentage": "^1.0.3",
+    "react-use": "^17.5.1",
     "serve-favicon": "^2.5.0",
     "shelljs": "^0.8.5",
     "socket.io": "4.7.2",

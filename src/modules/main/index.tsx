@@ -1,57 +1,21 @@
 import React from 'react';
 import { EVENT } from '../../lib/engine';
-import { Peer, MediaConnection } from "peerjs";
 import globalState from "../../global.state";
-import { useHookstate } from '@hookstate/core';
-import { Button } from 'primereact/button';
 import Footer from "./footer";
 import Header from "./header";
 import Chat from "./chat";
 import { useDidMount, useIntervalWhen } from 'rooks';
-import RightButtonsPanel from "./buttons";
+import ButtonsPanel from "./buttons";
 import BlurCanvas from "./canvas";
 import Indicator from "./left-panel";
+import rand from "random-percentage"
 import "../../css/base.css";
 
 
-const Buttons =({start, useStart, useNext})=> {
-    const ovnerState = useHookstate(globalState.ovner);
 
 
-
-    return(
-        <div className='PanelButtons'>
-            {!start &&
-                <div style={{ marginLeft: '46%', display: 'flex', flexDirection: 'row' }}>
-                    <Button className="button" id="start"
-                        icon="pi pi-play"
-                        onClick={()=> useStart(true)}
-                    />
-                </div>
-            }
-            { start &&
-                <div style={{ marginLeft: '46%', display: 'flex', flexDirection: 'row' }}>
-                    <Button className="button"
-                        style={{ marginRight: '10px', paddingLeft: '12px' }}
-                        icon="pi pi-stop-circle"
-                        onClick={()=> useStart(false)}
-                    />
-                    <Button className="button"
-                        style={{ marginLeft: '10px', paddingLeft: '12px' }}
-                        icon="pi pi-forward"
-                        onClick={()=> useNext()}
-                    />
-                </div>
-            }
-        </div>
-    );
-}
-
-
-
-
-export default function({peerId}) {
-    const [input, setInput] = React.useState(false);
+export default function({ peerId }) {
+    const [input, setInput] = React.useState(false);        // получен ли поток от собеседника
     const [start, setStart] = React.useState(false);        // нажата мной кнопка старт
 
     
@@ -84,6 +48,7 @@ export default function({peerId}) {
             });
         }
     }
+    // вызов бота
     const useCallBot =(data)=> {
         globalState.ovner.set(data);
         const ovnerVideo: HTMLVideoElement = document.querySelector('#ovnerVideo');
@@ -97,6 +62,11 @@ export default function({peerId}) {
         ovnerVideo.onloadedmetadata =(e)=> {
             ovnerVideo.play();
         }
+
+        const minut = 1000 * 60;
+        setTimeout(()=> {
+            useNext();
+        }, rand.getRandom(minut/2, minut * 2));
     }
     // вызов мы совершаем
     const useCall =(peerId)=> {
@@ -206,9 +176,9 @@ export default function({peerId}) {
                 useCall={useCall}
             />
 
-            <div className="Container" id={start && "ovnerDark"}>
+            <div className="Container">
                 <Indicator />
-                <div className="ovnerVideo-container">
+                <div className="ovnerVideo-container" id={start ? "ovnerDark" : ""}>
                     <video id='ovnerVideo'
                         width={'100%'}
                         height={'100%'}
@@ -227,8 +197,7 @@ export default function({peerId}) {
 
                     </video>
                 </div>
-                <RightButtonsPanel />
-                <Buttons 
+                <ButtonsPanel 
                     start={start}
                     useStart={useSetStart}
                     useNext={useNext}
