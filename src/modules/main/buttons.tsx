@@ -12,11 +12,15 @@ import { useDidMount, useWillUnmount } from 'rooks';
 
 function Buttons({ useClickButton }) {
     const activate = useHookstate(globalState.user.activate);
-    
+    const styleActiv = {
+        color: '#4dcdf5',
+        backgroundColor: '#2b253a7a'
+    }
 
     return(
         <div className='RightPanelButtons'>
             <Button className="button"
+                style={activate?.m?.get() ? styleActiv : {}}
                 disabled={activate?.m?.get()}
                 icon={
                     <IoMdMale />
@@ -24,6 +28,7 @@ function Buttons({ useClickButton }) {
                 onClick={()=> useClickButton('m')}
             />
             <Button className="button"
+                style={activate?.f?.get() ? styleActiv : {}}
                 disabled={activate?.f?.get()}
                 icon={
                     <IoMdFemale />
@@ -31,6 +36,7 @@ function Buttons({ useClickButton }) {
                 onClick={()=> useClickButton('f')}
             />
             <Button className="button"
+                style={activate?.mf?.get() ? styleActiv : {}}
                 disabled={activate?.mf?.get()}
                 icon={
                     <IoMaleFemale />
@@ -38,7 +44,8 @@ function Buttons({ useClickButton }) {
                 onClick={()=> useClickButton('mf')}
             />
             <Button className="button"
-                disabled={activate?.search?.get()}
+                style={globalState?.user?.timeSuperFind?.get() ? styleActiv : {}}
+                disabled={globalState?.user?.timeSuperFind?.get()}
                 icon={
                     <FaSearchengin />
                 }
@@ -47,7 +54,7 @@ function Buttons({ useClickButton }) {
         </div>
     );
 }
-function ButtonsPlay({start, useStart, useNext}) {
+function ButtonsPlay({ start, useStart, useNext }) {
     const ovnerState = useHookstate(globalState.ovner);
 
 
@@ -80,20 +87,25 @@ function ButtonsPlay({start, useStart, useNext}) {
 }
 function ButtonsMobail({ useClickButton, start, useStart, useNext }) {
     const activate = useHookstate(globalState.user.activate);
+    const styleActiv = {
+        color: '#4dcdf5',
+        backgroundColor: '#2b253a7a'
+    }
 
 
     return(
         <div className='PanelButtonsMobail'>
             <div className='ButtonsMobailLeft'>
                 <Button className="button"
-                    style={{marginRight: '10px'}}
-                    disabled={activate?.search?.get()}
+                    style={globalState?.user?.timeSuperFind?.get() ? {...styleActiv, marginRight: '10px'} :{marginRight: '10px'}}
+                    disabled={globalState?.user?.timeSuperFind?.get()}
                     icon={
                         <FaSearchengin />
                     }
                     onClick={()=> useClickButton('search')}
                 />
                 <Button className="button"
+                    style={activate?.mf?.get() ? styleActiv : {}}
                     disabled={activate?.mf?.get()}
                     icon={
                         <IoMaleFemale />
@@ -125,7 +137,7 @@ function ButtonsMobail({ useClickButton, start, useStart, useNext }) {
             }
             <div className='ButtonsMobailRight'>
                 <Button className="button"
-                    style={{marginRight: '10px'}}
+                    style={activate?.m?.get() ? {...styleActiv, marginRight: '10px'} : {marginRight: '10px'}}
                     disabled={activate?.m?.get()}
                     icon={
                         <IoMdMale />
@@ -133,6 +145,7 @@ function ButtonsMobail({ useClickButton, start, useStart, useNext }) {
                     onClick={()=> useClickButton('m')}
                 />
                 <Button className="button"
+                    style={activate?.f?.get() ? styleActiv : {}}
                     disabled={activate?.f?.get()}
                     icon={
                         <IoMdFemale />

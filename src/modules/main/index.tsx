@@ -211,12 +211,3 @@ export default function({ peerId }) {
         </div>
     );
 }
-
-
-/**
- * <Button className="button"
-                        style={{ marginLeft: '10px' }}
-                        icon="pi pi-forward"
-                        onClick={()=> useStart(true)}
-                    />
- */

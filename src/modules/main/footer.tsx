@@ -7,7 +7,7 @@ import "../../css/footer.css";
 
 
 
-export default function({start}: {start: boolean}) {
+export default function({ start }: {start: boolean}) {
     const ovnerState = useHookstate(globalState.ovner);
     const [text, setText] = React.useState<string>();
 
@@ -21,7 +21,7 @@ export default function({start}: {start: boolean}) {
         }
     }
     const useClickLike =()=> {
-        if(ovnerState?.peerId?.get()) socket.emit('like', {
+        if(ovnerState?.peerId?.get() !== undefined) socket.emit('like', {
             peerId: globalThis.peerId,
             peerIdLike: ovnerState.peerId.get()
         });

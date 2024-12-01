@@ -44,6 +44,7 @@ footer {
 }
 /* Лквая панель инфо о собеседнике */
 .Indicator {
+    padding-top: 1%;
     padding-left: 1%;
     z-index: 5;
     position: absolute;
@@ -194,5 +195,20 @@ footer {
         min-height: 60%;
         position: relative;
         background-color: #42385A;
+    }
+}
+
+@media screen and (max-width: 1050px) {
+    .myVideo-container {
+        display: inline-block;
+        height: 17%;
+        width: 25%;
+        position: absolute;
+        z-index: 2;
+        top: 41%;
+        left: 72%;
+        background-color: rgba(0, 0, 0, 0.5);
+        border: 1px solid rgba(19, 19, 19, 0.5);
+        border-radius: 5%;
     }
 }

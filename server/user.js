@@ -14,7 +14,7 @@ class User {
      * @type {'m'|'f'}
      */
     sex = undefined
-    timeshtap = Date.now()
+    timeshtamp = Date.now()
     onStart = false                         // нажата кнопка поиска
     permision = 0                           // 0 - 2
     money = 0
@@ -50,7 +50,7 @@ class User {
     get() {
         const data = {};
         Object.keys(this).forEach((key)=> {
-            if(key!=='socket') {
+            if(key !== 'socket') {
                 data[key] = this[key];
             }
         });
@@ -88,7 +88,6 @@ class User {
         //this.bonusTime = data.bonusTime ?? 5 * (60 * 1000);
         this.money = data.money ?? 0;
         this.status = data.status ?? 'free';
-        this.forvards = data.forvards ?? [];
         this.galery = data.galery ?? [];
     }
     // чекалка возможности выбрать пол
@@ -109,6 +108,7 @@ class User {
         this.onStart = false;
     }
     
+    // покупка супер поиска
     activateSuperFind() {
         if(this.money - 10 >= 0 && !this.timeSuperFind) {
             this.money -= 10;
@@ -117,6 +117,20 @@ class User {
             this.emit('refreshed', {
                 money: this.money,
                 timeSuperFind: this.timeSuperFind
+            });
+        }
+    }
+    /**
+     * выбор пола
+     * @param {'m'|'mf'|'f'} type 
+     */
+    activateSex(type) {
+        if(this._chekSexActivate()) {
+            this.activate[type] = true;
+
+            this.emit('refreshed', {
+                money: this.money,
+                activate: this.activate
             });
         }
     }
