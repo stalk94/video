@@ -1,4 +1,5 @@
 const FakeUser = require('./fake_user');
+const User = require('./user');
 const { online } = require('./online');
 const { db } = require('./db');
 
@@ -13,6 +14,9 @@ module.exports = {
     },
     async getAllBots() {
         return await db.get('FAKE');
+    },
+    async getAllUsers() {
+        return await db.get('USERS');
     },
     // управление ботами
     async _load() {
@@ -89,6 +93,24 @@ module.exports = {
 
             if(online.online[bot.peerId]) {
                 online.online[bot.peerId] = bot;
+            }
+        }
+    },
+
+    async editUser(peerId, data) {
+        const user = online.online[peerId];
+        const hasUser = await db.get(`USERS.${data.login}`);
+
+        if(user && user.permision > 0 && hasUser) {
+            const newUser = new User(hasUser.login, hasUser.password);
+            
+            if(online.online[hasUser.peerId]) {
+                online.online[hasUser.peerId]._update(data);
+                online.online[hasUser.peerId].dump();
+            }
+            else {
+                newUser._update(data);
+                newUser.dump();
             }
         }
     }

@@ -68,6 +68,9 @@ app.post("/exit", (req, res)=> {
 app.post("/getAllBot", async (req, res)=> {
     res.send(await botManager.getAllBots());
 });
+app.post("/getAllUsers", async (req, res)=> {
+    res.send(await botManager.getAllUsers());
+});
 // name, login
 app.post("/loadVideo", (req, res)=> {
     botManager.loadVideo(req.body.login, req.body.name);
@@ -146,6 +149,12 @@ io.on('connection', (socket)=> {
     socket.on('admin.botRead', (msg)=> {
         if(msg && msg.peerId && msg.data) {
             botManager.edit(msg.peerId, msg.data);
+        }
+    });
+    // изменить свойства юзера
+    socket.on('admin.userRead', (msg)=> {
+        if(msg && msg.peerId && msg.data) {
+            botManager.editUser(msg.peerId, msg.data);
         }
     });
 });

@@ -145,13 +145,15 @@ function App() {
             const permision = state.user.permision.get();
             
             if(permision && permision > 0 && e.key==='*') {
-                if(view !== 'admin') setView('admin');
-                else setView('base');
+                setView((old)=> {
+                    if(old !== 'admin') return 'admin';
+                    else return 'base';
+                });
             }
         });
     });
     
-
+    
     return(
         <MantineProvider theme={{}}>
             <React.Fragment>

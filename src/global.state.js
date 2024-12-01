@@ -22,9 +22,6 @@ export default hookstate({
         }
     },
     ovner: {
-        likes: 0,
-        info: {
-            country: 'RU'
-        }
+        
     }
 });

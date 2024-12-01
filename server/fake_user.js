@@ -70,7 +70,7 @@ class FakeUser {
             this[key] = data[key];
         });
         shell.ls(`src/upload/${this.login}`).forEach((elem)=> {
-            if(elem.split('.')[1])  this.videos.push(elem);
+            if(elem.split('.')[1]) this.videos.push(elem);
         });
 
         this.money = data.money ?? 0;
