@@ -1,10 +1,9 @@
 import React from 'react';
-import { Checkbox } from 'primereact/checkbox';
 
 
 
-export default function({useInitALarm, value}) {
 
+export default function({ useInitALarm, value }) {
     return(
         <div className='AlarmContainer'>
             <div className='LabelAlarm'>
@@ -16,16 +15,14 @@ export default function({useInitALarm, value}) {
                 В лингвистике термин «текст» используется в широком значении, включая и образцы устной речи. Восприятие текста изучается в рамках лингвистики текста и психолингвистики. Так, например, И. Р. Гальперин определяет текст следующим образом: «Это письменное сообщение, объективированное в виде письменного документа, состоящее из ряда высказываний, объединённых разными типами лексической, грамматической и логической связи, имеющее определённый модальный характер, прагматическую установку и соответственно литературно обработанное
             </div>
             <div className='AlarmRadio'>
-                <Checkbox className='AlarmCheckbox'
-                    onChange={(e)=> useInitALarm(e.checked)} 
+                <input type="checkbox" 
+                    className='AlarmCheckbox'
+                    onChange={(e)=> useInitALarm()} 
                     checked={value}
                 />
-                <label style={{
-                        marginLeft: '7px'
-                    }}
-                >
+                <div className='AlarmCheckboxLabel'>
                     Соглашаюсь
-                </label>
+                </div>
             </div>
         </div>
     );

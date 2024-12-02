@@ -36,7 +36,7 @@ const Test =({useCall, peerId})=> {
         </OverlayPanel>
     );
 }
-const Coins =({money})=> {
+const Coins =({ money })=> {
     return(
         <div className='CoinsContainer'>
             <div style={{}}>
@@ -76,24 +76,14 @@ export default function({useCall, peerId}) {
                 <Coins 
                     money={userState.money.get()} 
                 />
-                <div id="ls" onClick={useClickUser}>
-                    <i className="pi pi-envelope" 
-                        style={{
-                            fontSize: '1.6rem', 
-                            marginTop: '1.5px',
-                            marginLeft: '1px'
-                        }}
-                    />
-                </div>
-                <div id="user" onClick={useClickLs}>
-                    <i className="pi pi-user" 
-                        style={{
-                            fontSize: '1.9rem', 
-                            marginTop: '3px',
-                            marginLeft: '4px'
-                        }}
-                    />
-                </div>
+                <Button className="button" id="ls"
+                    icon="pi pi-envelope"
+                    onClick={useClickUser}
+                />
+                <Button className="button" id="user"
+                    icon="pi pi-user"
+                    onClick={useClickUser}
+                />
             </section>
         </header>
     );

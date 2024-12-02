@@ -1,5 +1,5 @@
 .Loader {
-    
+    margin: auto;
 }
 
 /* Выбор пола */
@@ -37,50 +37,64 @@
 .AlarmContainer {
     width: 100%;
     height: 100%;
-    padding-left: 27%;
-    margin-top: 4%;
     color: white;
     display: flex;
     flex-direction: column;
+}
+.LabelAlarm {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: auto;
+    font-size: 7vw;
+    font-weight: 700;
+    color: #ffcccc;
 }
 .AlarmCard {
     background-color: antiquewhite;
     border: 1px solid black;
     width: 50%;
+    margin-left: auto;
+    margin-right: auto;
     padding: 3%;
     color: black;
     border-radius: 25px;
-}
-.LabelAlarm {
-    margin-left: 9%;
-    font-size: 90px;
-    font-weight: 700;
-    color: #ffcccc;
+    font-size: 1.5vh;
 }
 .AlarmRadio {
     display: flex;
     flex-direction: row;
-    margin: 3%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: auto;
+    margin-top: 10px;
 }
+/* чекбокс */
 .AlarmCheckbox {
-    
+    width: 4.5vw;
+    height: 3vh;
+}
+.AlarmCheckboxLabel {
+    margin: auto;
+    font-size: 2vh;
+    margin-left: 5px;
+    margin-top: 5px;
 }
 
 
 /* Авторизация / Регистрация */
 .Form {
-    width: 100%;
-    height: 100%;
-    padding-left: 35%;
-    padding-right: 35%;
-    margin-top: 3%;
+    width: 60%;
+    height: 50%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10%;
     color: white;
     display: flex;
     flex-direction: column;
 }
 .LabelAuth {
-    margin-left: 9%;
-    font-size: 90px;
+    margin-left: 0%;
+    font-size: 6vh;
     font-weight: 700;
     color: #ffcccc;
 }
@@ -91,17 +105,19 @@
     background-color: rgba(182, 182, 182, 0.411);
     border-radius: 5px;
     color: white;
+    font-size: 1.4vh;
 }
 .FormButton:hover {
     background-color: rgba(182, 182, 182, 0.2);
 }
 .SocButton {
-    margin-top: 7px;
-    padding: 12px;
+    margin-top: 20px;
+    padding: 20px;
     border: 1px solid rgba(255, 255, 255, 0.052);
-    background-color: rgba(112, 8, 248, 0.411);
+    background-color: rgba(8, 168, 248, 0.411);
     border-radius: 5px;
     color: white;
+    font-size: 1.4vh;
 }
 .SocButton:hover {
     background-color: rgba(182, 182, 182, 0.2);
@@ -113,10 +129,58 @@
 .TooglerButton {
     padding: 0px;
     color: white;
-    font-size: 24px;
+    font-size: 3vh;
+    margin-bottom: 10px;
     background-color: rgba(0, 0, 0, 0);
     border: 1px solid rgba(255, 255, 255, 0);
 }
 .TooglerButton:hover {
     color: rgb(126, 126, 126);
+}
+
+
+
+
+@media screen and (max-width: 1280px) {
+    .SelectSexContainer {
+        padding-left: 10%;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 30vw;
+        color: white;
+        display: flex;
+        flex-direction: column;
+    }
+    .TextSelectSex {
+        letter-spacing: 5px;
+        margin-left: 0%;
+        font-size: 6.5vh;
+        font-weight: 700;
+        color: #ffcccc;
+    }
+    .SelectSex {
+        margin-left: 15px;
+        display: flex;
+        flex-direction: row;
+    }
+
+    .AlarmCard {
+        background-color: antiquewhite;
+        border: 1px solid black;
+        width: 60%;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 3%;
+        color: black;
+        border-radius: 25px;
+        font-size: 2.4vw;
+    }
+
+    .Form {
+        width: 80%;
+        margin-top: 20vh;
+        color: white;
+        display: flex;
+        flex-direction: column;
+    }
 }

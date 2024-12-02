@@ -8,7 +8,6 @@ export default function({mod, useMod}: {mod: 'auth'|'reg', useMod: (type: 'auth'
         <div className='Toogler'>
             <Button className='TooglerButton'
                 style={{
-                    marginLeft: '20px',
                     opacity: mod === 'auth' ? '0.4' : 1
                 }}
                 label='ВХОД'

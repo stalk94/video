@@ -5,6 +5,7 @@ import { PasswordInput, TextInput } from '@mantine/core';
 import { Button } from 'primereact/button';
 import { useDidMount } from 'rooks';
 
+
 const statusIcon = {
     valid: <i className="pi pi-check" style={{color:'green'}}/>,
     invalid: <i className="pi pi-times" style={{color:'red'}}/>
@@ -52,18 +53,21 @@ export default function({ useReg }) {
     return(
         <React.Fragment>
             <TextInput
+                size="xl"
                 placeholder="Логин"
                 value={login}
                 onChange={(event)=> setLogin(event.currentTarget.value)}
                 rightSection={chekLogin()}
             />
             <TextInput style={{marginTop:'20px'}}
+                size="xl"
                 placeholder="E-mail"
                 value={email}
                 onChange={(event)=> setEmail(event.currentTarget.value)}
                 rightSection={chekEmail()}
             />
             <PasswordInput style={{ marginTop: '20px' }}
+                size="xl"
                 placeholder="Пароль"
                 rightSection={chekPassword()}
                 value={password}

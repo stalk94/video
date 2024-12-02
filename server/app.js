@@ -13,7 +13,7 @@ const APP = {
             if(!ovner._bot) {
                 user.curentCall = ovner.peerId;
                 ovner.curentCall = user.peerId;
-                user.addStory(ovner.login)
+                user.addStory(ovner.login);
                 // инициация вызова на стороне клиента
                 user.emit('call', {
                     peerId: ovner.peerId,
@@ -27,7 +27,7 @@ const APP = {
             // ботяра
             else {
                 user.curentCall = ovner.peerId;
-                ovner.curentCall = user.peerId;
+                //ovner.curentCall = user.peerId;
                 user.addStory(ovner.login);
 
                 user.emit('call.bot', {
@@ -173,6 +173,7 @@ const APP = {
             if(!find) {
                 ovner.likes++;
                 user.story.forEach((elem)=> elem[ovner.login] = true);
+                ovner.dump();
             }
             
             return ovner.likes;

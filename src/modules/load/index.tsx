@@ -10,18 +10,18 @@ import "../../css/loader.css";
 
 
 
-export default function({useAuth}: {useAuth: (login: string, password: string)=> void}) {
+export default function({ useAuth }: {useAuth: (login: string, password: string)=> void}) {
     const [sex, setSex] = React.useState('m');
     const [alarms, setAlarm] = React.useState(false);
-    const [mod, setMod] = React.useState<'auth'|'reg'|'init'|'alarm'>('auth');
+    const [mod, setMod] = React.useState<'auth'|'reg'|'init'|'alarm'>('init');
 
     const useSetSex =(type: 'm'|'fem')=> {
         setSex(type);
         setMod('alarm');
     }
-    const useSetAlarm =(type: boolean)=> {
-        setAlarm(type);
-        if(type) setMod('auth');
+    const useSetAlarm =()=> {
+        setAlarm(true);
+        setMod('auth');
     }
     const useReg =(data: any)=> {
         send('reg', {...data, sex: sex}, 'POST').then((res) => {
@@ -37,9 +37,7 @@ export default function({useAuth}: {useAuth: (login: string, password: string)=>
     return(
         <div className='Loader'>
             { (mod === 'auth' ||  mod === 'reg') &&
-                <div className='Form' 
-                    style={{ marginTop: mod === 'reg' && '3%' }}
-                >
+                <div className='Form'>
                     <div className='LabelAuth'>
                         INTIMALIVE
                     </div>
@@ -47,12 +45,12 @@ export default function({useAuth}: {useAuth: (login: string, password: string)=>
                         mod={mod}
                         useMod={setMod}
                     />
-                    { mod==='auth' && 
+                    { mod === 'auth' && 
                         <Auth 
                             useAuth={useAuth} 
                         /> 
                     }
-                    { mod==='reg' && 
+                    { mod === 'reg' && 
                         <Reg 
                             useReg={useReg} 
                         /> 

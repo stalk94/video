@@ -33,6 +33,7 @@ export default function({ start }: {start: boolean}) {
 
     return(
         <footer>
+            <div className='FooterWraper'>
             <div className='PanelFooter'>
                 <Button className="button" id="like"
                     icon="pi pi-heart"
@@ -57,6 +58,7 @@ export default function({ start }: {start: boolean}) {
                     disabled={!start}
                     onClick={useSend}
                 />
+            </div>
             </div>
         </footer>
     );
