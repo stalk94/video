@@ -29,9 +29,6 @@ export default function({ peerId }) {
             navigator.mediaDevices.getUserMedia({ audio: true, video: true })
                 .then((mediaStream)=> {	
                     myVideo.srcObject = mediaStream;
-                    myVideo.onloadedmetadata =(e)=> {
-                        myVideo.play();
-                    };
                 })
 
             socket.emit('start', {
@@ -40,8 +37,11 @@ export default function({ peerId }) {
         }
         // отключаемся
         else {
+            setInput(false);
             myVideo.srcObject = undefined;
             ovnerVideo.srcObject = undefined;
+            ovnerVideo.src = '';
+            globalState.ovner.set({});
 
             socket.emit('finish', {
                 peerId: globalThis.peerId
@@ -59,11 +59,9 @@ export default function({ peerId }) {
 
         ovnerVideo.src = src;
         ovnerVideo.loop = true;
-        ovnerVideo.onloadedmetadata =(e)=> {
-            ovnerVideo.play();
-        }
 
         const minut = 1000 * 60;
+        //! это будет обсераться иногда
         setTimeout(()=> {
             useNext();
         }, rand.getRandom(minut/2, minut * 2));
@@ -72,6 +70,8 @@ export default function({ peerId }) {
     const useCall =(peerId)=> {
         const myVideo: HTMLVideoElement = document.querySelector('#myVideo');
         const ovnerVideo: HTMLVideoElement = document.querySelector('#ovnerVideo');
+        delete ovnerVideo.src;
+        ovnerVideo.src = '';
 
         navigator.mediaDevices.getUserMedia({ audio: true, video: true })
             .then((mediaStream)=> {	
@@ -81,17 +81,11 @@ export default function({ peerId }) {
                     //нам ответили, получим стрим
                     setTimeout(()=> {
                         ovnerVideo.srcObject = peercall.remoteStream;
-                        ovnerVideo.onloadedmetadata =(e)=> {
-                            ovnerVideo.play();
-                        }
-                    }, 1500);	
+                    }, 500);	
                 });
                 //  peercall.on('close', onCallClose);
                 if(!myVideo.srcObject) {
                     myVideo.srcObject = mediaStream;
-                    myVideo.onloadedmetadata =(e)=> {
-                        myVideo.play();
-                    };
                 }
             })
             .catch((err)=> { 
@@ -107,14 +101,16 @@ export default function({ peerId }) {
             setInput(false);
             globalThis.peercall.close();
             delete globalThis.peercall;
-            delete ovnerVideo.srcObject;
             delete myVideo.srcObject;
         }
         else {
             setInput(false);
-            ovnerVideo.src = '';
             delete myVideo.srcObject;
         }
+
+        delete ovnerVideo.src;
+        ovnerVideo.src = '';
+        delete ovnerVideo.srcObject;
         globalState.ovner.set({});
     }
     const useNext =()=> {
@@ -156,7 +152,7 @@ export default function({ peerId }) {
         });
         // видеопоток собеседника получен
         EVENT.on('input.start', ()=> {
-            console.log('INPUT START');
+            console.log('VIDEO INPUT SUCESS');
             setStart(true);
             setInput(true);
         });
@@ -167,6 +163,7 @@ export default function({ peerId }) {
             socket.emit('start', {peerId: peerId});
         }
     }, 1500, (globalThis.peerCall ? false : true) && start);
+    
     
     
     return(
@@ -180,8 +177,10 @@ export default function({ peerId }) {
                 <Indicator />
                 <div className="ovnerVideo-container" id={start ? "ovnerDark" : ""}>
                     <video id='ovnerVideo'
+                        controls={false}
                         width={'100%'}
                         height={'100%'}
+                        autoPlay={true}
                     >
 
                     </video>
@@ -191,8 +190,10 @@ export default function({ peerId }) {
                 </div>
                 <div className="myVideo-container">
                     <video id='myVideo'
+                        controls={false}
                         width={'100%'}
                         height={'100%'}
+                        autoPlay={true}
                     >
 
                     </video>

@@ -26,7 +26,7 @@ const APP = {
             }
             // ботяра
             else {
-                user.curentCall = ovner.peerId;
+                //user.curentCall = ovner.peerId;
                 //ovner.curentCall = user.peerId;
                 user.addStory(ovner.login);
 
@@ -122,7 +122,7 @@ const APP = {
             // ботяра
             else if(ovner && ovner._bot) {
                 user.emit('endCall.bot', {});
-                delete ovner.curentCall;
+                //delete ovner.curentCall;
                 delete user.curentCall;
             }
             // ни с кем не говорили
@@ -150,7 +150,7 @@ const APP = {
             else if(ovner && ovner._bot) {
                 user.stop();
                 user.emit('endCall.bot', {});
-                delete ovner.curentCall;
+                //delete ovner.curentCall;
                 delete user.curentCall;
             }
             // ни с кем не говорили
@@ -195,7 +195,7 @@ const APP = {
     sendMassage(myPeerId, text) {
         const user = online.online[myPeerId];
 
-        if(user && user.curentCall) {
+        if(user) {
             const ovner = online.online[user.curentCall];
         
             if(ovner) {
@@ -203,6 +203,13 @@ const APP = {
                     login: user.login,
                     text: text
                 });
+                user.emit('massage', {
+                    login: user.login,
+                    text: text
+                });
+            }
+            // ботинок
+            else {
                 user.emit('massage', {
                     login: user.login,
                     text: text

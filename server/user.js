@@ -159,6 +159,7 @@ class User {
         db.set('USERS.' + this.login, data);
     }
     exit() {
+        console.log('USER EXIT: ', this.login);
         delete this.curentCall;
         this.dump();
     }

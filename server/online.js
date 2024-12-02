@@ -44,7 +44,7 @@ const online = {
     },
     remove(login) {
         Object.keys(this.online).forEach((key)=> {
-            if(this.online[key].name === login) {
+            if(this.online[key].login === login) {
                 delete this.online[key];
             }
         });

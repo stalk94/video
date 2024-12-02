@@ -64,19 +64,11 @@ function App() {
                 
                 //помещаем собственный медиапоток в объект видео (чтоб видеть себя)
                 myVideo.srcObject = mediaStream;
-                myVideo.onloadedmetadata =(e)=> {
-                    //запускаем воспроизведение, когда объект загружен
-                    myVideo.play();
-                };
                 setTimeout(()=> {
                     //входящий стрим помещаем в объект видео для отображения
                     ovnerVideo.srcObject = peercall.remoteStream;
-                    ovnerVideo.onloadedmetadata =(e)=> {
-                        // и запускаем воспроизведение когда объект загружен
-                        ovnerVideo.play();
-                        EVENT.emit('input.start', {});
-                    };
-                }, 1500);
+                    EVENT.emit('input.start', {});
+                }, 500);
 
             })
             .catch((err)=> { 
