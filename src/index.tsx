@@ -1,4 +1,4 @@
-//import "primereact/resources/themes/lara-dark-blue/theme.css";
+//import "primereact/resources/themes/md-dark-indigo/theme.css";
 //import "primereact/resources/primereact.min.css";
 import '@mantine/core/styles.css';
 import 'primeicons/primeicons.css';
@@ -16,6 +16,7 @@ import Base from "./modules/main/index";
 import Loader from "./modules/load";
 import Admin from "./modules/admin/index";
 import "./css/index.css";
+import "./css/button.css";
 
 
 globalThis.peercall;

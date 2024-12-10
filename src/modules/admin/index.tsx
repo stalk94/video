@@ -1,5 +1,3 @@
-//import "primereact/resources/themes/lara-dark-blue/theme.css";
-//import "primereact/resources/primereact.min.css";
 import React from 'react';
 import { TabMenu } from 'primereact/tabmenu';
 import Base from "./base";

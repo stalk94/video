@@ -69,10 +69,14 @@ class FakeUser {
         Object.keys(data).forEach((key)=> {
             this[key] = data[key];
         });
+
+        // крепим видео
+        this.videos = [];
         shell.ls(`src/upload/${this.login}`).forEach((elem)=> {
             if(elem.split('.')[1]) this.videos.push(elem);
         });
 
+        
         this.money = data.money ?? 0;
         this.status = data.status ?? 'free';
         this.galery = data.galery ?? [];
