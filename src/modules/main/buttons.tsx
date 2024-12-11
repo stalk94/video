@@ -5,6 +5,8 @@ import { Button } from 'primereact/button';
 import { IoMaleFemale } from "react-icons/io5";
 import { IoMdFemale, IoMdMale } from "react-icons/io";
 import { FaSearchengin } from "react-icons/fa6";
+import { FaPlay, FaAngleDoubleRight } from "react-icons/fa";
+import { FaRegCircleStop } from "react-icons/fa6";
 import Modal from "../../component/modal";
 import { useOrientation, useWindowSize } from "react-use";
 import { useDidMount, useWillUnmount } from 'rooks';
@@ -63,7 +65,9 @@ function ButtonsPlay({ start, useStart, useNext }) {
             {!start &&
                 <div style={{ marginLeft: '46%', display: 'flex', flexDirection: 'row' }}>
                     <Button className="button" id="start"
-                        icon="pi pi-play"
+                        icon={
+                            <FaPlay />
+                        }
                         onClick={()=> useStart(true)}
                     />
                 </div>
@@ -72,12 +76,16 @@ function ButtonsPlay({ start, useStart, useNext }) {
                 <div style={{ marginLeft: '46%', display: 'flex', flexDirection: 'row' }}>
                     <Button className="button"
                         style={{ marginRight: '10px', paddingLeft: '12px' }}
-                        icon="pi pi-stop-circle"
+                        icon={
+                            <FaRegCircleStop />
+                        }
                         onClick={()=> useStart(false)}
                     />
                     <Button className="button"
                         style={{ marginLeft: '10px', paddingLeft: '12px' }}
-                        icon="pi pi-forward"
+                        icon={
+                            <FaAngleDoubleRight />
+                        }
                         onClick={()=> useNext()}
                     />
                 </div>
@@ -116,7 +124,9 @@ function ButtonsMobail({ useClickButton, start, useStart, useNext }) {
             { !start &&
                 <div style={{ display: 'flex', flexDirection: 'row' }}>
                     <Button className="button" id="start"
-                        icon="pi pi-play"
+                        icon={
+                            <FaPlay />
+                        }
                         onClick={()=> useStart(true)}
                     />
                 </div>
@@ -125,12 +135,16 @@ function ButtonsMobail({ useClickButton, start, useStart, useNext }) {
                 <div style={{ display: 'flex', flexDirection: 'row' }}>
                     <Button className="button"
                         style={{ marginRight: '10px', paddingLeft: '12px' }}
-                        icon="pi pi-stop-circle"
+                        icon={
+                            <FaRegCircleStop />
+                        }
                         onClick={()=> useStart(false)}
                     />
                     <Button className="button"
                         style={{ marginLeft: '10px', paddingLeft: '12px' }}
-                        icon="pi pi-forward"
+                        icon={
+                            <FaAngleDoubleRight />
+                        }
                         onClick={()=> useNext()}
                     />
                 </div>

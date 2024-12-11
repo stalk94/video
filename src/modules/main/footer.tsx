@@ -3,6 +3,8 @@ import { Button } from 'primereact/button';
 import globalState from "../../global.state";
 import { useHookstate } from '@hookstate/core';
 import { InputText } from 'primereact/inputtext';
+import { FaRegHeart } from "react-icons/fa";
+import { IoGiftSharp } from "react-icons/io5";
 import "../../css/footer.css";
 
 
@@ -36,11 +38,15 @@ export default function({ start }: {start: boolean}) {
             <div className='FooterWraper'>
             <div className='PanelFooter'>
                 <Button className="button" id="like"
-                    icon="pi pi-heart"
+                    icon={
+                        <FaRegHeart />
+                    }
                     onClick={useClickLike}
                 />
                 <Button className="button" id="gift"
-                    icon="pi pi-gift"
+                    icon={
+                        <IoGiftSharp />
+                    }
                     onClick={useClickGift}
                 />
             </div>

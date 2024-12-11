@@ -4,6 +4,8 @@ import { useHookstate } from '@hookstate/core';
 import { useDidMount, useIntervalWhen } from 'rooks';
 import { Button } from 'primereact/button';
 import { OverlayPanel } from 'primereact/overlaypanel';
+import { FiUser } from "react-icons/fi";
+import { TbMessageDots } from "react-icons/tb";
 import "../../css/header.css";
 
 
@@ -77,11 +79,15 @@ export default function({useCall, peerId}) {
                     money={userState.money.get()} 
                 />
                 <Button className="button" id="ls"
-                    icon="pi pi-envelope"
+                    icon={
+                        <TbMessageDots />
+                    }
                     onClick={useClickUser}
                 />
                 <Button className="button" id="user"
-                    icon="pi pi-user"
+                    icon={
+                        <FiUser />
+                    }
                     onClick={useClickUser}
                 />
             </section>

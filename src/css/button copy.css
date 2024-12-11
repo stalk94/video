@@ -27,6 +27,7 @@
     border: 1px solid rgba(206, 205, 205, 0.3);
     background-color: #2b253a;
     color: aliceblue;
+    font-size: 1.5rem;
     border-radius: 50%;
 }
 #ls:hover {
@@ -42,16 +43,13 @@
     border: 1px solid rgba(206, 205, 205, 0.3);
     background-color: #2b253a;
     color: aliceblue;
+    font-size: 1.5rem;
     border-radius: 50%;
 }
 #user:hover {
     color: rgb(224, 248, 3);
     border: 1px solid rgba(203, 237, 5, 0.3);
 }
-#start {
-   font-size: 22px;     
-}
-
 
 /* нижние кнопки */
 #like {
@@ -66,13 +64,16 @@
 #gift {
     margin-left: 10px;
     padding-left: 11px;
-   
+    padding-right: 12px;
 }
 
 
 @media screen and (max-width: 1280px) {
     .button {
-        width: 100px;
+        padding-left: 22px;
+        padding-right: 18px;
+        padding-top: 6px;
+        padding-bottom: 6px;
         border: 1px solid rgba(0, 0, 0, 0.2);
         background-color: #2b253a;
         color: aliceblue;
@@ -89,7 +90,7 @@
         height: 100%;
         border: 1px solid rgba(206, 205, 205, 0.3);
         color: aliceblue;
-        font-size: 3.2vh;
+        font-size: 2.9vh;
         border-radius: 50%;
     }
     #user {
@@ -102,17 +103,20 @@
         padding: 5px;
         border: 1px solid rgba(206, 205, 205, 0.3);
         color: aliceblue;
-        font-size: 3.2vh;
+        font-size: 2.9vh;
         border-radius: 50%;
     }
-    #start {
-        font-size: 2.8vh;
-    }
     #like {
-        
+        padding-left: 16px;
+        padding-right: 16px;
+        padding-top: 5px;
+        padding-bottom: 1px;
     }
     #gift {
         margin-left: 10px;
+        padding-left: 16px;
+        padding-right: 16px;
         padding-top: 2px;
+        padding-bottom: 1px;
     }
 }

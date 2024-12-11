@@ -1,5 +1,5 @@
-//import "primereact/resources/themes/md-dark-indigo/theme.css";
-//import "primereact/resources/primereact.min.css";
+import "primereact/resources/themes/md-dark-indigo/theme.css";
+import "primereact/resources/primereact.min.css";
 import '@mantine/core/styles.css';
 import 'primeicons/primeicons.css';
 import { createTheme, MantineProvider } from '@mantine/core';
