@@ -108,6 +108,7 @@ const APP = {
     next(myPeerId) {
         const user = online.online[myPeerId];
 
+
         if(user) {
             const ovner = online.online[user.curentCall];
 
@@ -119,14 +120,9 @@ const APP = {
                 delete ovner.curentCall;
                 delete user.curentCall;
             }
-            // ботяра
-            else if(ovner && ovner._bot) {
-                user.emit('endCall.bot', {});
-                //delete ovner.curentCall;
-                delete user.curentCall;
-            }
-            // ни с кем не говорили
+            // ни с кем не говорили либо с ботом
             else {
+                user.emit('endCall.bot', {});
                 delete user.curentCall;
             }
         }

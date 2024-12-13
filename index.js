@@ -3,8 +3,8 @@ const fs = require('fs');
 const uuid = require('uuid');
 const http = require('http');
 const express = require('express');
-const multer  = require('multer');
 const favicon = require('serve-favicon');
+const fileUpload = require('express-fileupload');
 const { Server } = require("socket.io");
 const cors = require("cors");
 const path = require("path");
@@ -18,16 +18,9 @@ const app = express();
 app.use(cors({origin:"http://localhost:3001"}));
 app.use(express.urlencoded({limit: '100mb'}));
 app.use(express.json({limit: '1mb'}));
+app.use(fileUpload({}));
 const server = http.createServer(app);
-const storage = multer.diskStorage({
-    destination: (req, file, cb)=> {
-        cb(null, __dirname + `/src/upload/${req.body.login}`)
-    },
-    filename: (req, file, cb)=> {
-        cb(null, req.body.name);
-    }
-});
-const upload = multer({ storage: storage });
+
 const io = new Server(server, {
     cors: {
         origin: "http://localhost:3001",
@@ -71,10 +64,11 @@ app.post("/getAllBot", async (req, res)=> {
 app.post("/getAllUsers", async (req, res)=> {
     res.send(await botManager.getAllUsers());
 });
-// name, login
-app.post("/loadVideo", (req, res)=> {
-    botManager.loadVideo(req.body.login, req.body.name);
-    res.send('sucess');
+app.post('/upload', (req, res)=> {
+    //req.files.photo.mv('src/upload/'+req.files.photo.name);
+    //res.end(req.files.photo.name);
+    console.log(req.body);
+    console.log(req.files);
 });
 
 

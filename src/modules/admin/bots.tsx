@@ -8,7 +8,9 @@ import { InputNumber } from 'primereact/inputnumber';
 import { useDidMount, useIntervalWhen } from 'rooks';
 
 
-const NewBot =()=> {
+const NewBot =({ useUpdate })=> {
+    const [login, setLogin] = React.useState('');
+    const [country, setCountry] = React.useState('RU');
     const [state, setState] = React.useState({
         login: '',
         time: {
@@ -17,8 +19,14 @@ const NewBot =()=> {
         }
     });
 
+
     const useClickNewBot =()=> {
-        if(state.login.length > 3) socket.emit('admin.botCreate', {
+        state.login = login;
+        state.info = {
+            country: country
+        }
+
+        if(login.length > 3) socket.emit('admin.botCreate', {
             peerId: globalThis.peerId,
             data: state
         });
@@ -38,8 +46,13 @@ const NewBot =()=> {
         <div style={{display: 'flex', flexDirection: 'row'}}>
             <InputText 
                 placeholder='Логин'
-                value={state.login} 
-                onChange={(e)=> useState('login', e.target.value)} 
+                value={login} 
+                onChange={(e)=> setLogin(e.target.value)} 
+            />
+            <InputText
+                placeholder='RU, UA, EE ...'
+                value={country} 
+                onChange={(e)=> setCountry(e.target.value)} 
             />
             <InputNumber showButtons
                 value={state.time.start} 
@@ -53,8 +66,8 @@ const NewBot =()=> {
                 min={0} 
                 max={23} 
             />
-            <Button
-                style={{}}
+            <Button className='p-button-success'
+                style={{marginLeft: '20px'}}
                 icon={"pi pi-user-plus"}
                 onClick={()=> useClickNewBot()}
             />
@@ -73,6 +86,9 @@ export default function() {
             if(key !== 'start' && key !== 'end') {
                 old[findIndex][key] = value;
             }
+            else if(key === 'country') {
+                old[findIndex].info.country = value;
+            }
             else {
                 old[findIndex].time[key] = value;
             }
@@ -88,12 +104,17 @@ export default function() {
             data: products[findIndex]
         });
     }
-    useDidMount(()=> {
+    const useUpdate =()=> {
         send("getAllBot", {}, "POST").then((data)=> {
-            console.log(Object.values(data)[0])
             setProducts(Object.values(data));
         });
+    }
+    useDidMount(()=> {
+        useUpdate();
     });
+    useIntervalWhen(()=> {
+        useUpdate();
+    }, 500, true);
 
 
     return(
@@ -101,10 +122,17 @@ export default function() {
             <DataTable 
                 value={products}
                 header={
-                    <NewBot />
+                    <NewBot useUpdate={useUpdate} />
                 }
             >
                 <Column field="login" header="Login"/>
+                <Column header="Страна"
+                    body={(data)=> 
+                        <div>
+                            { data.info.country }
+                        </div>
+                    }
+                />
                 <Column header="Лайки"
                     body={(data)=> 
                         <InputNumber showButtons

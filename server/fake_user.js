@@ -60,7 +60,7 @@ class FakeUser {
             this[key] = data[key];
         });
 
-        if(this.login!=='testBaby') fs.mkdir(__dirname + `/src/upload/${this.login}`, (err)=> {
+        if(this.login!=='testBaby') fs.mkdir(`src/upload/${this.login}`, (err)=> {
             if(err) logger.error(err, 'ERROR CREATE BOT DIR');
         });
         this.dump();

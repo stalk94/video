@@ -34,12 +34,18 @@ export default function() {
             data: products[findIndex]
         });
     }
-    useDidMount(()=> {
+    const useUpdate =()=> {
         send("getAllUsers", {}, "POST").then((data)=> {
             console.log(Object.values(data)[0])
             setProducts(Object.values(data));
         });
+    }
+    useDidMount(()=> {
+        useUpdate();
     });
+    useIntervalWhen(()=> {
+        useUpdate();
+    }, 500, true);
 
 
     return(

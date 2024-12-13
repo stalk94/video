@@ -98,7 +98,6 @@ function App() {
             showToast('success', 'Успешно!', data.text);
         });
         
-        
         socket.on('data.ovner', (data)=> {
             state.ovner.set(data.userData);
         });
@@ -121,7 +120,6 @@ function App() {
                 return oldState;
             });
         });
-
 
         peer.on('open', (peerID)=> {
             globalThis.peerId = peerID;
@@ -147,6 +145,7 @@ function App() {
     });
     
     
+
     return(
         <MantineProvider theme={{}}>
             <React.Fragment>

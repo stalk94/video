@@ -1,4 +1,3 @@
-import { send } from "./lib/engine";
 
 
 export function getSizeElement(selector?: string) {

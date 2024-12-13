@@ -1,5 +1,5 @@
 import React from 'react';
-import { EVENT } from '../../lib/engine';
+import { EVENT, send } from '../../lib/engine';
 import globalState from "../../global.state";
 import Footer from "./footer";
 import Header from "./header";
@@ -18,7 +18,7 @@ export default function({ peerId }) {
     const [input, setInput] = React.useState(false);        // получен ли поток от собеседника
     const [start, setStart] = React.useState(false);        // нажата мной кнопка старт
 
-    
+
     // мы запускаем поиск
     const useSetStart =(type: boolean)=> {
         const myVideo: HTMLVideoElement = document.querySelector('#myVideo');
@@ -205,7 +205,7 @@ export default function({ peerId }) {
                 />
                 <Chat />
             </div>
-            
+
             <Footer
                 start={input}
             />
