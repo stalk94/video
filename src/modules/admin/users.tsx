@@ -36,7 +36,6 @@ export default function() {
     }
     const useUpdate =()=> {
         send("getAllUsers", {}, "POST").then((data)=> {
-            console.log(Object.values(data)[0])
             setProducts(Object.values(data));
         });
     }
@@ -54,6 +53,13 @@ export default function() {
                 value={products}
             >
                 <Column field="login" header="Login"/>
+                <Column header="Страна"
+                    body={(data)=> 
+                        <div>
+                            { data.info?.country }
+                        </div>
+                    }
+                />
                 <Column header="Лайки"
                     body={(data)=> 
                         <InputNumber showButtons

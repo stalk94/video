@@ -13,7 +13,7 @@ const statusIcon = {
 
 
 export default function({ useReg }) {
-    const [ipData, setIpData] = React.useState<any>();
+    const [ipData, setIpData] = React.useState<any>();                  // данные по ip клиента
     const [login, setLogin] = React.useState<string>();
     const [email, setEmail] = React.useState<string>();
     const [password, setPassword] = React.useState<string>();

@@ -134,6 +134,7 @@ class User {
             });
         }
     }
+    // поплнение счета либо изменение баланса юзера
     addMoney(value) {
         if(value >= 150) {
             this.status = 'premium'

@@ -50,17 +50,20 @@ const NewBot =({ useUpdate })=> {
                 onChange={(e)=> setLogin(e.target.value)} 
             />
             <InputText
+                style={{marginLeft: '5px'}}
                 placeholder='RU, UA, EE ...'
                 value={country} 
                 onChange={(e)=> setCountry(e.target.value)} 
             />
             <InputNumber showButtons
+                style={{marginLeft: '5px'}}
                 value={state.time.start} 
                 onValueChange={(e)=> useState('start', e.value)} 
                 min={0} 
                 max={23} 
             />
-            <InputNumber showButtons
+            <InputNumber showButtons 
+                style={{marginLeft: '5px'}}
                 value={state.time.end} 
                 onValueChange={(e)=> useState('end', e.value)} 
                 min={0} 

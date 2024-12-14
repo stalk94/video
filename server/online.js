@@ -100,6 +100,7 @@ const autorize = async function(login, password, sid, peerId, socket) {
 }
 
 
+
 module.exports = {
     online: online,
     registration: registration,

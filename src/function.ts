@@ -17,7 +17,11 @@ export function getIp(clb: Function) {
         (jsonResponse)=> clb(jsonResponse)
     );
 }
-
+/**
+ * 
+ * @param time 
+ * @returns 
+ */
 const useTime =(time: number)=> {
     let hours = 0;
     let min = 0;
