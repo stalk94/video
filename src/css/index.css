@@ -38,6 +38,14 @@ body {
     color: #8a717c;
 }
 
+
 @media only screen and (max-width: 1280px) {
-    
+    input, textarea, select {
+        font-size: 28px;
+    }
+}
+@media screen and (-webkit-min-device-pixel-ratio: 0) { 
+    select:focus, textarea:focus, input:focus { 
+        font-size: 28px; 
+    } 
 }

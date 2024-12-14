@@ -52,7 +52,7 @@ const Coins =({ money })=> {
 }
 
 
-export default function({useCall, peerId}) { 
+export default function({useCall, peerId}: {useCall:(peerId:string)=> void, peerId:string}) { 
     const userState = useHookstate(globalState.user);
 
     const useClickUser =()=> {

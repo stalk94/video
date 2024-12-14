@@ -6,7 +6,7 @@ import Header from "./header";
 import Chat from "./chat";
 import { useDidMount, useIntervalWhen } from 'rooks';
 import ButtonsPanel from "./buttons";
-import BlurCanvas from "./canvas";
+import BlurCanvas, { Spiner } from "./canvas";
 import Indicator from "./left-panel";
 import rand from "random-percentage"
 import "../../css/base.css";
@@ -52,13 +52,16 @@ export default function({ peerId }) {
     const useCallBot =(data)=> {
         globalState.ovner.set(data);
         const ovnerVideo: HTMLVideoElement = document.querySelector('#ovnerVideo');
-        const curVideoSrc = data.videos[0];
-        const src = gurl + `upload/${data.login}/${curVideoSrc}`;
-        setStart(true);
-        setInput(true);
 
-        ovnerVideo.src = src;
-        ovnerVideo.loop = true;
+        if(data.videos[0]) {
+            const curVideoSrc = data.videos[0];
+            const src = gurl + `upload/${data.login}/${curVideoSrc}`;
+            setStart(true);
+            setInput(true);
+
+            ovnerVideo.src = src;
+            ovnerVideo.loop = true;
+        }
 
         const minut = 1000 * 60;
         //! это будет обсераться иногда
@@ -67,7 +70,7 @@ export default function({ peerId }) {
         }, rand.getRandom(minut/2, minut * 2));
     }
     // вызов мы совершаем
-    const useCall =(peerId)=> {
+    const useCall =(peerId: string)=> {
         const myVideo: HTMLVideoElement = document.querySelector('#myVideo');
         const ovnerVideo: HTMLVideoElement = document.querySelector('#ovnerVideo');
         delete ovnerVideo.src;
@@ -184,6 +187,10 @@ export default function({ peerId }) {
                     >
 
                     </video>
+                    <Spiner
+                        start={start}
+                        input={input}
+                    />
                     <BlurCanvas
                         start={start}
                     />

@@ -31,7 +31,6 @@ export default function() {
         if(login !== user?.login) return true;
     }
     useDidMount(()=> {
-        console.log('MOUNT')
         socket.on('call', ()=> setMassages([]));
         socket.on('call.bot', ()=> setMassages([]));
         socket.on('endCall', ()=> setMassages([]));

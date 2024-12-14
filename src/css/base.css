@@ -70,8 +70,17 @@ footer {
     height: 100%;
     position: relative;
 }
+/* фон видео */
 .BlurCanvas {
     left: 0;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+}
+/* когда идет поиск */
+.Spiner {
+    left: 46%;
+    top: 50%;
     height: 100%;
     width: 100%;
     position: absolute;
