@@ -46,6 +46,6 @@ body {
 }
 @media screen and (-webkit-min-device-pixel-ratio: 0) { 
     select:focus, textarea:focus, input:focus { 
-        font-size: 28px; 
+        font-size: 18px; 
     } 
 }
