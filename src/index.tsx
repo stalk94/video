@@ -54,9 +54,11 @@ function App() {
     }
     // прием входящего
     const callanswer =()=> {
-        console.log('CALL INPUT');
+        console.log('📞 CALL ANSWER!!!');
         const myVideo: HTMLVideoElement = document.querySelector('#myVideo');
         const ovnerVideo: HTMLVideoElement = document.querySelector('#ovnerVideo');
+        delete ovnerVideo.src;
+        ovnerVideo.src = '';
 
         navigator.mediaDevices.getUserMedia({ audio: true, video: true })
             .then((mediaStream)=> {
@@ -69,7 +71,7 @@ function App() {
                     //входящий стрим помещаем в объект видео для отображения
                     ovnerVideo.srcObject = peercall.remoteStream;
                     EVENT.emit('input.start', {});
-                }, 500);
+                }, 1000);
 
             })
             .catch((err)=> { 
@@ -128,6 +130,7 @@ function App() {
 		});
         // нам звонок
         peer.on('call', (call)=> {
+            EVENT.emit('callanswer', call);
             globalThis.peercall = call;
             callanswer();
         });

@@ -102,10 +102,13 @@ export default function() {
     const useClickButton =(login: string)=> {
         const findIndex = products.findIndex((elem)=> elem.login === login);
         
-        if(findIndex !== -1) socket.emit('admin.botRead', {
-            peerId: globalThis.peerId,
-            data: products[findIndex]
-        });
+        if(findIndex !== -1) {
+            socket.emit('admin.botRead', {
+                peerId: globalThis.peerId,
+                data: products[findIndex]
+            });
+            setTimeout(useUpdate, 400);
+        }
     }
     const useUpdate =()=> {
         send("getAllBot", {}, "POST").then((data)=> {
@@ -115,9 +118,6 @@ export default function() {
     useDidMount(()=> {
         useUpdate();
     });
-    useIntervalWhen(()=> {
-        useUpdate();
-    }, 500, true);
 
 
     return(

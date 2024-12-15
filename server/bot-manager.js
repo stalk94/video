@@ -102,13 +102,15 @@ module.exports = {
         const hasUser = await db.get(`USERS.${data.login}`);
 
         if(user && user.permision > 0 && hasUser) {
-            const newUser = new User(hasUser.login, hasUser.password);
+            const findOnline = Object.values(online.online).find((elem)=> elem.login === data.login);
             
-            if(online.online[hasUser.peerId]) {
-                online.online[hasUser.peerId]._update(data);
-                online.online[hasUser.peerId].dump();
+            if(findOnline) {
+                findOnline._update(data);
+                findOnline.dump();
+                findOnline.socket.emit('refreshed', data);
             }
             else {
+                const newUser = new User(hasUser.login, hasUser.password);
                 newUser._update(data);
                 newUser.dump();
             }

@@ -6,6 +6,7 @@ import { Button } from 'primereact/button';
 import { OverlayPanel } from 'primereact/overlaypanel';
 import { FiUser } from "react-icons/fi";
 import { TbMessageDots } from "react-icons/tb";
+import { ConfirmPopup, confirmPopup } from 'primereact/confirmpopup';
 import "../../css/header.css";
 
 
@@ -53,10 +54,12 @@ const Coins =({ money })=> {
 
 
 export default function({useCall, peerId}: {useCall:(peerId:string)=> void, peerId:string}) { 
+    const op = React.useRef(null);
     const userState = useHookstate(globalState.user);
 
-    const useClickUser =()=> {
 
+    const useClickUser =(e)=> {
+        op.current.toggle(e);
     }
     const useClickLs =()=> {
 
@@ -65,6 +68,9 @@ export default function({useCall, peerId}: {useCall:(peerId:string)=> void, peer
 
     return(
         <header>
+            <OverlayPanel ref={op}>
+                в разработке!
+            </OverlayPanel>
             <Test 
                 peerId={peerId}
                 useCall={useCall}

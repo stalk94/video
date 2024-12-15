@@ -6,9 +6,9 @@ const { db } = require('./db');
 class FakeUser {
     _bot = true
     /**
-     * @type {'m'|'f'}
+     * @type {'m'|'fem'}
      */
-    sex = undefined
+    sex = 'fem'
     onStart = true
     timeshtap = Date.now()
     time = {
@@ -78,6 +78,7 @@ class FakeUser {
 
         
         this.money = data.money ?? 0;
+        this.sex = data.sex ?? 'fem';
         this.status = data.status ?? 'free';
         this.galery = data.galery ?? [];
     }
@@ -100,9 +101,8 @@ class FakeUser {
         delete data.socket;
         db.set('FAKE.' + this.login, data);
     }
-    loadVideo(videoName) {
+    loadVideo() {
         this.videos = shell.ls(`src/upload/${this.login}`);
-        console.log(this.videos);
         db.set(`FAKE.${this.login}.videos`, this.videos);
     }
     exit() {

@@ -10,7 +10,7 @@ import BlurCanvas, { Spiner } from "./canvas";
 import Indicator from "./left-panel";
 import rand from "random-percentage"
 import "../../css/base.css";
-
+let task;
 
 
 
@@ -19,6 +19,12 @@ export default function({ peerId }) {
     const [start, setStart] = React.useState(false);        // нажата мной кнопка старт
 
 
+    const useClearTask =()=> {
+        if(task) {
+            clearTimeout(task);
+            task = undefined;
+        }
+    }
     // мы запускаем поиск
     const useSetStart =(type: boolean)=> {
         const myVideo: HTMLVideoElement = document.querySelector('#myVideo');
@@ -59,13 +65,14 @@ export default function({ peerId }) {
             setStart(true);
             setInput(true);
 
+            delete ovnerVideo.srcObject;
             ovnerVideo.src = src;
             ovnerVideo.loop = true;
         }
 
+        useClearTask();
         const minut = 1000 * 60;
-        //! это будет обсераться иногда
-        setTimeout(()=> {
+        task = setTimeout(()=> {
             useNext();
         }, rand.getRandom(minut/2, minut * 2));
     }
@@ -84,7 +91,7 @@ export default function({ peerId }) {
                     //нам ответили, получим стрим
                     setTimeout(()=> {
                         ovnerVideo.srcObject = peercall.remoteStream;
-                    }, 500);	
+                    }, 1000);	
                 });
                 //  peercall.on('close', onCallClose);
                 if(!myVideo.srcObject) {
@@ -111,12 +118,14 @@ export default function({ peerId }) {
             delete myVideo.srcObject;
         }
 
+        useClearTask();
         delete ovnerVideo.src;
         ovnerVideo.src = '';
         delete ovnerVideo.srcObject;
         globalState.ovner.set({});
     }
     const useNext =()=> {
+        useEndCall();
         if(start) socket.emit('next', {
             peerId: globalThis.peerId
         });
@@ -125,6 +134,7 @@ export default function({ peerId }) {
         // нам найден собеседник (вызываем его)
         socket.on('call', (data) => {
             console.log('SERVER SEARCH CLIENT');
+            useClearTask();
             useCall(data.peerId);
             globalState.ovner.set(data.userData);
         });
@@ -150,12 +160,13 @@ export default function({ peerId }) {
         });
         // ботяра разрыв соединения
         socket.on('endCall.bot', (data)=> {
-            console.log('END BOT CALL');
+            console.log('END CALL BOT');
             useEndCall();
         });
         // видеопоток собеседника получен
         EVENT.on('input.start', ()=> {
             console.log('VIDEO INPUT SUCESS');
+            useClearTask();
             setStart(true);
             setInput(true);
         });
