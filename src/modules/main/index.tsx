@@ -95,6 +95,7 @@ export default function({ peerId }) {
                 });
                 //  peercall.on('close', onCallClose);
                 if(!myVideo.srcObject) {
+                    myVideo.volume = 0;
                     myVideo.srcObject = mediaStream;
                 }
             })

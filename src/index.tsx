@@ -69,6 +69,7 @@ function App() {
                 
                 //помещаем собственный медиапоток в объект видео (чтоб видеть себя)
                 myVideo.srcObject = mediaStream;
+                myVideo.volume = 0;
                 setTimeout(()=> {
                     //входящий стрим помещаем в объект видео для отображения
                     ovnerVideo.srcObject = peercall.remoteStream;
