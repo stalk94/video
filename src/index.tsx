@@ -17,6 +17,8 @@ import Loader from "./modules/load";
 import Admin from "./modules/admin/index";
 import "./css/index.css";
 import "./css/button.css";
+import "./sw.js";
+import "./pwa.js";
 
 
 globalThis.peercall;

@@ -26,7 +26,7 @@
     "screenshots": [
         {
             "src": "/img/pwa/screen.png",
-            "sizes": "1920x874",
+            "sizes": "1398x771",
             "type": "image/png",
             "description": "A screenshot of the home page"
         }
