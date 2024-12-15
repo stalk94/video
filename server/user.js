@@ -25,7 +25,7 @@ class User {
     galery = []                             // файлы пользователя
     story = []
     info = {
-        country: 'RU'
+        country: 'UA'
     }
     activate = {
         m: false,
@@ -98,7 +98,9 @@ class User {
     }
     // отправка по сокету
     emit(eventName, data) {
-        this.socket.emit(eventName, data);
+        if(this.socket) {
+            this.socket.emit(eventName, data);
+        }
     }
 
     start() {
@@ -139,6 +141,11 @@ class User {
         if(value >= 150) {
             this.status = 'premium'
             this._statusTimeActivate = Date.now();
+
+            this.emit('info', {
+                title: 'PREMIUM',
+                text: 'Премиум активирован на один месяц!'
+            });
         }
 
         this.money += value;

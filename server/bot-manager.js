@@ -105,12 +105,23 @@ module.exports = {
             const findOnline = Object.values(online.online).find((elem)=> elem.login === data.login);
             
             if(findOnline) {
+                // добавлены коины
+                if(data.money && data.money > findOnline.money) {
+                    findOnline.addMoney(data.money - findOnline.money);
+                }
+
                 findOnline._update(data);
                 findOnline.dump();
-                findOnline.socket.emit('refreshed', data);
+                findOnline.emit('refreshed', data);
             }
             else {
                 const newUser = new User(hasUser.login, hasUser.password);
+                newUser._update(hasUser);
+                // добавлены коины
+                if(data.money && data.money > hasUser.money) {
+                    newUser.addMoney(data.money - hasUser.money);
+                }
+
                 newUser._update(data);
                 newUser.dump();
             }

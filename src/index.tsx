@@ -105,6 +105,7 @@ function App() {
         socket.on('data.ovner', (data)=> {
             state.ovner.set(data.userData);
         });
+        // авторизация успещно
         socket.on('autorize.sucess', (data)=> {
             setView('base');
             window.localStorage.setItem('TOKEN', data.token);
@@ -115,6 +116,7 @@ function App() {
             setView('load');
             localStorage.removeItem('TOKEN');
         });
+        // обновился стейт юзера
         socket.on('refreshed', (data)=> {
             state.user.set((oldState)=> {
                 Object.keys(data).map((key)=> {
@@ -123,6 +125,10 @@ function App() {
 
                 return oldState;
             });
+        });
+        // оповещения от сервера
+        socket.on('info', (data)=> {
+            showToast('success', data.title, data.text);
         });
 
         peer.on('open', (peerID)=> {
