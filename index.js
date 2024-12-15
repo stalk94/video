@@ -85,6 +85,10 @@ io.on('connection', (socket)=> {
                         user: data,
                         token: data.token
                     });
+                    socket.userInfo = {
+                        login: data.login,
+                        peerId: data.peerId
+                    }
                 }
                 else {
                     socket.emit('autorize.filed', {});
@@ -102,6 +106,10 @@ io.on('connection', (socket)=> {
                         user: data,
                         token: data.token
                     });
+                    socket.userInfo = {
+                        login: data.login,
+                        peerId: data.peerId
+                    }
                 }
             });
         }
@@ -149,6 +157,11 @@ io.on('connection', (socket)=> {
     socket.on('admin.userRead', (msg)=> {
         if(msg && msg.peerId && msg.data) {
             botManager.editUser(msg.peerId, msg.data);
+        }
+    });
+    socket.on("disconnect", ()=> {
+        if(socket?.userInfo?.peerId) {
+            APP.exit(socket.userInfo.peerId);
         }
     });
 });
