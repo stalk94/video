@@ -6,7 +6,7 @@ import { Button } from 'primereact/button';
 import { OverlayPanel } from 'primereact/overlaypanel';
 import { FiUser } from "react-icons/fi";
 import { TbMessageDots } from "react-icons/tb";
-import { ConfirmPopup, confirmPopup } from 'primereact/confirmpopup';
+import DropMain from "./user/index";
 import "../../css/header.css";
 
 
@@ -54,27 +54,33 @@ const Coins =({ money })=> {
 
 
 export default function({useCall, peerId}: {useCall:(peerId:string)=> void, peerId:string}) { 
+    const [curent, setCurent] = React.useState<'ls'|'user'>();
     const op = React.useRef(null);
     const userState = useHookstate(globalState.user);
 
 
     const useClickUser =(e)=> {
+        setCurent('user');
         op.current.toggle(e);
     }
-    const useClickLs =()=> {
-
+    const useClickLs =(e)=> {
+        setCurent('ls');
+        op.current.toggle(e);
     }
 
 
     return(
         <header>
             <OverlayPanel ref={op}>
-                в разработке!
+                <DropMain 
+                    type={curent} 
+                />
             </OverlayPanel>
             <Test 
                 peerId={peerId}
                 useCall={useCall}
             />
+
             <section className='Left'>
                 <div className='Logo'>
                     INTIMALIVE
@@ -88,7 +94,7 @@ export default function({useCall, peerId}: {useCall:(peerId:string)=> void, peer
                     icon={
                         <TbMessageDots />
                     }
-                    onClick={useClickUser}
+                    onClick={useClickLs}
                 />
                 <Button className="button" id="user"
                     icon={
@@ -100,12 +106,3 @@ export default function({useCall, peerId}: {useCall:(peerId:string)=> void, peer
         </header>
     );
 }
-
-
-
-/**
- * <Test 
-                peerId={peerId}
-                useCall={useCall}
-            />
- */
