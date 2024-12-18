@@ -101,9 +101,14 @@ class FakeUser {
         delete data.socket;
         db.set('FAKE.' + this.login, data);
     }
-    loadVideo() {
-        this.videos = shell.ls(`src/upload/${this.login}`);
-        db.set(`FAKE.${this.login}.videos`, this.videos);
+    loadVideo(src, videoData) {
+        this.videos.forEach((name)=> {
+            fs.unlink(`src/upload/${this.login}/${name}`, (err)=> {
+                fs.writeFile(src, videoData, console.log);
+                this.videos = shell.ls(`src/upload/${this.login}`);
+                db.set(`FAKE.${this.login}.videos`, this.videos);
+            });
+        });
     }
     exit() {
         delete this.curentCall;

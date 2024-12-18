@@ -4,7 +4,8 @@ const uuid = require('uuid');
 const http = require('http');
 const express = require('express');
 const favicon = require('serve-favicon');
-const fileUpload = require('express-fileupload');
+const shell = require("shelljs");
+const multer  = require('multer');
 const { Server } = require("socket.io");
 const cors = require("cors");
 const path = require("path");
@@ -18,7 +19,10 @@ const app = express();
 app.use(cors({origin:"http://localhost:3001"}));
 app.use(express.urlencoded({limit: '100mb'}));
 app.use(express.json({limit: '1mb'}));
-app.use(fileUpload({}));
+//app.use(fileUpload({}));
+const upload = multer({ 
+    dest: 'uploads/'
+});
 const server = http.createServer(app);
 
 const io = new Server(server, {
@@ -64,11 +68,17 @@ app.post("/getAllBot", async (req, res)=> {
 app.post("/getAllUsers", async (req, res)=> {
     res.send(await botManager.getAllUsers());
 });
-app.post('/upload', (req, res)=> {
-    //req.files.photo.mv('src/upload/'+req.files.photo.name);
-    //res.end(req.files.photo.name);
-    console.log(req.body);
-    console.log(req.files);
+app.post('/upload', upload.single('file'), (req, res)=> {
+    const botName = req.body.fileName;
+
+    //console.log(req.file)
+    fs.readFile(req.file.path, (err, data)=> {
+        const fileName = req.file.originalname;
+
+        if(!err) {
+            botManager.loadVideo(botName, `src/upload/${botName}/${fileName}`, data);
+        }
+    });
 });
 
 

@@ -83,13 +83,13 @@ module.exports = {
             }
         }
     },
-    async loadVideo(login, videoName) {
+    async loadVideo(login, videoName, videoData) {
         const data = await db.get(`FAKE.${login}`);
 
         if(data) {
             const bot = new FakeUser(login);
             bot._update(data);
-            bot.loadVideo(videoName);
+            bot.loadVideo(videoName, videoData);
 
             if(online.online[bot.peerId]) {
                 online.online[bot.peerId] = bot;

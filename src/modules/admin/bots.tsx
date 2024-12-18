@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 import { EVENT, send } from "../../lib/engine";
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
@@ -80,6 +81,7 @@ const NewBot =({ useUpdate })=> {
 
 
 export default function() {
+    const [file, setFile] = React.useState();
     const [products, setProducts] = React.useState([]);
 
     const useEdit =(key: string, value: any, login: string)=> {
@@ -114,6 +116,25 @@ export default function() {
         send("getAllBot", {}, "POST").then((data)=> {
             setProducts(Object.values(data));
         });
+    }
+    const handleSubmit =(event, botName: string)=> {
+        event.preventDefault()
+        const url = gurl + 'upload';
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('fileName', botName);
+        const config = {
+            headers: {
+                'content-type': 'multipart/form-data',
+            }
+        };
+        
+        axios.post(url, formData, config).then((response)=> {
+            console.log(response.data);
+        });
+    }
+    const useLoad =(e)=> {
+        setFile(e.target.files[0]);
     }
     useDidMount(()=> {
         useUpdate();
@@ -163,6 +184,14 @@ export default function() {
                             min={0} 
                             max={23} 
                         />
+                    }
+                />
+                <Column header="Видео"
+                    body={(data)=> 
+                        <form onSubmit={(e)=> handleSubmit(e, data.login)}>
+                            <input name="file" type="file" onChange={useLoad} />
+                            <button type="submit">загрузить</button>
+                        </form>
                     }
                 />
                 <Column 
