@@ -9,7 +9,8 @@
         ".gitignore": true,
         "node_modules": true,
         "package-lock.json": true,
-        "server/db.js": true
+        "server/db.js": true,
+        "uploads": true
     },
     "explorerExclude.backup": {}
 }

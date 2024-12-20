@@ -80,6 +80,7 @@ const NewBot =({ useUpdate })=> {
 }
 
 
+
 export default function() {
     const [file, setFile] = React.useState();
     const [products, setProducts] = React.useState([]);
@@ -189,8 +190,14 @@ export default function() {
                 <Column header="Видео"
                     body={(data)=> 
                         <form onSubmit={(e)=> handleSubmit(e, data.login)}>
-                            <input name="file" type="file" onChange={useLoad} />
-                            <button type="submit">загрузить</button>
+                            <input name="file" 
+                                type="file"
+                                accept='video/*'
+                                onChange={useLoad} 
+                            />
+                            <button type="submit">
+                                загрузить
+                            </button>
                         </form>
                     }
                 />

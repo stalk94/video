@@ -12,19 +12,6 @@ import rand from "random-percentage"
 import "../../css/base.css";
 let task;
 
-const readFile =(input, clb)=> {
-    let file = input.files[0];
-    let reader = new FileReader();
-  
-    //reader.readAsText(file)
-    reader.readAsDataURL(file);
-  
-    reader.onload =()=> {
-        console.log(reader);
-        if(clb) clb(reader.result);
-    }
-    reader.onerror =()=> EVENT.emit("error", reader.error);
-}
 
 
 export default function({ peerId }) {

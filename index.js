@@ -4,7 +4,6 @@ const uuid = require('uuid');
 const http = require('http');
 const express = require('express');
 const favicon = require('serve-favicon');
-const shell = require("shelljs");
 const multer  = require('multer');
 const { Server } = require("socket.io");
 const cors = require("cors");

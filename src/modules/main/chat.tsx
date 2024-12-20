@@ -23,7 +23,7 @@ const test = [
 
 
 export default function() { 
-    const [massages, setMassages] = React.useState(test);
+    const [massages, setMassages] = React.useState([]);
     
     const chek =(login: string)=> {
         const user = globalState.user.get();
@@ -35,8 +35,8 @@ export default function() {
         socket.on('call.bot', ()=> setMassages([]));
         socket.on('endCall', ()=> setMassages([]));
         socket.on('endCall.bot', ()=> setMassages([]));
+
         socket.on('massage', (data)=> {
-            console.log('new MASSAGE: ', data)
             setMassages((old)=> {
                 return [...old, data];
             });
@@ -47,8 +47,8 @@ export default function() {
         socket.off('call.bot', ()=> setMassages([]));
         socket.off('endCall', ()=> setMassages([]));
         socket.off('endCall.bot', ()=> setMassages([]));
+        
         socket.off('massage', (data)=> {
-            console.log('new MASSAGE: ', data)
             setMassages((old)=> {
                 return [...old, data];
             });
