@@ -4,6 +4,12 @@ const rand = require('random-percentage');
 
 
 const APP = {
+    /**
+     * Инициация вызова сторонами
+     * 🔌 user event: 'call' && 'data.ovner' || 'call.bot'
+     * @param {string} myPeerId 
+     * @param {string} ovnerPeerId 
+     */
     call(myPeerId, ovnerPeerId) {
         const user = online.online[myPeerId];
         const ovner = online.online[ovnerPeerId];
@@ -36,6 +42,10 @@ const APP = {
             }
         }
     },
+    /**
+     * Старт поиска собеседника, кнопка 'START'
+     * @param {string} myPeerId 
+     */
     start(myPeerId) {
         const user = online.online[myPeerId];
         
@@ -105,6 +115,11 @@ const APP = {
             }
         }
     },
+    /**
+     * Нажата кнопка 'NEXT'
+     * 🔌 user event: 'endCall' || 'endCall.bot'
+     * @param {string} myPeerId 
+     */
     next(myPeerId) {
         const user = online.online[myPeerId];
 
@@ -127,6 +142,11 @@ const APP = {
             }
         }
     },
+    /**
+     * Нажата кнопка 'STOP'
+     * 🔌 user event: 'endCall' || 'endCall.bot'
+     * @param {string} myPeerId 
+     */
     finish(myPeerId) {
         const user = online.online[myPeerId];
 
@@ -156,6 +176,12 @@ const APP = {
             }
         }
     },
+    /**
+     * Поставлен лайк
+     * @param {*} myPeerId 
+     * @param {*} peerIdLike 
+     * @returns {number | undefined}
+     */
     like(myPeerId, peerIdLike) {
         const user = online.online[myPeerId];
         const ovner = online.online[peerIdLike];
@@ -176,7 +202,8 @@ const APP = {
         }
     },
     /**
-     * активация кнопки на панели слева
+     * ! Aктивация кнопки на панели справа
+     * 🔌 user event: 'refreshed'
      * @param {number} myPeerId 
      * @param {'search'|'m'|'f'|'mf'} type 
      */
@@ -188,6 +215,12 @@ const APP = {
             user.emit('refreshed', {activate: user.activate});
         }
     },
+    /**
+     * Сообщение в чат
+     * 🔌 user event: 'massage'
+     * @param {string} myPeerId 
+     * @param {string} text 
+     */
     sendMassage(myPeerId, text) {
         const user = online.online[myPeerId];
 

@@ -18,7 +18,6 @@ const app = express();
 app.use(cors({origin:"http://localhost:3001"}));
 app.use(express.urlencoded({limit: '100mb'}));
 app.use(express.json({limit: '1mb'}));
-//app.use(fileUpload({}));
 const upload = multer({ 
     dest: 'uploads/'
 });
