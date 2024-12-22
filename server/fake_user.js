@@ -3,7 +3,7 @@ const shell = require("shelljs");
 const { db } = require('./db');
 
 
-class FakeUser {
+module.exports = class FakeUser {
     _bot = true
     /**
      * @type {'m'|'fem'}
@@ -38,8 +38,9 @@ class FakeUser {
     }
     get() {
         const data = {};
+        
         Object.keys(this).forEach((key)=> {
-            if(key!=='socket') {
+            if(key !== 'socket') {
                 data[key] = this[key];
             }
         });
@@ -115,6 +116,3 @@ class FakeUser {
         this.dump();
     }
 }
-
-
-module.exports = FakeUser;

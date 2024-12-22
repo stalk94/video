@@ -5,20 +5,6 @@ const { db } = require('./db');
 
 
 module.exports = {
-    init() {
-        this._load();
-
-        setInterval(()=> {
-            this._load();
-        }, 1000 * 60);
-    },
-    async getAllBots() {
-        return await db.get('FAKE');
-    },
-    async getAllUsers() {
-        return await db.get('USERS');
-    },
-    // управление ботами
     async _load() {
         let all = await db.get('FAKE');
         const time = new Date();
@@ -51,7 +37,20 @@ module.exports = {
             }
         });
     },
+    init() {
+        this._load();
 
+        setInterval(()=> {
+            this._load();
+        }, 1000 * 60);
+    },
+
+    async getAllBots() {
+        return await db.get('FAKE');
+    },
+    async getAllUsers() {
+        return await db.get('USERS');
+    },
 
     async create(peerId, data) {
         const user = online.online[peerId];
@@ -65,9 +64,9 @@ module.exports = {
     
                 return bot;
             }
-            else return {error: 'Логин бота занят'}
+            else user.emit('error', {text: 'Логин бота занят'});
         }
-        else return {error: 'Нет прав'}
+        else if(user) user.emit('error', {text: 'Нет прав'})
     },
     async edit(peerId, data) {
         const user = online.online[peerId];

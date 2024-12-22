@@ -77,7 +77,7 @@ const registration = async function(login, password, sex, ipData) {
 const autorize = async function(login, password, sid, peerId, socket) {
     const loginHas = await db.has('USERS.' + login);
     
-    if(loginHas){
+    if(loginHas) {
         const data = await db.get('USERS.' + login);
 
         if(getPasswordHash(data.password) === password){

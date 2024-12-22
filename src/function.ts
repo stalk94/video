@@ -19,6 +19,8 @@ export function getIp(clb: Function) {
         (jsonResponse)=> clb(jsonResponse)
     );
 }
+
+
 /**
  * 
  * @param time 
@@ -46,7 +48,6 @@ const useTime =(time: number)=> {
     if(hours === '00') return(min + ':' + sec);
     else return(hours + ':' + min + ':' + sec);
 }
-
 export const useUploadForm =(url: string)=> {
     const [isSuccess, setIsSuccess] = useState(false);
     const [progress, setProgress] = useState(0);
@@ -70,4 +71,9 @@ export const useUploadForm =(url: string)=> {
     };
   
     return { uploadForm, isSuccess, progress };
-};
+}
+
+
+async function getDevices() {
+    const devices = await navigator.mediaDevices.enumerateDevices();
+}

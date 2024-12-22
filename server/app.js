@@ -246,6 +246,10 @@ const APP = {
             }
         }
     },
+    /**
+     * Юзер вышел
+     * @param {string} myPeerId 
+     */
     exit(myPeerId) {
         this.finish(myPeerId);
         online.exit(myPeerId)
