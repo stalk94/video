@@ -20,20 +20,28 @@ module.exports = {
             /** @type {FakeUser} */
             const fake = all[key];
 
-            if(time.getHours() >= fake.time.start) {
-                if(!online.online[fake.peerId]) {
-                    console.log('BOT ADD ONLINE');
-                    const user = new FakeUser(fake.login);
-                    user._update(fake);
-                    online.online[fake.peerId] = user;
+            // проверка на рабочее время
+            if(time.getDay() >= fake.time.startDay && time.getDay() <= fake.time.endDay) {
+                if(time.getHours() >= fake.time.start) {
+                    if(!online.online[fake.peerId]) {
+                        console.log('BOT ADD ONLINE');
+                        const user = new FakeUser(fake.login);
+                        user._update(fake);
+                        online.online[fake.peerId] = user;
+                    }
+                }
+                else if(time.getHours() > fake.time.end) {
+                    if(online.online[fake.peerId] && online.online[fake.peerId]._bot) {
+                        console.log('BOT OFFLINE');
+                        online.online[fake.peerId].exit();
+                        delete online.online[fake.peerId];
+                    }
                 }
             }
-            else if(time.getHours() > fake.time.end) {
-                if(online.online[fake.peerId] && online.online[fake.peerId]._bot) {
-                    console.log('BOT OFFLINE');
-                    online.online[fake.peerId].exit();
-                    delete online.online[fake.peerId];
-                }
+            else if(online.online[fake.peerId] && online.online[fake.peerId]._bot) {
+                console.log('BOT OFFLINE');
+                online.online[fake.peerId].exit();
+                delete online.online[fake.peerId];
             }
         });
     },

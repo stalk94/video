@@ -78,6 +78,19 @@ const NewBot =({ useUpdate })=> {
         </div>
     );
 }
+const VideoPreview =({ data })=> {
+    return(
+        <div>
+            {data.videos[0]
+                ? <video 
+                    src={`upload/${data.login}/${data.videos[0]}`}
+                    width='150px'
+                  />
+                : <div>no video</div>
+            }
+        </div>
+    );
+}
 
 
 
@@ -89,7 +102,7 @@ export default function() {
         const findIndex = products.findIndex((elem)=> elem.login === login);
 
         if(findIndex !== -1) setProducts((old)=> {
-            if(key !== 'start' && key !== 'end') {
+            if(key !== 'start' && key !== 'end' && key !== 'startDay' && key !== 'endDay') {
                 old[findIndex][key] = value;
             }
             else if(key === 'country') {
@@ -137,10 +150,15 @@ export default function() {
     const useLoad =(e)=> {
         setFile(e.target.files[0]);
     }
+    const getWeekDay =(date)=> {
+        const days = ['ВС', 'ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ'];
+
+        return days[date.getDay()];
+    }
     useDidMount(()=> {
         useUpdate();
     });
-
+    
 
     return(
         <div className='AdminBase'>
@@ -161,15 +179,39 @@ export default function() {
                 <Column header="Лайки"
                     body={(data)=> 
                         <InputNumber showButtons
+                            size={1}
                             value={data.likes} 
                             onValueChange={(e)=> useEdit('likes', e.value, data.login)} 
                             min={0}  
                         />
                     }
                 />
+                <Column header="День вход"
+                    body={(data)=> 
+                        <InputNumber showButtons
+                            size={1}
+                            value={data.time.startDay} 
+                            onValueChange={(e)=> useEdit('startDay', e.value, data.login)} 
+                            min={6} 
+                            max={23} 
+                        />
+                    }
+                />
+                <Column header="День выход"
+                    body={(data)=> 
+                        <InputNumber showButtons
+                            size={1}
+                            value={data.time.endDay} 
+                            onValueChange={(e)=> useEdit('endDay', e.value, data.login)} 
+                            min={0} 
+                            max={6} 
+                        />
+                    }
+                />
                 <Column header="Время вход"
                     body={(data)=> 
                         <InputNumber showButtons
+                            size={1}
                             value={data.time.start} 
                             onValueChange={(e)=> useEdit('start', e.value, data.login)} 
                             min={0} 
@@ -180,11 +222,17 @@ export default function() {
                 <Column header="Время выход"
                     body={(data)=> 
                         <InputNumber showButtons
+                            size={1}
                             value={data.time.end} 
                             onValueChange={(e)=> useEdit('end', e.value, data.login)} 
                             min={0} 
                             max={23} 
                         />
+                    }
+                />
+                <Column 
+                    body={(data)=> 
+                        <VideoPreview data={data} />
                     }
                 />
                 <Column header="Видео"

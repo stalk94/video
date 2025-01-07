@@ -12,6 +12,8 @@ module.exports = class FakeUser {
     onStart = true
     timeshtap = Date.now()
     time = {
+        startDay: 0,
+        endDay: 6,
         start: 12,
         end: 1
     }
@@ -77,7 +79,11 @@ module.exports = class FakeUser {
             if(elem.split('.')[1]) this.videos.push(elem);
         });
 
-        
+        if(data.time.startDay === undefined) {
+            this.time.startDay = 0;
+            this.time.endDay = 6;
+
+        }
         this.money = data.money ?? 0;
         this.sex = data.sex ?? 'fem';
         this.status = data.status ?? 'free';

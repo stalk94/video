@@ -26,13 +26,13 @@ export default function({ peerId }) {
         }
     }
     // мы запускаем поиск
-    const useSetStart =(type: boolean)=> {
+    const useSetStart =(type: boolean, constraints?: MediaStreamConstraints)=> {
         const myVideo: HTMLVideoElement = document.querySelector('#myVideo');
         const ovnerVideo: HTMLVideoElement = document.querySelector('#ovnerVideo');
         setStart(type);
 
         if(type) {
-            navigator.mediaDevices.getUserMedia({ audio: true, video: true })
+            navigator.mediaDevices.getUserMedia(constraints ?? { audio: true, video: true })
                 .then((mediaStream)=> {	
                     myVideo.srcObject = mediaStream;
                 })
@@ -53,6 +53,33 @@ export default function({ peerId }) {
                 peerId: globalThis.peerId
             });
         }
+    }
+    // вызов мы совершаем
+    const useCall =(peerId: string, constraints?: MediaStreamConstraints)=> {
+        const myVideo: HTMLVideoElement = document.querySelector('#myVideo');
+        const ovnerVideo: HTMLVideoElement = document.querySelector('#ovnerVideo');
+        delete ovnerVideo.src;
+        ovnerVideo.src = '';
+    
+        navigator.mediaDevices.getUserMedia(constraints ?? { audio: true, video: true })
+            .then((mediaStream)=> {	
+                //звоним, указав peerId-партнера и передав свой mediaStream		  
+                globalThis.peercall = peer.call(peerId, mediaStream);
+                peercall.on('stream', (stream)=> {
+                    //нам ответили, получим стрим
+                    setTimeout(()=> {
+                        ovnerVideo.srcObject = peercall.remoteStream;
+                    }, 1000);	
+                });
+                //  peercall.on('close', onCallClose);
+                if(!myVideo.srcObject) {
+                    myVideo.volume = 0;
+                    myVideo.srcObject = mediaStream;
+                }
+            })
+            .catch((err)=> { 
+                console.log(err.name + ": " + err.message); 
+            });
     }
     // вызов бота
     const useCallBot =(data)=> {
@@ -75,33 +102,6 @@ export default function({ peerId }) {
         task = setTimeout(()=> {
             useNext();
         }, rand.getRandom(minut/2, minut * 2));
-    }
-    // вызов мы совершаем
-    const useCall =(peerId: string)=> {
-        const myVideo: HTMLVideoElement = document.querySelector('#myVideo');
-        const ovnerVideo: HTMLVideoElement = document.querySelector('#ovnerVideo');
-        delete ovnerVideo.src;
-        ovnerVideo.src = '';
-
-        navigator.mediaDevices.getUserMedia({ audio: true, video: true })
-            .then((mediaStream)=> {	
-                //звоним, указав peerId-партнера и передав свой mediaStream		  
-                globalThis.peercall = peer.call(peerId, mediaStream);
-                peercall.on('stream', (stream)=> {
-                    //нам ответили, получим стрим
-                    setTimeout(()=> {
-                        ovnerVideo.srcObject = peercall.remoteStream;
-                    }, 1000);	
-                });
-                //  peercall.on('close', onCallClose);
-                if(!myVideo.srcObject) {
-                    myVideo.volume = 0;
-                    myVideo.srcObject = mediaStream;
-                }
-            })
-            .catch((err)=> { 
-                console.log(err.name + ": " + err.message); 
-            });
     }
     // завершить вызов
     const useEndCall =()=> {
@@ -131,6 +131,7 @@ export default function({ peerId }) {
             peerId: globalThis.peerId
         });
     }
+
     useDidMount(()=> {
         // нам найден собеседник (вызываем его)
         socket.on('call', (data) => {

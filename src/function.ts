@@ -73,7 +73,12 @@ export const useUploadForm =(url: string)=> {
     return { uploadForm, isSuccess, progress };
 }
 
-
-async function getDevices() {
+// -------------------------------------MEDIASTREAM-------------------------------------------
+/**
+ * Вернет массив устройств
+ */
+async function getDevices(type: 'audioinput'|'audiooutput'|'videoinput') {
     const devices = await navigator.mediaDevices.enumerateDevices();
+
+    return devices.filter((elem)=> elem.kind === type);
 }
