@@ -10,7 +10,7 @@ import globalState from "./global.state";
 import { createRoot } from 'react-dom/client'
 import { useHookstate } from '@hookstate/core';
 import { Peer, MediaConnection } from "peerjs";
-import { useDidMount } from "rooks";
+import { useDidMount, useIntervalWhen } from "rooks";
 import { Toast } from 'primereact/toast';
 import Base from "./modules/main/index";
 import Loader from "./modules/load";
@@ -130,6 +130,10 @@ function App() {
         // оповещения от сервера
         socket.on('info', (data)=> {
             showToast('success', data.title, data.text);
+        });
+        // оповещения от сервера warning
+        socket.on('warn', (data)=> {
+            showToast('warn', data.title, data.text);
         });
 
         peer.on('open', (peerID)=> {

@@ -23,3 +23,29 @@
 .p-highlight {
     color: brown;
 }
+
+.Uploader {
+    position: fixed;
+    z-index: 3;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.35);
+}
+#Spiner {
+    font-size: 4em;
+    margin-left: 50%;
+    margin-top: 20%;
+    color: white;
+}
+
+@keyframes flick {
+    from {color: white;}
+    to {color:gray;}
+}
+.UploaderText {
+    color: white;
+    font-size: 20px;
+    animation-name: flick;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+}

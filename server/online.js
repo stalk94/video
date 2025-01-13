@@ -6,6 +6,22 @@ const { getPasswordHash, setPasswordHash } = require('./function');
 const online = {
     online: {},
 
+    init() {
+        Object.keys(this.online).forEach((peerid)=> {
+            const user = this.online[peerid];
+
+            //? проверка таймера суперпоиска
+            if(user.timeSuperFind) {
+                if((user.timeSuperFind - (30*1000)) < 0) {
+                    user.timeSuperFind = undefined;
+                    user.activate.search = false;
+                }
+                else user.timeSuperFind -= 30 * 1000;
+
+                user.emit('refreshed', {activate: user.activate});
+            }
+        });
+    },
     set(peerId, user) {
         this.online[peerId] = user;
         db.set('SESSIONS.' + user.token, {

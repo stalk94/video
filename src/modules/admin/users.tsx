@@ -10,6 +10,7 @@ import { useDidMount, useIntervalWhen } from 'rooks';
 
 
 export default function() {
+    const [login, setLogin] = React.useState();
     const [products, setProducts] = React.useState([]);
 
     const useEdit =(key: string, value: any, login: string)=> {
@@ -42,6 +43,15 @@ export default function() {
             setProducts(Object.values(data));
         });
     }
+    const useFiltre =(login: string)=> {
+        if(!login || login.length===0) return products;
+        else {
+            const filters = products.filter((elem)=> 
+                elem.login.includes(login) === true
+            );
+            return filters;
+        }
+    }
     useDidMount(()=> {
         useUpdate();
     });
@@ -50,7 +60,14 @@ export default function() {
     return(
         <div className='AdminBase'>
             <DataTable 
-                value={products}
+                value={useFiltre(login)}
+                header={
+                    <InputText className='Filter'
+                        placeholder='Поиск'
+                        value={login}
+                        onChange={(e)=> setLogin(e.target.value)}
+                    />
+                }
             >
                 <Column field="login" header="Login"/>
                 <Column header="Страна"

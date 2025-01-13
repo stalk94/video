@@ -117,16 +117,20 @@ module.exports = class FakeUser {
         if(this.videos[0]) this.videos.forEach((name, index)=> {
             fs.unlink(`src/upload/${this.login}/${name}`, (err)=> {
                 if(count === (index+1)) {
-                    fs.writeFile(src, videoData, clb);
-                    this.videos = shell.ls(`src/upload/${this.login}`);
-                    db.set(`FAKE.${this.login}.videos`, this.videos);
+                    fs.writeFile(src, videoData, (err)=> {
+                        clb(err);
+                        this.videos = shell.ls(`src/upload/${this.login}`);
+                        db.set(`FAKE.${this.login}.videos`, this.videos);
+                    });
                 }
             });
         });
         else {
-            fs.writeFile(src, videoData, clb);
-            this.videos = shell.ls(`src/upload/${this.login}`);
-            db.set(`FAKE.${this.login}.videos`, this.videos);
+            fs.writeFile(src, videoData, (err)=> {
+                clb(err);
+                this.videos = shell.ls(`src/upload/${this.login}`);
+                db.set(`FAKE.${this.login}.videos`, this.videos);
+            });
         }
     }
     exit() {

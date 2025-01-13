@@ -26,7 +26,7 @@ export function getIp(clb: Function) {
  * @param time 
  * @returns 
  */
-const useTime =(time: number)=> {
+export const useTime =(time: number)=> {
     let hours = 0;
     let min = 0;
     let sec = 0;

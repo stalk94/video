@@ -112,13 +112,35 @@ class User {
     
     // покупка супер поиска
     activateSuperFind() {
-        if(this.money - 10 >= 0 && !this.timeSuperFind) {
+        if((this.money - 10) >= 0 && !this.timeSuperFind) {
             this.money -= 10;
-            this.timeSuperFind = 60 * (60 * 1000);          //?
+            this.timeSuperFind = 60 * (60 * 1000);          //? 60 min
+            this.activate.search = true;
+            this.dump();
 
             this.emit('refreshed', {
                 money: this.money,
                 timeSuperFind: this.timeSuperFind
+            });
+            this.emit('info', {
+                title: `Удачно`,
+                text: 'Супер поиск был активирован на 60 min.'
+            });
+            APP.createIndividualAction(this.login, {
+                header: 'Активация',
+                text: 'Супер поиск был активирован на 60 min.'
+            });
+        }
+        else if(this.money < 10) {
+            this.emit('warn', {
+                title: `Внимание!`,
+                text: 'Не хватает COINS.'
+            });
+        }
+        else if(this.timeSuperFind) {
+            this.emit('warn', {
+                title: `Внимание!`,
+                text: 'Супер поиск был ранее активирован.'
             });
         }
     }
@@ -129,10 +151,25 @@ class User {
     activateSex(type) {
         if(this._chekSexActivate()) {
             this.activate[type] = true;
+            this.dump();
 
             this.emit('refreshed', {
                 money: this.money,
                 activate: this.activate
+            });
+            this.emit('info', {
+                title: `Удачно`,
+                text: 'Выбор пола активирован.'
+            });
+            APP.createIndividualAction(this.login, {
+                header: 'Активация',
+                text: 'Выбор пола активирован.'
+            });
+        }
+        else {
+            this.emit('warn', {
+                title: `Внимание!`,
+                text: 'Не достаточно COINS. Либо купите premium статус.'
             });
         }
     }
@@ -149,6 +186,7 @@ class User {
         }
 
         this.money += value;
+        this.dump();
         this.emit('refreshed', {
             money: this.money,
             status: this.status
@@ -169,6 +207,9 @@ class User {
     exit() {
         console.log('USER EXIT: ', this.login);
         delete this.curentCall;
+        this.activate.f = false;
+        this.activate.mf = false;
+        this.activate.m = false;
         this.dump();
     }
 }

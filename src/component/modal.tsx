@@ -15,7 +15,7 @@ type PropsModal = {
 export default function({visible, setVisible, message, header, accept, reject}: PropsModal) {
     return(
         <React.Fragment>
-            <ConfirmDialog 
+            <ConfirmDialog style={{maxWidth:'50%'}}
                 visible={visible} 
                 onHide={()=> setVisible(false)} 
                 message={message}

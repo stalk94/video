@@ -4,6 +4,9 @@ const rand = require('random-percentage');
 
 
 const APP = {
+    _init() {
+        setInterval(()=> online.init(), 30000);
+    },
     /**
      * Инициация вызова сторонами
      * 🔌 user event: 'call' && 'data.ovner' || 'call.bot'
@@ -202,7 +205,7 @@ const APP = {
         }
     },
     /**
-     * ! Aктивация кнопки на панели справа
+     *  Aктивация кнопки на панели справа
      * 🔌 user event: 'refreshed'
      * @param {number} myPeerId 
      * @param {'search'|'m'|'f'|'mf'} type 
@@ -211,6 +214,8 @@ const APP = {
         const user = online.online[myPeerId];
 
         if(user) {
+            if(type === 'search') user.activateSuperFind();
+            else user.activateSex(type);
 
             user.emit('refreshed', {activate: user.activate});
         }
@@ -245,6 +250,9 @@ const APP = {
                 });
             }
         }
+    },
+    createIndividualAction(login, data) {
+        actions.cteateIndividual(login, data);
     },
     /**
      * Юзер вышел

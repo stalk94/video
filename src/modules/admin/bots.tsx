@@ -4,11 +4,22 @@ import { EVENT, send } from "../../lib/engine";
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
+import { Checkbox } from 'primereact/checkbox';
 import { InputText } from 'primereact/inputtext';
 import { InputNumber } from 'primereact/inputnumber';
 import { useDidMount, useIntervalWhen } from 'rooks';
 
 
+const Uploader =()=> {
+    return(
+        <div className='Uploader'>
+            <i className="pi pi-spin pi-spinner" id='Spiner'/>
+            <var className='UploaderText'>
+                идет загрузка
+            </var>
+        </div>
+    );
+}
 const NewBot =({ useUpdate })=> {
     const [login, setLogin] = React.useState('');
     const [country, setCountry] = React.useState('RU');
@@ -98,7 +109,10 @@ const VideoPreview =({ data })=> {
 
 
 export default function() {
+    const [upload, setUpload] = React.useState(false);
     const [file, setFile] = React.useState();
+    const [checked, setCheked] = React.useState(false);
+    const [login, setLogin] = React.useState();
     const [products, setProducts] = React.useState([]);
 
     const useEdit =(key: string, value: any, login: string)=> {
@@ -135,7 +149,8 @@ export default function() {
         });
     }
     const handleSubmit =(event, botName: string)=> {
-        event.preventDefault()
+        event.preventDefault();
+        setUpload(true);
         const url = gurl + 'upload';
         const formData = new FormData();
         formData.append('file', file);
@@ -149,6 +164,7 @@ export default function() {
         axios.post(url, formData, config).then((response)=> {
             console.log(response.data);
             useUpdate();
+            setUpload(false);
         });
     }
     const useLoad =(e)=> {
@@ -159,6 +175,23 @@ export default function() {
 
         return days[date.getDay()];
     }
+    const useFiltre =(login)=> {
+        if(!login || login.length===0) return products;
+        else {
+            const filters = products.filter((elem)=> 
+                elem.login.includes(login) === true
+            );
+            return filters;
+        }
+    }
+    const useChekedFiltre =(login)=> {
+        const elems = useFiltre(login);
+
+        if(checked) {
+            return elems.filter((elem)=> elem.videos[0]!==undefined);
+        }
+        else return elems;
+    }
     useDidMount(()=> {
         useUpdate();
     });
@@ -166,14 +199,15 @@ export default function() {
 
     return(
         <div className='AdminBase'>
+            { upload && <Uploader />}
             <DataTable 
-                value={products}
+                value={useChekedFiltre(login)}
                 header={
                     <NewBot useUpdate={useUpdate} />
                 }
             >
                 <Column field="login" header="Login"/>
-                <Column header="Страна"
+                <Column header="Страна" field="info.country" sortable
                     body={(data)=> 
                         <div>
                             { data.info.country }
@@ -190,7 +224,7 @@ export default function() {
                         />
                     }
                 />
-                <Column header="День вход"
+                <Column header="День вход" field="time.startDay" sortable
                     body={(data)=> 
                         <InputNumber showButtons
                             size={1}
@@ -201,7 +235,7 @@ export default function() {
                         />
                     }
                 />
-                <Column header="День выход"
+                <Column header="День выход" field="time.endDay" sortable
                     body={(data)=> 
                         <InputNumber showButtons
                             size={1}
@@ -212,7 +246,7 @@ export default function() {
                         />
                     }
                 />
-                <Column header="Время вход"
+                <Column header="Время вход" field="time.start" sortable
                     body={(data)=> 
                         <InputNumber showButtons
                             size={1}
@@ -223,7 +257,7 @@ export default function() {
                         />
                     }
                 />
-                <Column header="Время выход"
+                <Column header="Время выход" field="time.end" sortable
                     body={(data)=> 
                         <InputNumber showButtons
                             size={1}
@@ -235,11 +269,24 @@ export default function() {
                     }
                 />
                 <Column 
+                    header={
+                        <Checkbox 
+                            onChange={(e)=> setCheked(e.checked)} 
+                            checked={checked}
+                        />
+                    }
                     body={(data)=> 
                         <VideoPreview data={data} />
                     }
                 />
-                <Column header="Видео"
+                <Column 
+                    header={
+                        <InputText className='Filter'
+                            placeholder='Поиск'
+                            value={login} 
+                            onChange={(e)=> setLogin(e.target.value)} 
+                        />
+                    }
                     body={(data)=> 
                         <form onSubmit={(e)=> handleSubmit(e, data.login)}>
                             <input name="file" 

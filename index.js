@@ -8,12 +8,15 @@ const multer  = require('multer');
 const { Server } = require("socket.io");
 const cors = require("cors");
 const path = require("path");
+const { db } = require('./server/db');
+const actions = require('./server/action');
 const { scheme } = require('./server/function');
 const { online, autorize, registration } = require('./server/online');
 const botManager = require('./server/bot-manager');
 const APP = require('./server/app');
 
 
+globalThis.APP = APP;
 const app = express();
 app.use(cors({origin:"http://localhost:3001"}));
 app.use(express.urlencoded({limit: '100mb'}));
@@ -67,6 +70,9 @@ app.post("/getAllBot", async (req, res)=> {
 app.post("/getAllUsers", async (req, res)=> {
     res.send(await botManager.getAllUsers());
 });
+app.post("/getAllEvents", async (req, res)=> {
+    res.send(await db.get('ACTIONS.GLOBAL'));
+});
 app.post('/upload', upload.single('file'), (req, res)=> {
     const botName = req.body.fileName;
 
@@ -81,7 +87,7 @@ app.post('/upload', upload.single('file'), (req, res)=> {
         }
     });
 });
- 
+
 
 //.........................................................[#user 🔌]
 io.on('connection', (socket)=> {
@@ -150,6 +156,16 @@ io.on('connection', (socket)=> {
             APP.sendMassage(msg.peerId, msg.text);
         }
     });
+    socket.on('chek', (msg)=> {
+        if(msg?.peerId) {
+            const user = online.online[msg.peerId];
+
+            if(user) {
+                actions.chek(user);
+                user.emit('refreshed', user.get());
+            }
+        }
+    });
 
     // -- admin --
     // создать нового бота
@@ -170,6 +186,13 @@ io.on('connection', (socket)=> {
             botManager.editUser(msg.peerId, msg.data);
         }
     });
+    // добавить событие
+    socket.on('admin.eventAdd', (msg)=> {
+        if(msg && msg.peerId && msg.data) {
+            const user = online.online[msg.peerId];
+            actions.create(user, msg.data);
+        }
+    });
     socket.on("disconnect", ()=> {
         if(socket?.userInfo?.peerId) {
             APP.exit(socket.userInfo.peerId);
@@ -182,6 +205,7 @@ app.use('/', express.static(path.join(__dirname, '/src')));
 app.use('/', express.static(path.join(__dirname, '/dist')));
 app.use(favicon(path.join(__dirname, 'src/img/fav', 'favicon.ico')));
 server.listen(3000, ()=> {
+    APP._init();
     botManager.init();
     console.log("start 3000");
 });

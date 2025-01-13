@@ -177,6 +177,12 @@ export default function({start, useStart, useNext}) {
     const [modal, setModal] = React.useState();
     const resize = useWindowSize();
 
+    const texts = {
+        m: 'Выбор пола доступен при балансе выше 50 COINS. Вы хотите активировать поиск по мужскому полу. ',
+        f: 'Выбор пола доступен при балансе выше 50 COINS. Вы хотите активировать поиск по женскому полу. ',
+        mf: 'Выбор пола доступен при балансе выше 50 COINS. Вы хотите активировать поиск по М/Ж полу. ',
+        search: 'Активация супер поиска стоит 10 COINS на 60 минут. '
+    }
     const useConfirm =(header, message, accept, reject)=> {
         setModal(
             <Modal
@@ -190,7 +196,22 @@ export default function({start, useStart, useNext}) {
         );
     }
     const useClickButton =(type: 'search'|'m'|'f'|'mf')=> {
+        const ps = `P.S: активация данной способности увеличивает шанс!`;
 
+        if(type !== 'search') {
+            useConfirm('Активация способности', 
+                texts[type] + ps,
+                ()=> socket.emit('activate', {peerId: globalThis.peerId, type: type}),
+                ()=> console.log('cancel')
+            );
+        }
+        else {
+            useConfirm('Активация способности', 
+                texts[type] + ps,
+                ()=> socket.emit('activate', {peerId: globalThis.peerId, type: type}),
+                ()=> console.log('cancel')
+            );
+        }
     }
     
 

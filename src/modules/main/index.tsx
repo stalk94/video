@@ -15,6 +15,7 @@ let task;
 
 
 export default function({ peerId }) {
+    const [actions, setActions] = React.useState([]);
     const [input, setInput] = React.useState(false);        // получен ли поток от собеседника
     const [start, setStart] = React.useState(false);        // нажата мной кнопка старт
 
@@ -165,6 +166,18 @@ export default function({ peerId }) {
             console.log('END CALL BOT');
             useEndCall();
         });
+
+        // все события юзера
+        socket.on('all.actions', (data)=> {
+            setActions(data);
+        });
+        // новое событие
+        socket.on('add.action', (data)=> {
+            setActions((old)=> {
+                old.push(data);
+                return old;
+            });
+        });
         // видеопоток собеседника получен
         EVENT.on('input.start', ()=> {
             console.log('VIDEO INPUT SUCESS');
@@ -173,6 +186,7 @@ export default function({ peerId }) {
             setInput(true);
         });
     });
+    useIntervalWhen(()=> socket.emit('chek', {peerId: globalThis.peerId}), 2000, true);
     useIntervalWhen(()=> {
         if(!input) {
             console.log('REFIND!!!');

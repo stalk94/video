@@ -1,6 +1,8 @@
 .Left {
     margin: 5px;
     width: 50%;
+    display: flex;
+    flex-direction: row;
 }
 .Right {
     display: flex;
@@ -21,6 +23,11 @@
     padding-left: 2%;
     color: #ffcccc;
     font-size: 30px;
+}
+.BetaLabel {
+    color: rgba(255, 255, 0, 0.836);
+    margin-left: 3px;
+    text-decoration: underline;
 }
 .CoinsContainer {
     display: flex;

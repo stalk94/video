@@ -7,7 +7,15 @@ exports.setPasswordHash =(pass)=> {
 exports.getPasswordHash =(hashPass)=> {
     return CryptoJS.AES.decrypt(hashPass, 'xa4ikxa4ik').toString(CryptoJS.enc.Utf8)
 }
+exports.useTimeFormat =()=> {
+    const time = new Date();
+    const dmy = `${time.getDay()}.${time.getMonth()}.${time.getFullYear()} `;
+    const hm = `${time.getHours()}:${time.getMinutes()}`;
 
+    return(
+        `[${dmy}] ${hm}`
+    );
+}
 
 exports.scheme = {
     data: {

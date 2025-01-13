@@ -85,6 +85,9 @@ export default function({useCall, peerId}: {useCall:(peerId:string)=> void, peer
                 <div className='Logo'>
                     INTIMALIVE
                 </div>
+                <div className='BetaLabel'>
+                    beta
+                </div>
             </section>
             <section className='Right'>
                 <Coins 
