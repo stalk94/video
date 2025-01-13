@@ -27,10 +27,13 @@ const NewBot =({ useUpdate })=> {
             country: country
         }
 
-        if(login.length > 3) socket.emit('admin.botCreate', {
-            peerId: globalThis.peerId,
-            data: state
-        });
+        if(login.length > 3) {
+            socket.emit('admin.botCreate', {
+                peerId: globalThis.peerId,
+                data: state
+            });
+            setTimeout(useUpdate, 500);
+        }
         else EVENT.emit('error', {text: 'Логин менее 3х символов'});
     }
     const useState =(key, value)=> {
@@ -145,6 +148,7 @@ export default function() {
         
         axios.post(url, formData, config).then((response)=> {
             console.log(response.data);
+            useUpdate();
         });
     }
     const useLoad =(e)=> {
@@ -192,8 +196,8 @@ export default function() {
                             size={1}
                             value={data.time.startDay} 
                             onValueChange={(e)=> useEdit('startDay', e.value, data.login)} 
-                            min={6} 
-                            max={23} 
+                            min={0} 
+                            max={6} 
                         />
                     }
                 />

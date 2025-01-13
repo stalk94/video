@@ -62,6 +62,9 @@ module.exports = class FakeUser {
         Object.keys(data).forEach((key)=> {
             this[key] = data[key];
         });
+        
+        this.time.startDay = 0;
+        this.time.endDay = 6;
 
         if(this.login!=='testBaby') fs.mkdir(`src/upload/${this.login}`, (err)=> {
             if(err) logger.error(err, 'ERROR CREATE BOT DIR');
@@ -108,14 +111,23 @@ module.exports = class FakeUser {
         delete data.socket;
         db.set('FAKE.' + this.login, data);
     }
-    loadVideo(src, videoData) {
-        this.videos.forEach((name)=> {
+    loadVideo(src, videoData, clb) {
+        const count = this.videos.length;
+
+        if(this.videos[0]) this.videos.forEach((name, index)=> {
             fs.unlink(`src/upload/${this.login}/${name}`, (err)=> {
-                fs.writeFile(src, videoData, console.log);
-                this.videos = shell.ls(`src/upload/${this.login}`);
-                db.set(`FAKE.${this.login}.videos`, this.videos);
+                if(count === (index+1)) {
+                    fs.writeFile(src, videoData, clb);
+                    this.videos = shell.ls(`src/upload/${this.login}`);
+                    db.set(`FAKE.${this.login}.videos`, this.videos);
+                }
             });
         });
+        else {
+            fs.writeFile(src, videoData, clb);
+            this.videos = shell.ls(`src/upload/${this.login}`);
+            db.set(`FAKE.${this.login}.videos`, this.videos);
+        }
     }
     exit() {
         delete this.curentCall;

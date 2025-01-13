@@ -19,7 +19,8 @@ app.use(cors({origin:"http://localhost:3001"}));
 app.use(express.urlencoded({limit: '100mb'}));
 app.use(express.json({limit: '1mb'}));
 const upload = multer({ 
-    dest: 'uploads/'
+    dest: 'uploads/',
+    limits : { fileSize : 50 * 1024 * 1024 }
 });
 const server = http.createServer(app);
 
@@ -74,7 +75,9 @@ app.post('/upload', upload.single('file'), (req, res)=> {
         const fileName = req.file.originalname;
 
         if(!err) {
-            botManager.loadVideo(botName, `src/upload/${botName}/${fileName}`, data);
+            botManager.loadVideo(botName, `src/upload/${botName}/${fileName}`, data, (data)=> {
+                res.send(data)
+            });
         }
     });
 });
