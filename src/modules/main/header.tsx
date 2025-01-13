@@ -54,11 +54,14 @@ const Coins =({ money })=> {
 
 
 export default function({useCall, peerId}: {useCall:(peerId:string)=> void, peerId:string}) { 
-    const [curent, setCurent] = React.useState<'ls'|'user'>();
+    const [curent, setCurent] = React.useState<'ls'|'user'|'beta'>();
     const op = React.useRef(null);
     const userState = useHookstate(globalState.user);
 
-
+    const useClickBeta =(e)=> {
+        setCurent('beta');
+        op.current.toggle(e);
+    }
     const useClickUser =(e)=> {
         setCurent('user');
         op.current.toggle(e);
@@ -71,17 +74,22 @@ export default function({useCall, peerId}: {useCall:(peerId:string)=> void, peer
 
     return(
         <header>
-            <OverlayPanel ref={op}>
-                <DropMain 
-                    type={curent} 
-                />
+            <OverlayPanel ref={op} style={{maxWidth:'50vw'}}>
+                { curent !== 'beta'
+                    ? <DropMain 
+                        type={curent} 
+                     />
+                    : <div style={{padding:'10px'}}>
+                        В beta версии не все функции работают, а так же могут быть баги. 
+                     </div>
+                }
             </OverlayPanel>
             <Test 
                 peerId={peerId}
                 useCall={useCall}
             />
 
-            <section className='Left'>
+            <section className='Left' onClick={useClickBeta}>
                 <div className='Logo'>
                     INTIMALIVE
                 </div>

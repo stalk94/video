@@ -102,6 +102,10 @@ function App() {
         EVENT.on('success', (data)=> {
             showToast('success', 'Успешно!', data.text);
         });
+        EVENT.on('exit', (data)=> {
+            setView('load');
+            localStorage.removeItem('TOKEN');
+        });
         
         socket.on('data.ovner', (data)=> {
             state.ovner.set(data.userData);

@@ -1,6 +1,6 @@
 import React from 'react';
 import { EVENT, send } from '../../lib/engine';
-import globalState from "../../global.state";
+import globalState, { actions } from "../../global.state";
 import Footer from "./footer";
 import Header from "./header";
 import Chat from "./chat";
@@ -15,7 +15,6 @@ let task;
 
 
 export default function({ peerId }) {
-    const [actions, setActions] = React.useState([]);
     const [input, setInput] = React.useState(false);        // получен ли поток от собеседника
     const [start, setStart] = React.useState(false);        // нажата мной кнопка старт
 
@@ -169,12 +168,12 @@ export default function({ peerId }) {
 
         // все события юзера
         socket.on('all.actions', (data)=> {
-            setActions(data);
+            actions.set(data.reverse());
         });
         // новое событие
         socket.on('add.action', (data)=> {
-            setActions((old)=> {
-                old.push(data);
+            actions.set((old)=> {
+                old.unshift(data);
                 return old;
             });
         });

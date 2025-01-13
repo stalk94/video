@@ -25,3 +25,5 @@ export default hookstate({
         
     }
 });
+
+export const actions = hookstate([]);

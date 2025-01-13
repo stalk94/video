@@ -193,6 +193,7 @@ io.on('connection', (socket)=> {
             actions.create(user, msg.data);
         }
     });
+
     socket.on("disconnect", ()=> {
         if(socket?.userInfo?.peerId) {
             APP.exit(socket.userInfo.peerId);
