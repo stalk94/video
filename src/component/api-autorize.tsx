@@ -1,11 +1,25 @@
 import React from 'react';
+import { EVENT, send } from "../lib/engine";
 import { Button } from 'primereact/button';
+import { googleAuthorize, getIp } from "../function";
 
 
 
-export default function() {
+export default function({ sex }) {
     const useGoogle =()=> {
-
+        googleAuthorize(()=> {
+            EVENT.emit('error', { text: 'Ошибка авторизации!' });
+        },
+        (data)=> {
+            getIp((ipData)=> {
+                socket.emit('authGoogle', {
+                    googleData: data,
+                    peerId: globalThis.peerId,
+                    ipData: ipData,
+                    sex: sex
+                });
+            });
+        });
     }
 
 

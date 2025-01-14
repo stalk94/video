@@ -31,11 +31,15 @@ const icon = {
 }
 
 
+
+
+
 function App() {
     const state = useHookstate(globalState);
     const toast = React.useRef(null);
     const [peerID, setPeerId] = React.useState<string>();
     const [view, setView] = React.useState<'base'|'load'|'admin'>('base');
+    
 
     const showToast =(type:'error'|'success'|'warn', title:string, text:string)=> {
         toast.current.clear();

@@ -9,7 +9,7 @@ const statusIcon = {
 }
 
 
-export default function({useAuth}) {
+export default function({ useAuth }) {
     const [login, setLogin] = React.useState<string>();
     const [password, setPassword] = React.useState<string>();
 

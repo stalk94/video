@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { loadGapiInsideDOM } from 'gapi-script';
 import axios from "axios";
 
 
@@ -18,6 +19,40 @@ export function getIp(clb: Function) {
     ).then(
         (jsonResponse)=> clb(jsonResponse)
     );
+}
+export function googleAuthorize(clbError, clbSucces) {
+    loadGapiInsideDOM().then((gapi)=> {
+        gapi.load('auth2', ()=> {
+            gapi.auth2.init({
+                client_id: '1077937530822-v8dusvvavm6uoofqfjv24pcs7f90o9of.apps.googleusercontent.com',
+            }).then(()=> {
+                    const auth2 = gapi.auth2.getAuthInstance();
+                    globalThis.googleAuth2 = auth2;
+
+                    auth2.signIn().then((data)=> {
+                        const profile = data.getBasicProfile();
+                        const target = {
+                            id: profile.getId(),
+                            name: profile.getGivenName(),
+                            familyName: profile.getFamilyName(),
+                            img: profile.getImageUrl(),
+                            email: profile.getEmail(),
+                            token: data.getAuthResponse().id_token
+                        }
+                        clbSucces(target);
+                    });
+                }, 
+                clbError
+            );
+        });
+    });
+}
+export function googleOut() {
+    if(globalThis.googleAuth2) {
+        globalThis.googleAuth2.signOut().then(()=> {
+            console.log('User signed out.')
+        });
+    }
 }
 
 

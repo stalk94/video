@@ -11,7 +11,7 @@ const path = require("path");
 const { db } = require('./server/db');
 const actions = require('./server/action');
 const { scheme } = require('./server/function');
-const { online, autorize, registration } = require('./server/online');
+const { online, autorize, registration, googleOuth } = require('./server/online');
 const botManager = require('./server/bot-manager');
 const APP = require('./server/app');
 
@@ -127,6 +127,22 @@ io.on('connection', (socket)=> {
                         login: data.login,
                         peerId: data.peerId
                     }
+                }
+            });
+        }
+    });
+    socket.on('authGoogle', (msg)=> {
+        if(msg) {
+            googleOuth(msg.googleData, uuid.v4(), msg.peerId, socket, msg.sex, msg.ipData).then((userData)=> {
+                delete userData.password;
+                
+                socket.emit('autorize.sucess', {
+                    user: userData,
+                    token: userData.token
+                });
+                socket.userInfo = {
+                    login: userData.login,
+                    peerId: userData.peerId
                 }
             });
         }

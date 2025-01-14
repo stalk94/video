@@ -114,11 +114,47 @@ const autorize = async function(login, password, sid, peerId, socket) {
     }
     else return {error:'not find user'};
 }
+const googleOuth = async function(googleData, sid, peerId, socket, sex, ipData) {
+    const id = googleData.id;
+    const loginHas = await db.has('USERS.' + id);
+    
+    if(loginHas) {
+        const data = await db.get('USERS.' + id);
+        const user = new User(id, setPasswordHash(id));
+        online.remove(id);
+        online.deleteAllSession(id, sid);
+        user._update(data);
+        user.token = sid;
+        user.peerId = peerId;
+        user.socket = socket;
+        user.googleData = googleData;
+
+        online.set(peerId, user);
+        
+        return user.get();
+    }
+    else {
+        const user = new User(id, setPasswordHash(id));
+        user.sex = sex;
+        if(ipData) user.info = ipData;
+        user.googleData = googleData;
+        user._create();
+        user.token = sid;
+        user.peerId = peerId;
+        user.socket = socket;
+        await db.set('USERS.' + id, user.get());
+
+        online.set(peerId, user);
+
+        return user.get();
+    }
+}
 
 
 
 module.exports = {
     online: online,
     registration: registration,
-    autorize: autorize
+    autorize: autorize,
+    googleOuth: googleOuth
 }

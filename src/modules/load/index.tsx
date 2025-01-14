@@ -55,7 +55,10 @@ export default function({ useAuth }: {useAuth: (login: string, password: string)
                             useReg={useReg} 
                         /> 
                     }
-                    <SocialRegs />
+                    <SocialRegs 
+                        sex={sex}
+                        useAuth={useAuth}
+                    />
                 </div>
             }
             { mod === 'init' && 

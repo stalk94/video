@@ -1,6 +1,7 @@
 import React from 'react';
 import { EVENT, send } from '../../../lib/engine';
 import globalState, { actions } from "../../../global.state";
+import { googleOut } from "../../../function";
 import { useHookstate } from '@hookstate/core';
 import { Menu } from 'primereact/menu';
 import "./style.css";
@@ -8,7 +9,6 @@ import "./style.css";
 
 export default function() { 
     const state = useHookstate(globalState);
-
 
 
     return(
@@ -37,6 +37,7 @@ export default function() {
                         icon: 'pi pi-power-off',
                         command: ()=> {
                             send('exit', {peerId:globalThis.peerId}, 'POST');
+                            googleOut();
                             EVENT.emit('exit', {});
                         }
                     }
