@@ -7,7 +7,11 @@ import { IoMaleFemale } from "react-icons/io5";
 
 const Flag =({ code })=> {
     return(
-        <img style={{width: '25px', height: '25px', marginLeft: '2px'}}
+        <img style={{
+            width: window.innerWidth > 1280 ? "25px" : "65px", 
+            height: window.innerWidth > 1280 ? "25px" : "65px",
+            marginLeft: '4px'
+        }}
             src={`http://purecatamphetamine.github.io/country-flag-icons/3x2/${code}.svg`}
         />
     );
@@ -30,8 +34,8 @@ const Likes =({ count })=> {
     return(
         <svg style={{fontSize: '30px'}}
             fill="red"
-            height="35px"
-            width="35px"
+            height={window.innerWidth > 1280 ? "35px" : "80px"}
+            width={window.innerWidth > 1280 ? "35px" : "80px"}
             viewBox="0 0 500 500"
         >
             
@@ -54,9 +58,9 @@ const Likes =({ count })=> {
 }
 const Sex =({ type })=> {
     const icons = {
-        m: <IoMdMale style={{color: 'blue', fontSize: '26px', marginTop: '2px'}} />,
-        fem: <IoMdFemale style={{color: 'red', fontSize: '26px', marginTop: '2px'}}/>,
-        mf: <IoMaleFemale style={{color: 'silver', fontSize: '26px', marginTop: '2px'}} />
+        m: <IoMdMale style={{color: 'blue', fontSize: window.innerWidth > 1280 ? "28px" : "75px", marginTop: '4px'}} />,
+        fem: <IoMdFemale style={{color: 'red', fontSize: window.innerWidth > 1280 ? "28px" : "75px", marginTop: '4px'}}/>,
+        mf: <IoMaleFemale style={{color: 'silver', fontSize: window.innerWidth > 1280 ? "28px" : "75px", marginTop: '4px'}} />
     }
     console.log(type)
 

@@ -47,11 +47,11 @@ const online = {
             }
         }
     },
-    async deleteAllSession(login) {
+    async deleteAllSession(login, sidExcp) {
         const all = await db.get('SESSIONS');
         
         Object.keys(all).forEach((sid)=> {
-            if(all[sid].login === login) {
+            if(sid !== sidExcp && all[sid].login === login) {
                 db.delete('SESSIONS.' + sid);
             }
         });
@@ -100,7 +100,7 @@ const autorize = async function(login, password, sid, peerId, socket) {
             const user = new User(login, data.password);
             
             online.remove(login);
-            await online.deleteAllSession(login);
+            online.deleteAllSession(login, sid);
             user._update(data);
             user.token = sid;
             user.peerId = peerId;

@@ -47,12 +47,14 @@ export default function({ start }: {start: boolean}) {
                         <FaRegHeart />
                     }
                     onClick={useClickLike}
+                    disabled={!start}
                 />
                 <Button className="button" id="gift"
                     icon={
                         <IoGiftSharp />
                     }
                     onClick={useClickGift}
+                    disabled={!start}
                 />
             </div>
             <div className='InputChatContainer'>
