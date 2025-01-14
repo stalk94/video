@@ -26,7 +26,7 @@ export default function() {
     }
     const useColor =(elem)=> {
         if(elem.author === 'SYSTEM') return 'white';
-        else return '#ecfc5f';
+        else return '#ffcccc';
     }
 
 

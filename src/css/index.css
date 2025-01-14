@@ -38,7 +38,11 @@ body {
     color: #8a717c;
 }
 .p-dialog-title {
-    color: rgb(148, 148, 148);
+    color: white;
+}
+.p-confirm-dialog-message {
+    color: #ffcccc;
+    font-size: 1.6vh;
 }
 
 @media only screen and (max-width: 1280px) {

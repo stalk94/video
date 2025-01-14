@@ -51,6 +51,29 @@ const Coins =({ money })=> {
         </div>
     );
 }
+const Avatar =({ useClickUser })=> {
+    const user = useHookstate(globalState.user);
+    
+    const useSize =()=> {
+        if(window.innerHeight < 1280) return '50px';
+        else return '90px'
+    }
+
+    return(
+        <Button className="button" id="user"
+            icon={
+                user.get({ noproxy: true })?.googleData?.img
+                    ? <img style={{}}
+                        src={user.get({ noproxy: true }).googleData.img}
+                        width={useSize()}
+                        width={useSize()}
+                    />
+                    : <FiUser />
+            }
+            onClick={useClickUser}
+        />
+    );
+}
 
 
 export default function({useCall, peerId}: {useCall:(peerId:string)=> void, peerId:string}) { 
@@ -107,11 +130,8 @@ export default function({useCall, peerId}: {useCall:(peerId:string)=> void, peer
                     }
                     onClick={useClickLs}
                 />
-                <Button className="button" id="user"
-                    icon={
-                        <FiUser />
-                    }
-                    onClick={useClickUser}
+                <Avatar
+                    useClickUser={useClickUser}
                 />
             </section>
         </header>

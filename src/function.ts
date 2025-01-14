@@ -37,8 +37,8 @@ export function googleAuthorize(clbError, clbSucces) {
                             familyName: profile.getFamilyName(),
                             img: profile.getImageUrl(),
                             email: profile.getEmail(),
-                            token: data.getAuthResponse().id_token
                         }
+                        // token: data.getAuthResponse().id_token
                         clbSucces(target);
                     });
                 }, 

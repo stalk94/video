@@ -26,14 +26,14 @@ export default function({ useAuth }) {
     return(
         <React.Fragment>
             <TextInput
-                size="xl"
+                size={window.innerWidth > 1280 ? "lg" : "xl"}
                 placeholder="Логин"
                 value={login}
                 onChange={(event)=> setLogin(event.currentTarget.value)}
                 
             />
             <PasswordInput style={{marginTop:'20px'}}
-                size="xl"
+                size={window.innerWidth > 1280 ? "lg" : "xl"}
                 placeholder="Пароль"
                 value={password}
                 onChange={(event)=> setPassword(event.currentTarget.value)}
