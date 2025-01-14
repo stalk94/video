@@ -123,10 +123,11 @@ export default function({ peerId }) {
         delete ovnerVideo.src;
         ovnerVideo.src = '';
         delete ovnerVideo.srcObject;
+        ovnerVideo.srcObject = null;
         globalState.ovner.set({});
     }
     const useNext =()=> {
-        useEndCall();
+        //useEndCall();
         if(start) socket.emit('next', {
             peerId: globalThis.peerId
         });
@@ -156,7 +157,7 @@ export default function({ peerId }) {
             });
         });
         // кто то разорвал звонок
-        socket.on('endCall', (data) => {
+        socket.on('endCall', (data)=> {
             console.log('END CALL');
             useEndCall();
         });
@@ -206,6 +207,7 @@ export default function({ peerId }) {
                 <Indicator />
                 <div className="ovnerVideo-container" id={start ? "ovnerDark" : ""}>
                     <video id='ovnerVideo'
+                        playsInline
                         controls={false}
                         width={'100%'}
                         height={'100%'}
@@ -223,6 +225,7 @@ export default function({ peerId }) {
                 </div>
                 <div className="myVideo-container">
                     <video id='myVideo'
+                        playsInline
                         controls={false}
                         width={'100%'}
                         height={'100%'}

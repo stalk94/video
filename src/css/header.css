@@ -48,7 +48,7 @@
     .Logo {
         padding-left: 2%;
         color: #ffcccc;
-        font-size: 3.2vh;
+        font-size: 3vh;
     }
     .CoinsContainer {
         margin-left: 5%;
@@ -62,5 +62,8 @@
         font-size: 26px;
         margin-top: auto;
         margin-bottom: auto;
+    }
+    .BetaLabel {
+        font-size: 1.7vh;
     }
 }

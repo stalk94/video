@@ -126,7 +126,6 @@ const APP = {
     next(myPeerId) {
         const user = online.online[myPeerId];
 
-
         if(user) {
             const ovner = online.online[user.curentCall];
 
