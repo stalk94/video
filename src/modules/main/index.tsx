@@ -26,13 +26,13 @@ export default function({ peerId }) {
         }
     }
     // мы запускаем поиск
-    const useSetStart =(type: boolean, constraints?: MediaStreamConstraints)=> {
+    const useSetStart =(type: boolean)=> {
         const myVideo: HTMLVideoElement = document.querySelector('#myVideo');
         const ovnerVideo: HTMLVideoElement = document.querySelector('#ovnerVideo');
         setStart(type);
 
         if(type) {
-            navigator.mediaDevices.getUserMedia(constraints ?? { audio: true, video: true })
+            navigator.mediaDevices.getUserMedia(globalThis.creditionals)
                 .then((mediaStream)=> {	
                     myVideo.srcObject = mediaStream;
                 })
@@ -55,13 +55,13 @@ export default function({ peerId }) {
         }
     }
     // вызов мы совершаем
-    const useCall =(peerId: string, constraints?: MediaStreamConstraints)=> {
+    const useCall =(peerId: string)=> {
         const myVideo: HTMLVideoElement = document.querySelector('#myVideo');
         const ovnerVideo: HTMLVideoElement = document.querySelector('#ovnerVideo');
         delete ovnerVideo.src;
         ovnerVideo.src = '';
     
-        navigator.mediaDevices.getUserMedia(constraints ?? { audio: true, video: true })
+        navigator.mediaDevices.getUserMedia(globalThis.creditionals)
             .then((mediaStream)=> {	
                 //звоним, указав peerId-партнера и передав свой mediaStream		  
                 globalThis.peercall = peer.call(peerId, mediaStream);
@@ -148,6 +148,7 @@ export default function({ peerId }) {
         // обновились данные собеседника
         socket.on('ovner.refresh', (data)=> {
             console.log('OVNER REFRESH');
+            
             globalState.ovner.set((old)=> {
                 Object.keys(data).forEach((key)=> {
                     old[key] = data[key];
@@ -202,7 +203,7 @@ export default function({ peerId }) {
                 peerId={peerId}
                 useCall={useCall}
             />
-
+            
             <div className="Container">
                 <Indicator />
                 <div className="ovnerVideo-container" id={start ? "ovnerDark" : ""}>

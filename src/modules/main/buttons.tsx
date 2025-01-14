@@ -9,7 +9,7 @@ import { FaPlay, FaAngleDoubleRight } from "react-icons/fa";
 import { FaRegCircleStop } from "react-icons/fa6";
 import Modal from "../../component/modal";
 import { useOrientation, useWindowSize } from "react-use";
-import { useDidMount, useWillUnmount } from 'rooks';
+
 
 
 function Buttons({ useClickButton }) {

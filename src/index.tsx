@@ -24,13 +24,12 @@ import "./sw.js";
 globalThis.peercall;
 globalThis.peerId;
 globalThis.peer = new Peer();
+globalThis.creditionals = { audio: true, video: true };
 const icon = {
     sucess: "✔️",
     error: "🛑",
     warn: "💡"
 }
-
-
 
 
 
@@ -41,6 +40,18 @@ function App() {
     const [view, setView] = React.useState<'base'|'load'|'admin'>('base');
     
 
+    const init =()=> {
+        const constructConfig =(deviceId: string, type: 'video'|'audio')=> {
+            if(type === 'video') globalThis.creditionals.video = { deviceId: { exact: deviceId } };
+            else globalThis.creditionals.audio = { deviceId: { exact: deviceId } };
+        }
+
+        const videos = localStorage.getItem('video');
+        const audios = localStorage.getItem('audio');
+
+        if(videos) constructConfig(JSON.parse(videos).code, 'video');
+        if(audios) constructConfig(JSON.parse(audios).code, 'audio');
+    }
     const showToast =(type:'error'|'success'|'warn', title:string, text:string)=> {
         toast.current.clear();
         toast.current.show({
@@ -66,7 +77,7 @@ function App() {
         delete ovnerVideo.src;
         ovnerVideo.src = '';
 
-        navigator.mediaDevices.getUserMedia({ audio: true, video: true })
+        navigator.mediaDevices.getUserMedia(globalThis.creditionals)
             .then((mediaStream)=> {
                 peercall.answer(mediaStream); // отвечаем на звонок и передаем свой медиапоток собеседнику
                 //peercall.on ('close', onCallClose); //можно обработать закрытие-обрыв звонка
@@ -109,6 +120,11 @@ function App() {
         EVENT.on('exit', (data)=> {
             setView('load');
             localStorage.removeItem('TOKEN');
+            state.set({});
+        });
+        // настройки изменены
+        EVENT.on('inputChange', ()=> {
+            
         });
         
         socket.on('data.ovner', (data)=> {
@@ -166,6 +182,8 @@ function App() {
                 });
             }
         });
+
+        init();
     });
     
 
