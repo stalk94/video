@@ -190,7 +190,7 @@ function App() {
 
     return(
         <MantineProvider theme={{}}>
-            <React.Fragment>
+            <div className="rootTop">
                 <Toast style={{
                         width: '35%',
                         fontSize: window.innerWidth > 1300 ? '13px' : '11px'
@@ -200,7 +200,7 @@ function App() {
                 { view==='admin' && <Admin />}
                 { view==='base' && <Base peerId={peerID} /> }
                 { view==='load' && <Loader useAuth={useAuth} /> }
-            </React.Fragment>
+            </div>
         </MantineProvider>
     );
 }

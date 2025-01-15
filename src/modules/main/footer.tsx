@@ -16,7 +16,7 @@ export default function({ start }: {start: boolean}) {
     const [text, setText] = React.useState<string>();
 
     const useSend =()=> {
-        if(text.length >= 2 && text.length < 100) {
+        if(text.length >= 2 && text.length < 100 && start) {
             socket.emit('send.massage', {
                 peerId: globalThis.peerId,
                 text: text
@@ -25,7 +25,7 @@ export default function({ start }: {start: boolean}) {
         }
     }
     const useClickLike =()=> {
-        if(ovnerState?.peerId?.get() !== undefined) socket.emit('like', {
+        if(ovnerState?.peerId?.get() !== undefined && start) socket.emit('like', {
             peerId: globalThis.peerId,
             peerIdLike: ovnerState.peerId.get()
         });
@@ -47,14 +47,12 @@ export default function({ start }: {start: boolean}) {
                         <FaRegHeart />
                     }
                     onClick={useClickLike}
-                    disabled={!start}
                 />
                 <Button className="button" id="gift"
                     icon={
                         <IoGiftSharp />
                     }
                     onClick={useClickGift}
-                    disabled={!start}
                 />
             </div>
             <div className='InputChatContainer'>
@@ -68,7 +66,6 @@ export default function({ start }: {start: boolean}) {
                 <Button className='ButtonInputChat'
                     icon="pi pi-send"
                     label='Отправить'
-                    disabled={!start}
                     onClick={useSend}
                 />
             </div>

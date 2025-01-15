@@ -226,25 +226,31 @@ const APP = {
      * @param {string} text 
      */
     sendMassage(myPeerId, text) {
+        const chek =(userData)=> {
+            if(userData.googleData) {
+                return `${userData.googleData.name}`;
+            }
+            else return userData.login;
+        }
         const user = online.online[myPeerId];
-
+        
         if(user) {
             const ovner = online.online[user.curentCall];
         
             if(ovner) {
                 if(!ovner._bot) ovner.emit('massage', {
-                    login: user.login,
+                    login: chek(user),
                     text: text
                 });
                 user.emit('massage', {
-                    login: user.login,
+                    login: chek(user),
                     text: text
                 });
             }
             // ботинок
             else {
                 user.emit('massage', {
-                    login: user.login,
+                    login: chek(user),
                     text: text
                 });
             }

@@ -7,6 +7,8 @@ import { Button } from 'primereact/button';
 import { Checkbox } from 'primereact/checkbox';
 import { InputText } from 'primereact/inputtext';
 import { InputNumber } from 'primereact/inputnumber';
+import { Dropdown } from 'primereact/dropdown';
+import { IoMdFemale, IoMdMale } from "react-icons/io";
 import { useDidMount, useIntervalWhen } from 'rooks';
 
 
@@ -22,6 +24,7 @@ const Uploader =()=> {
 }
 const NewBot =({ useUpdate })=> {
     const [login, setLogin] = React.useState('');
+    const [sex, setSex] = React.useState({name:'Ж',code:'fem'});
     const [country, setCountry] = React.useState('RU');
     const [state, setState] = React.useState({
         login: '',
@@ -34,6 +37,7 @@ const NewBot =({ useUpdate })=> {
 
     const useClickNewBot =()=> {
         state.login = login;
+        state.sex = sex.code??'fem';
         state.info = {
             country: country
         }
@@ -44,6 +48,8 @@ const NewBot =({ useUpdate })=> {
                 data: state
             });
             setTimeout(useUpdate, 500);
+            setSex({name:'Ж',code:'fem'});
+            setLogin('');
         }
         else EVENT.emit('error', {text: 'Логин менее 3х символов'});
     }
@@ -64,13 +70,26 @@ const NewBot =({ useUpdate })=> {
                 value={login} 
                 onChange={(e)=> setLogin(e.target.value)} 
             />
+            <Dropdown 
+                style={{width:'100px',marginLeft: '15px'}}
+                value={sex}
+                options={[
+                    {name:'Ж',code:'fem'},
+                    {name:'М',code:'fem'}
+                ]}
+                onChange={(e)=> setSex(e.value)}
+                optionLabel="name"
+                editable 
+            />
             <InputText
-                style={{marginLeft: '5px'}}
+                size={3}
+                style={{marginLeft: '5px',marginRight: '15px'}}
                 placeholder='RU, UA, EE ...'
                 value={country} 
                 onChange={(e)=> setCountry(e.target.value)} 
             />
             <InputNumber showButtons
+                size={1}
                 style={{marginLeft: '5px'}}
                 value={state.time.start} 
                 onValueChange={(e)=> useState('start', e.value)} 
@@ -78,6 +97,7 @@ const NewBot =({ useUpdate })=> {
                 max={23} 
             />
             <InputNumber showButtons 
+                size={1}
                 style={{marginLeft: '5px'}}
                 value={state.time.end} 
                 onValueChange={(e)=> useState('end', e.value)} 
@@ -85,8 +105,9 @@ const NewBot =({ useUpdate })=> {
                 max={23} 
             />
             <Button className='p-button-success'
-                style={{marginLeft: '20px'}}
+                style={{marginLeft: '25px'}}
                 icon={"pi pi-user-plus"}
+                label='Создать'
                 onClick={()=> useClickNewBot()}
             />
         </div>
@@ -112,6 +133,7 @@ export default function() {
     const [upload, setUpload] = React.useState(false);
     const [file, setFile] = React.useState();
     const [checked, setCheked] = React.useState(false);
+    const [country, setCountry] = React.useState();
     const [login, setLogin] = React.useState();
     const [products, setProducts] = React.useState([]);
 
@@ -175,6 +197,10 @@ export default function() {
 
         return days[date.getDay()];
     }
+    const useCountryFilter =(curCountry: string)=> {
+        if(country!==curCountry) setCountry(curCountry);
+        else setCountry();
+    }
     const useFiltre =(login)=> {
         if(!login || login.length===0) return products;
         else {
@@ -185,12 +211,16 @@ export default function() {
         }
     }
     const useChekedFiltre =(login)=> {
-        const elems = useFiltre(login);
-
+        let result = useFiltre(login);
+        
         if(checked) {
-            return elems.filter((elem)=> elem.videos[0]!==undefined);
+            result = result.filter((elem)=> elem.videos[0]!==undefined);
         }
-        else return elems;
+        if(country && country.length) {
+            result = result.filter((elem)=> elem.info.country===country);
+        }
+
+        return result;
     }
     useDidMount(()=> {
         useUpdate();
@@ -206,10 +236,20 @@ export default function() {
                     <NewBot useUpdate={useUpdate} />
                 }
             >
-                <Column field="login" header="Login"/>
-                <Column header="Страна" field="info.country" sortable
+                <Column field="login" header="Login" sortable/>
+                <Column field="sex" header="Пол" sortable
                     body={(data)=> 
                         <div>
+                            { data.sex === 'fem' 
+                                ? <IoMdFemale style={{color: 'red', fontSize: "25px"}}/>
+                                : <IoMdMale style={{color: 'blue', fontSize: "25px"}} />
+                            }
+                        </div>
+                    }
+                />
+                <Column header="Страна" field="info.country"
+                    body={(data)=> 
+                        <div className='Country' onClick={()=> useCountryFilter(data.info.country)}>
                             { data.info.country }
                         </div>
                     }
@@ -230,17 +270,6 @@ export default function() {
                             size={1}
                             value={data.time.startDay} 
                             onValueChange={(e)=> useEdit('startDay', e.value, data.login)} 
-                            min={0} 
-                            max={6} 
-                        />
-                    }
-                />
-                <Column header="День выход" field="time.endDay" sortable
-                    body={(data)=> 
-                        <InputNumber showButtons
-                            size={1}
-                            value={data.time.endDay} 
-                            onValueChange={(e)=> useEdit('endDay', e.value, data.login)} 
                             min={0} 
                             max={6} 
                         />
@@ -312,3 +341,18 @@ export default function() {
         </div>
     );
 }
+
+
+/*
+<Column header="День выход" field="time.endDay" sortable
+                    body={(data)=> 
+                        <InputNumber showButtons
+                            size={1}
+                            value={data.time.endDay} 
+                            onValueChange={(e)=> useEdit('endDay', e.value, data.login)} 
+                            min={0} 
+                            max={6} 
+                        />
+                    }
+                />
+**/

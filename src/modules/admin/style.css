@@ -49,3 +49,10 @@
     animation-duration: 1s;
     animation-iteration-count: infinite;
 }
+
+.Country {
+    cursor: pointer;
+}
+.Country:hover {
+    color: red;
+}

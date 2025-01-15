@@ -84,6 +84,7 @@ export default function({ peerId }) {
     // вызов бота
     const useCallBot =(data)=> {
         globalState.ovner.set(data);
+        const myVideo: HTMLVideoElement = document.querySelector('#myVideo');
         const ovnerVideo: HTMLVideoElement = document.querySelector('#ovnerVideo');
 
         if(data.videos[0]) {
@@ -95,13 +96,17 @@ export default function({ peerId }) {
             delete ovnerVideo.srcObject;
             ovnerVideo.src = src;
             ovnerVideo.loop = true;
+            myVideo.volume = 0;
         }
 
         useClearTask();
-        const minut = 1000 * 60;
+        const timer = data.timerNext * 1000;
+
         task = setTimeout(()=> {
-            useNext();
-        }, rand.getRandom(minut/2, minut * 2));
+            socket.emit('next', {
+                peerId: globalThis.peerId
+            });
+        }, rand.getRandom(timer-5, timer+5));
     }
     // завершить вызов
     const useEndCall =()=> {
@@ -128,6 +133,7 @@ export default function({ peerId }) {
     }
     const useNext =()=> {
         //useEndCall();
+        
         if(start) socket.emit('next', {
             peerId: globalThis.peerId
         });
@@ -240,7 +246,7 @@ export default function({ peerId }) {
                     useStart={useSetStart}
                     useNext={useNext}
                 />
-                <Chat />
+                <Chat start={start} />
             </div>
 
             <Footer

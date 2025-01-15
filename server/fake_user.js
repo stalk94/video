@@ -17,6 +17,7 @@ module.exports = class FakeUser {
         start: 12,
         end: 1
     }
+    timerNext = 15                          // секунд до переключения
     peerId = ''
     money = 0
     status = 'free'

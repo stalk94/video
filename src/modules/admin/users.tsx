@@ -5,14 +5,22 @@ import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
 import { InputNumber } from 'primereact/inputnumber';
+import { IoMdFemale, IoMdMale } from "react-icons/io";
 import { useDidMount, useIntervalWhen } from 'rooks';
 
 
 
 export default function() {
     const [login, setLogin] = React.useState();
+    const [country, setCountry] = React.useState();
     const [products, setProducts] = React.useState([]);
 
+    const chek =(userData)=> {
+        if(userData.googleData) {
+            return `${userData.googleData.name} ${userData.googleData.familyName}`;
+        }
+        else return userData.login;
+    }
     const useEdit =(key: string, value: any, login: string)=> {
         const findIndex = products.findIndex((elem)=> elem.login === login);
 
@@ -31,26 +39,44 @@ export default function() {
         const findIndex = products.findIndex((elem)=> elem.login === login);
         
         if(findIndex !== -1) {
+            const copy = products[findIndex];
+            if(copy.googleData) copy.login = copy.googleData.id;
+
             socket.emit('admin.userRead', {
                 peerId: globalThis.peerId,
-                data: products[findIndex]
+                data: copy
             });
             setTimeout(useUpdate, 400);
         }
     }
     const useUpdate =()=> {
         send("getAllUsers", {}, "POST").then((data)=> {
-            setProducts(Object.values(data));
+            const result = [];
+            Object.values(data).forEach((user, index)=> {
+                if(user.googleData) user.login = chek(user);
+                result.push(user);
+            });
+            setProducts(result);
         });
     }
+    const useCountryFilter =(curCountry: string)=> {
+        if(country!==curCountry) setCountry(curCountry);
+        else setCountry();
+    }
     const useFiltre =(login: string)=> {
-        if(!login || login.length===0) return products;
+        let result = products;
+
+        if(!login || login.length===0) result = products;
         else {
-            const filters = products.filter((elem)=> 
+            result = result.filter((elem)=> 
                 elem.login.includes(login) === true
             );
-            return filters;
         }
+        if(country && country.length) {
+            result = result.filter((elem)=> elem?.info?.country===country);
+        }
+
+        return result;
     }
     useDidMount(()=> {
         useUpdate();
@@ -69,10 +95,20 @@ export default function() {
                     />
                 }
             >
-                <Column field="login" header="Login"/>
-                <Column header="Страна"
-                    body={(data)=> 
+                <Column sortable field="login" header="Login"/>
+                <Column field="sex" header="Пол" sortable
+                    body={(data) =>
                         <div>
+                            {data.sex === 'fem'
+                                ? <IoMdFemale style={{ color: 'red', fontSize: "25px" }} />
+                                : <IoMdMale style={{ color: 'blue', fontSize: "25px" }} />
+                            }
+                        </div>
+                    }
+                />
+                <Column sortable header="Страна" field="info.country"
+                    body={(data)=> 
+                        <div className='Country' onClick={()=> useCountryFilter(data.info.country)}>
                             { data.info?.country }
                         </div>
                     }
@@ -86,7 +122,7 @@ export default function() {
                         />
                     }
                 />
-                <Column header="Coins"
+                <Column sortable header="Coins" field="coins"
                     body={(data)=> 
                         <InputNumber showButtons
                             value={data.money} 

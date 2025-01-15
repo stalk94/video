@@ -20,10 +20,16 @@ const test = [
     {login: 'test12', text: 'xxxxxxxxxxx'},
     {login: 'test11', text: 'xxxxxxxxxxx'},
 ];
+const test2 = [
+    {login: 'test12', text: 'Сделать это не сложно, достаточно написать следующее свойство!'},
+    {login: 'test11', text: '🤮 🤮 🤮 🤮 🤮'},
+];
 
 
-export default function() { 
+export default function({ start }) { 
     const [massages, setMassages] = React.useState([]);
+    const messagesContainerRef = React.useRef(null);
+
     
     const chek =(login: string)=> {
         const user = globalState.user.get();
@@ -31,45 +37,64 @@ export default function() {
         if(login !== user?.login) return true;
     }
     useDidMount(()=> {
-        socket.on('call', ()=> setMassages([]));
-        socket.on('call.bot', ()=> setMassages([]));
+        const placehold = import.meta.env.DEV ? test2 : [];
+
+        socket.on('call', ()=> setMassages(placehold));
+        socket.on('call.bot', ()=> setMassages(placehold));
         socket.on('endCall', ()=> setMassages([]));
         socket.on('endCall.bot', ()=> setMassages([]));
 
         socket.on('massage', (data)=> {
             setMassages((old)=> {
-                return [...old, data];
+                return [data, ...old];
             });
         });
     });
     useWillUnmount(()=> {
-        socket.off('call', ()=> setMassages([]));
-        socket.off('call.bot', ()=> setMassages([]));
+        const placehold = import.meta.env.DEV ? test2 : [];
+
+        socket.off('call', ()=> setMassages(placehold));
+        socket.off('call.bot', ()=> setMassages(placehold));
         socket.off('endCall', ()=> setMassages([]));
         socket.off('endCall.bot', ()=> setMassages([]));
         
         socket.off('massage', (data)=> {
             setMassages((old)=> {
-                return [...old, data];
+                return [data, ...old];
             });
         });
     });
+    React.useEffect(()=> {
+        const container = messagesContainerRef.current;
+
+        container.scrollTo({
+            top: container.scrollHeight,
+            behavior: "smooth",
+        });
+    }, [massages]);
+    React.useEffect(()=> {
+        setMassages([]);
+    }, [start]);
 
 
     return(
         <div className='Chat'>
-            { massages.map((msg, index)=> 
-                <div key={index} className='MassageContainer'>
-                    <div className='MassageHeader'
-                        style={{color: chek(msg.login) ? 'red' : 'green'}}
-                    >
-                        { msg.login }:
+            <div className='ChatContainer' 
+                ref={messagesContainerRef} 
+            >
+                { massages.map((msg, index)=> 
+                    <div key={index} className='MassageContainer'>
+                        <div className='MassageHeader'
+                            style={{color: chek(msg.login) ? 'red' : 'green'}}
+                        >
+                            { msg.login }:
+                        </div>
+                        <div className='MassageText'>
+                            { msg.text }
+                        </div>
                     </div>
-                    <div className='MassageText'>
-                        { msg.text }
-                    </div>
-                </div>
-            )}
+                )}
+            </div>
         </div>
     );
 }
