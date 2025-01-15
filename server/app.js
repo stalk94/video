@@ -199,7 +199,9 @@ const APP = {
                 user.story.forEach((elem)=> elem[ovner.login] = true);
                 ovner.dump();
             }
-            
+            // оповещаем о лайке
+            if(ovner.emit) ovner.emit('set.like', {likes: ovner.likes});
+
             return ovner.likes;
         }
     },

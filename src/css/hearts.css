@@ -1,0 +1,58 @@
+#heart-container {
+    position: absolute;
+    z-index: 60;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    left: 15%;
+    top: 0;
+}
+
+.heart {
+    position: absolute;
+    width: 3vh;
+    height: 3vh;
+    background-color: red;
+    transform: rotate(45deg);
+    animation: float 2s ease-out forwards;
+}
+.heart::before, .heart::after {
+    content: '';
+    position: absolute;
+    width: 3vh;
+    height: 3vh;
+    background-color: red;
+    border-radius: 50%;
+}
+.heart::before {
+    top: -1.5vh;
+    left: 0;
+}
+.heart::after {
+    top: 0;
+    left: -1.5vh;
+}
+
+@keyframes float {
+    0% {
+        opacity: 1;
+        transform: translateY(0) translateX(0) scale(1) rotate(45deg);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(-50vh) translateX(1vh) scale(1.5) rotate(85deg);
+    }
+}
+
+@media only screen and (max-width: 1280px) {
+    #heart-container {
+        position: absolute;
+        z-index: 60;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        left: 0;
+        top: 0;
+    }
+}

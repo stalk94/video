@@ -6,6 +6,7 @@ import { InputText } from 'primereact/inputtext';
 import { FaRegHeart } from "react-icons/fa";
 import { IoGiftSharp } from "react-icons/io5";
 import { OverlayPanel } from 'primereact/overlaypanel';
+import { useDidMount, useWillUnmount } from "rooks";
 import "../../css/footer.css";
 
 
@@ -16,7 +17,7 @@ export default function({ start }: {start: boolean}) {
     const [text, setText] = React.useState<string>();
 
     const useSend =()=> {
-        if(text.length >= 2 && text.length < 100 && start) {
+        if(text.length >= 2 && text.length < 100 && ovnerState?.peerId?.get() !== undefined) {
             socket.emit('send.massage', {
                 peerId: globalThis.peerId,
                 text: text
@@ -24,8 +25,30 @@ export default function({ start }: {start: boolean}) {
             setText('');
         }
     }
-    const useClickLike =()=> {
-        if(ovnerState?.peerId?.get() !== undefined && start) socket.emit('like', {
+    const useLike =()=> {
+        const heartContainer = document.getElementById('heart-container');
+        const button = document.getElementById('like');
+        const heart = document.createElement('div');
+        heart.className = 'heart';
+        const left = window.innerWidth < 1280 ? 60 : 30;
+        const top = window.innerWidth < 1280 ? window.innerHeight - 100 : button.offsetTop;
+
+        // Устанавливаем позицию сердечка
+        heart.style.left = `${left}px`;
+        heart.style.top = `${top}px`;
+        //heart.style.transform = `rotate(${rand.getRandom(45, 180)}deg)`;
+
+        // Добавляем элемент в контейнер
+        heartContainer.appendChild(heart);
+
+        // Удаляем сердечко после завершения анимации
+        heart.addEventListener('animationend', ()=> {
+            heart.remove();
+        });
+    }
+    const useClickLike =(e)=> {
+        useLike(e);
+        if(ovnerState?.peerId?.get() !== undefined) socket.emit('like', {
             peerId: globalThis.peerId,
             peerIdLike: ovnerState.peerId.get()
         });
@@ -33,6 +56,18 @@ export default function({ start }: {start: boolean}) {
     const useClickGift =(e)=> {
         op.current.toggle(e);
     }
+    useDidMount(()=> {
+        socket.on('set.like', (data)=> {
+            useLike();
+            globalState.user.likes.set(data.likes);
+        });
+    });
+    useWillUnmount(()=> {
+        socket.off('set.like', (data)=> {
+            useLike();
+            globalState.user.likes.set(data.likes);
+        });
+    });
 
 
     return(

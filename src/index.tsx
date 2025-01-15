@@ -16,6 +16,7 @@ import Base from "./modules/main/index";
 import Loader from "./modules/load";
 import Admin from "./modules/admin/index";
 import "./css/index.css";
+import "./css/hearts.css";
 import "./css/button.css";
 import "./sw.js";
 //import "./pwa.js";
@@ -201,6 +202,7 @@ function App() {
                 { view==='base' && <Base peerId={peerID} /> }
                 { view==='load' && <Loader useAuth={useAuth} /> }
             </div>
+            <div id="heart-container"></div>
         </MantineProvider>
     );
 }

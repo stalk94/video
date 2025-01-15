@@ -8,7 +8,7 @@ import { useDidMount, useIntervalWhen } from 'rooks';
 import ButtonsPanel from "./buttons";
 import BlurCanvas, { Spiner } from "./canvas";
 import Indicator from "./left-panel";
-import rand from "random-percentage"
+import rand from "random-percentage";
 import "../../css/base.css";
 let task;
 
@@ -195,11 +195,11 @@ export default function({ peerId }) {
     });
     useIntervalWhen(()=> socket.emit('chek', {peerId: globalThis.peerId}), 2000, true);
     useIntervalWhen(()=> {
-        if(!input) {
+        if(!input && !globalThis.peercall) {
             console.log('REFIND!!!');
             socket.emit('start', {peerId: peerId});
         }
-    }, 1500, (globalThis.peerCall ? false : true) && start);
+    }, 1500, (globalThis.peercall ? false : true) && start);
     
     
     
