@@ -86,6 +86,8 @@ export default function() {
     return(
         <div className='AdminBase'>
             <DataTable 
+                scrollable
+                scrollHeight="78vh"
                 value={useFiltre(login)}
                 header={
                     <InputText className='Filter'

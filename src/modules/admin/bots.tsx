@@ -8,6 +8,8 @@ import { Checkbox } from 'primereact/checkbox';
 import { InputText } from 'primereact/inputtext';
 import { InputNumber } from 'primereact/inputnumber';
 import { Dropdown } from 'primereact/dropdown';
+import { OverlayPanel } from 'primereact/overlaypanel';
+import { FileUpload } from 'primereact/fileupload';
 import { IoMdFemale, IoMdMale } from "react-icons/io";
 import { useDidMount, useIntervalWhen } from 'rooks';
 
@@ -113,29 +115,104 @@ const NewBot =({ useUpdate })=> {
         </div>
     );
 }
-const VideoPreview =({ data })=> {
+const VideoPreview =({ data, useUpdate, setUpload })=> {
+    const [duration, setDuration] = React.useState();
+    const op = React.useRef(null);
+    const choseOptions = {
+        label: 'Выбрать', 
+        icon: 'pi pi-fw pi-file',
+        className: 'p-button-outlined p-button-success FileLoader'
+    }
+
+    const handleSubmit =(e, botName: string)=> {
+        //event.preventDefault();
+        setUpload(true);
+        const url = gurl + 'upload';
+        const formData = new FormData();
+        formData.append('file', e.files[0]);
+        formData.append('fileName', botName);
+        const config = {
+            headers: {
+                'content-type': 'multipart/form-data',
+            }
+        };
+        
+        axios.post(url, formData, config).then((response)=> {
+            console.log(response.data);
+            e.options.clear();
+            useUpdate();
+            setUpload(false);
+        });
+    }
+    
+
     return(
-        <div>
+        <div style={{position:'relative'}}
+            onMouseOver={(e)=> {
+                //op.current.style.width = '200px';
+                //op?.current?.play();
+                //op.current.volume = 0;
+            }}
+            onMouseOut={()=> {
+                //op.current.style.width = '150px';
+                if(op?.current?.pause?.ss) {
+                    op.current.pause();
+                    op.current.currentTime = 0;
+                    op.current.playbackRate = 3;
+                }
+            }}
+        >
+            <FileUpload
+                auto
+                name="file"
+                url="./upload"
+                accept='video/*'
+                mode="basic"
+                customUpload
+                uploadHandler={(e)=> handleSubmit(e, data.login)}
+                chooseOptions={choseOptions}
+            />
+            { duration &&
+                <div className='TimerPreview'>
+                    { Math.ceil(duration) } sec
+                </div>
+            }
             {data.videos[0]
-                ? <video 
+                ? <video ref={op}
                     src={`upload/${data.login}/${data.videos[0]}`}
                     width='150px'
+                    onLoadedMetadata={(e)=> setDuration(e.target.duration)}
                   />
                 : <div>no video</div>
             }
         </div>
     );
 }
-
+const SelectDay =({ select, onChange })=> {
+    return(
+        <div className='SelectDayContainer'>
+            {['ВС', 'ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ'].map((name, index)=> 
+                <div className={`OptionDay ${select?.day===index?'SelectDay':''}`}
+                    key={index}
+                    onClick={()=> onChange(index, select?.login)}
+                >
+                    { name }
+                </div>
+            )}
+        </div>
+    );
+}
 
 
 export default function() {
+    const op = React.useRef(null);
     const [upload, setUpload] = React.useState(false);
-    const [file, setFile] = React.useState();
     const [checked, setCheked] = React.useState(false);
+    const [selectDay, setSelectDay] = React.useState();
     const [country, setCountry] = React.useState();
     const [login, setLogin] = React.useState();
     const [products, setProducts] = React.useState([]);
+
 
     const useEdit =(key: string, value: any, login: string)=> {
         const findIndex = products.findIndex((elem)=> elem.login === login);
@@ -170,32 +247,18 @@ export default function() {
             setProducts(Object.values(data));
         });
     }
-    const handleSubmit =(event, botName: string)=> {
-        event.preventDefault();
-        setUpload(true);
-        const url = gurl + 'upload';
-        const formData = new FormData();
-        formData.append('file', file);
-        formData.append('fileName', botName);
-        const config = {
-            headers: {
-                'content-type': 'multipart/form-data',
-            }
-        };
-        
-        axios.post(url, formData, config).then((response)=> {
-            console.log(response.data);
-            useUpdate();
-            setUpload(false);
-        });
-    }
     const useLoad =(e)=> {
         setFile(e.target.files[0]);
     }
     const getWeekDay =(date)=> {
         const days = ['ВС', 'ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ'];
 
-        return days[date.getDay()];
+        return days[date];
+    }
+    const handlerSelectDay =(day, login)=> {
+        useEdit('startDay', day, login);
+        setSelectDay({day, login});
+        op.current.hide();
     }
     const useCountryFilter =(curCountry: string)=> {
         if(country!==curCountry) setCountry(curCountry);
@@ -230,7 +293,15 @@ export default function() {
     return(
         <div className='AdminBase'>
             { upload && <Uploader />}
+            <OverlayPanel ref={op} style={{maxWidth: '60%'}}>
+                <SelectDay
+                    select={selectDay}
+                    onChange={handlerSelectDay}
+                />
+            </OverlayPanel>
             <DataTable 
+                scrollable
+                scrollHeight="78vh"
                 value={useChekedFiltre(login)}
                 header={
                     <NewBot useUpdate={useUpdate} />
@@ -266,13 +337,14 @@ export default function() {
                 />
                 <Column header="День вход" field="time.startDay" sortable
                     body={(data)=> 
-                        <InputNumber showButtons
-                            size={1}
-                            value={data.time.startDay} 
-                            onValueChange={(e)=> useEdit('startDay', e.value, data.login)} 
-                            min={0} 
-                            max={6} 
-                        />
+                        <div className='PreviewSelectDay'
+                            onClick={(e)=> {
+                                setSelectDay({day:data.time.startDay,login:data.login});
+                                op.current.toggle(e);
+                            }}
+                        >
+                            { getWeekDay(data.time.startDay) }
+                        </div>
                     }
                 />
                 <Column header="Время вход" field="time.start" sortable
@@ -305,7 +377,11 @@ export default function() {
                         />
                     }
                     body={(data)=> 
-                        <VideoPreview data={data} />
+                        <VideoPreview 
+                            data={data} 
+                            useUpdate={useUpdate}
+                            setUpload={setUpload}
+                        />  
                     }
                 />
                 <Column 
@@ -317,21 +393,8 @@ export default function() {
                         />
                     }
                     body={(data)=> 
-                        <form onSubmit={(e)=> handleSubmit(e, data.login)}>
-                            <input name="file" 
-                                type="file"
-                                accept='video/*'
-                                onChange={useLoad} 
-                            />
-                            <button type="submit">
-                                загрузить
-                            </button>
-                        </form>
-                    }
-                />
-                <Column 
-                    body={(data)=> 
-                        <Button className="button"
+                        <Button className='p-button-outlined p-button-success'
+                            style={{height:'4vw'}}
                             icon={"pi pi-pencil"}
                             onClick={()=> useClickButton(data.login)}
                         />
@@ -342,7 +405,27 @@ export default function() {
     );
 }
 
-
+/**
+ * <InputNumber showButtons
+                            size={1}
+                            value={data.time.startDay} 
+                            onValueChange={(e)=> useEdit('startDay', e.value, data.login)} 
+                            min={0} 
+                            max={6} 
+                        />
+ */
+/**
+ * <form onSubmit={(e)=> handleSubmit(e, data.login)}>
+                            <input name="file" 
+                                type="file"
+                                accept='video/*'
+                                onChange={useLoad} 
+                            />
+                            <button type="submit">
+                                загрузить
+                            </button>
+                        </form>
+ */
 /*
 <Column header="День выход" field="time.endDay" sortable
                     body={(data)=> 

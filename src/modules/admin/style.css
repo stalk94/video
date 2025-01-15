@@ -56,3 +56,59 @@
 .Country:hover {
     color: red;
 }
+
+
+
+.PreviewSelectDay {
+    cursor: pointer;
+    border: 1px solid silver;
+    border-radius: 5px;
+    max-width: 52px;
+    padding: 12%;
+    margin-left: 15px;
+    background-color: rgba(2, 2, 2, 0.2);
+}
+.PreviewSelectDay:hover {
+    color: orange;
+    border: 1px solid orange;
+}
+.SelectDayContainer{
+    display: flex;
+    flex-direction: row;
+}
+.OptionDay {
+    background-color: rgb(175, 174, 174);
+    cursor: pointer;
+    border: 1px solid rgb(147, 243, 248);
+    padding: 12%;
+    margin-left: 5%;
+    color: rgb(7, 7, 7);
+    font-weight: 600;
+}
+.SelectDay {
+    background-color: rgb(203, 155, 155);
+    color: red;
+    border: 1px solid red;
+}
+.TimerPreview {
+    color: #c5e1a5;
+    position: absolute;
+    top: 3px;
+    left: 3px;
+}
+.FileLoader {
+    position: absolute;
+    top: 0%;
+    z-index: 4;
+    width: 150px;
+    height: 100%;
+    opacity: 0;
+}
+.FileLoader:hover {
+    animation-name: flickFileLoader;
+    animation-duration: 1s;
+}
+@keyframes flickFileLoader {
+    from {color: orange; opacity: 1;}
+    to {color: orange; opacity: 0;}
+}
