@@ -208,6 +208,8 @@ export default function() {
     const op = React.useRef(null);
     const [upload, setUpload] = React.useState(false);
     const [checked, setCheked] = React.useState(false);
+    const [checkedOnline, setChekedOnline] = React.useState(false);
+    const [checkedCurDay, setChekedCurDay] = React.useState(0);
     const [selectDay, setSelectDay] = React.useState();
     const [country, setCountry] = React.useState();
     const [login, setLogin] = React.useState();
@@ -247,9 +249,6 @@ export default function() {
             setProducts(Object.values(data));
         });
     }
-    const useLoad =(e)=> {
-        setFile(e.target.files[0]);
-    }
     const getWeekDay =(date)=> {
         const days = ['ВС', 'ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ'];
 
@@ -282,6 +281,15 @@ export default function() {
         if(country && country.length) {
             result = result.filter((elem)=> elem.info.country===country);
         }
+        if(checkedOnline) {
+            result = result.filter((elem)=> elem.isOnline===true);
+        }
+        if(checkedCurDay===0) result = result.sort((a, b)=> a.time.startDay - b.time.startDay);
+        else if(checkedCurDay===1) result = result.sort((a, b)=> b.time.startDay - a.time.startDay);
+        else {
+            const day = new Date().getDay();
+            result = result.filter((elem)=> elem.time.startDay===day);
+        }
 
         return result;
     }
@@ -307,6 +315,22 @@ export default function() {
                     <NewBot useUpdate={useUpdate} />
                 }
             >
+                <Column field="isOnline"
+                    header={
+                        <Checkbox 
+                            onChange={(e)=> setChekedOnline(e.checked)} 
+                            checked={checkedOnline}
+                        />
+                    }
+                    body={(data)=> 
+                        <div>
+                            { data.isOnline === true
+                                ? <div style={{color: 'green'}}>on</div>
+                                : <div style={{color: 'red'}}>off</div>
+                            }
+                        </div>
+                    }
+                />
                 <Column field="login" header="Login" sortable/>
                 <Column field="sex" header="Пол" sortable
                     body={(data)=> 
@@ -335,7 +359,20 @@ export default function() {
                         />
                     }
                 />
-                <Column header="День вход" field="time.startDay" sortable
+                <Column field="time.startDay"
+                    header={
+                        <div className='FiltreStartDay' 
+                            onClick={(e)=> {
+                                if(checkedCurDay===0) setChekedCurDay(1);
+                                else if(checkedCurDay===1) setChekedCurDay(2);
+                                else setChekedCurDay(0);
+                            }}
+                        >
+                            {checkedCurDay===0 && <div style={{color:'#efed9f'}}>Вход 🡇</div>}
+                            {checkedCurDay===1 && <div style={{color:'#e7c573'}}>Вход 🡅</div>}
+                            {checkedCurDay===2 && <div style={{color:'#73e77d'}}>Вход ◉</div>}
+                        </div>
+                    }
                     body={(data)=> 
                         <div className='PreviewSelectDay'
                             onClick={(e)=> {
@@ -384,8 +421,19 @@ export default function() {
                         />  
                     }
                 />
+                <Column header="Перекл." field="timerNext" sortable
+                    body={(data)=> 
+                        <InputNumber showButtons
+                            size={2}
+                            value={data.timerNext} 
+                            onValueChange={(e)=> useEdit('timerNext', e.value, data.login)} 
+                            min={15} 
+                            max={300} 
+                        />
+                    }
+                />
                 <Column 
-                    header={
+                    header={                    
                         <InputText className='Filter'
                             placeholder='Поиск'
                             value={login} 

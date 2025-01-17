@@ -16,6 +16,20 @@ exports.useTimeFormat =()=> {
         `[${dmy}] ${hm}`
     );
 }
+exports.chekType =(user, newType)=> {
+    const vals = [];
+    ['m', 'f', 'mf'].forEach((elem)=> {
+        if(elem!==newType) vals.push(elem);
+    });
+    
+    vals.forEach((type)=> {
+        user.activate[type] = false;
+    });
+
+    user.activate[newType] = true;
+}
+
+
 
 exports.scheme = {
     data: {

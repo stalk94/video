@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { EVENT } from './lib/engine';
 import { loadGapiInsideDOM } from 'gapi-script';
 import axios from "axios";
 
@@ -19,6 +20,36 @@ export function getIp(clb: Function) {
     ).then(
         (jsonResponse)=> clb(jsonResponse)
     );
+}
+export function errorMedia(err) { 
+    console.log(err.name + ": " + err.message);
+    if(err.name === 'NotFoundError' || err.name === 'DevicesNotFoundError') {
+        EVENT.emit('error', { text: 'Не подключена веб камера!' });
+    }
+    else if(err.name === 'NotAllowedError') {
+        EVENT.emit('error', { text: 'Вы не дали разрешения на доступ к камере или микрофону!' });
+    }
+}
+export async function checkCameraPermission() {
+    try {
+        const status = await navigator.permissions.query({ name: 'camera' });
+
+        if(status.state === 'granted') {
+            console.log('Доступ к камере предоставлен');
+            return true;
+        } 
+        else if (status.state === 'prompt') {
+            console.log('Пользователь ещё не дал разрешение, требуется запрос');
+            return false;
+        } 
+        else if (status.state === 'denied') {
+            console.log('Доступ к камере отклонён');
+            return false;
+        }
+    } catch (error) {
+        console.error('Ошибка проверки разрешений:', error);
+        return false;
+    }
 }
 export function googleAuthorize(clbError, clbSucces) {
     loadGapiInsideDOM().then((gapi)=> {

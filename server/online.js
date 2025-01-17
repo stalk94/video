@@ -7,18 +7,22 @@ const online = {
     online: {},
 
     init() {
+        const time = Date.now();
+
         Object.keys(this.online).forEach((peerid)=> {
+            /**@type {User} */
             const user = this.online[peerid];
 
-            //? проверка таймера суперпоиска
-            if(user.timeSuperFind) {
-                if((user.timeSuperFind - (30*1000)) < 0) {
-                    user.timeSuperFind = undefined;
-                    user.activate.search = false;
+            // проверка таймера статуса Новичка
+            if(user.timeNewUser) {
+                if((user.timeNewUser - (30*1000)) < 0) {
+                    user.timeNewUser = undefined;
                 }
-                else user.timeSuperFind -= 30 * 1000;
-
-                user.emit('refreshed', {activate: user.activate});
+                else user.timeNewUser -= 30 * 1000;
+            }
+            // 14 секунд и оффлайн
+            if((user.timeshtamp+14000) < time) {
+                APP.exit(user.peerId);
             }
         });
     },
@@ -28,6 +32,19 @@ const online = {
             login: user.login,
             timeshtamp: Date.now()
         });
+    },
+    getCountsOnline() {
+        const result = {
+            users: 0,
+            bots: 0
+        }
+
+        Object.values(this.online).forEach((elem)=> {
+            if(elem._bot) result.bots += 1;
+            else result.users += 1;
+        });
+
+        return result;
     },
     async findSession(token, peerId, socket) {
         const session = await db.get('SESSIONS.' + token);

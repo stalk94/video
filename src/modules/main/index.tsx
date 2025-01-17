@@ -9,6 +9,7 @@ import ButtonsPanel from "./buttons";
 import BlurCanvas, { Spiner } from "./canvas";
 import Indicator from "./left-panel";
 import rand from "random-percentage";
+import { checkCameraPermission, errorMedia } from "../../function";
 import "../../css/base.css";
 let task;
 
@@ -35,11 +36,15 @@ export default function({ peerId }) {
             navigator.mediaDevices.getUserMedia(globalThis.creditionals)
                 .then((mediaStream)=> {	
                     myVideo.srcObject = mediaStream;
+                    myVideo.volume = 0;
+                    socket.emit('start', {
+                        peerId: globalThis.peerId
+                    });
                 })
-
-            socket.emit('start', {
-                peerId: globalThis.peerId
-            });
+                .catch((err)=> {
+                    errorMedia(err);
+                    setStart(false);
+                });
         }
         // отключаемся
         else {
@@ -77,21 +82,22 @@ export default function({ peerId }) {
                     myVideo.srcObject = mediaStream;
                 }
             })
-            .catch((err)=> { 
-                console.log(err.name + ": " + err.message); 
+            .catch((err)=> {
+                errorMedia(err);
+                setStart(false);
             });
     }
     // вызов бота
     const useCallBot =(data)=> {
-        globalState.ovner.set(data);
         const myVideo: HTMLVideoElement = document.querySelector('#myVideo');
         const ovnerVideo: HTMLVideoElement = document.querySelector('#ovnerVideo');
 
         if(data.videos[0]) {
-            const curVideoSrc = data.videos[0];
-            const src = gurl + `upload/${data.login}/${curVideoSrc}`;
             setStart(true);
             setInput(true);
+            globalState.ovner.set(data);
+            const curVideoSrc = data.videos[0];
+            const src = gurl + `upload/${data.login}/${curVideoSrc}`;
 
             delete ovnerVideo.srcObject;
             ovnerVideo.src = src;
@@ -192,8 +198,8 @@ export default function({ peerId }) {
             setStart(true);
             setInput(true);
         });
+        
     });
-    useIntervalWhen(()=> socket.emit('chek', {peerId: globalThis.peerId}), 2000, true);
     useIntervalWhen(()=> {
         if(!input && !globalThis.peercall) {
             console.log('REFIND!!!');

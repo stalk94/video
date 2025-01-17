@@ -58,21 +58,29 @@
 }
 
 
-
+.FiltreStartDay {
+    cursor: pointer;
+}
+.FiltreStartDay:hover {
+    color: red;
+    background-color: rgba(169, 167, 167, 0.2);
+}
 .PreviewSelectDay {
     cursor: pointer;
     border: 1px solid silver;
     border-radius: 5px;
-    max-width: 52px;
+    width: 45px;
+    height: 50px;
     padding: 12%;
-    margin-left: 15px;
     background-color: rgba(2, 2, 2, 0.2);
+    padding-left: 11px;
+    padding-top: 15px;
 }
 .PreviewSelectDay:hover {
     color: orange;
     border: 1px solid orange;
 }
-.SelectDayContainer{
+.SelectDayContainer {
     display: flex;
     flex-direction: row;
 }

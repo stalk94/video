@@ -65,7 +65,25 @@ app.post("/exit", (req, res)=> {
     if(req.body.peerId) APP.exit(req.body.peerId);
 });
 app.post("/getAllBot", async (req, res)=> {
-    res.send(await botManager.getAllBots());
+    const getBotsOnline =()=> {
+        const result = [];
+
+        Object.values(online.online).forEach((elem)=> {
+            if(elem._bot) result.push(elem.login);
+        });
+
+        return result;
+    }
+    const allBots = await botManager.getAllBots();
+    const botsOmline = getBotsOnline();
+    Object.keys(allBots).forEach((botLogin)=> {
+        allBots[botLogin].isOnline = false;
+    });
+    botsOmline.forEach((botLogin)=> {
+        if(allBots[botLogin]) allBots[botLogin].isOnline = true;
+    });
+
+    res.send(allBots);
 });
 app.post("/getAllUsers", async (req, res)=> {
     res.send(await botManager.getAllUsers());
@@ -178,7 +196,7 @@ io.on('connection', (socket)=> {
 
             if(user) {
                 actions.chek(user);
-                user.emit('refreshed', user.get());
+                user.refresh();
             }
         }
     });

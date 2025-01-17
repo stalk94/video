@@ -118,6 +118,7 @@ export default function() {
                 <Column header="Лайки"
                     body={(data)=> 
                         <InputNumber showButtons
+                            size={3}
                             value={data.likes} 
                             onValueChange={(e)=> useEdit('likes', e.value, data.login)} 
                             min={0}  
@@ -127,6 +128,7 @@ export default function() {
                 <Column sortable header="Coins" field="coins"
                     body={(data)=> 
                         <InputNumber showButtons
+                            size={3}
                             value={data.money} 
                             onValueChange={(e)=> useEdit('money', e.value, data.login)} 
                             min={0}  
@@ -135,7 +137,8 @@ export default function() {
                 />
                 <Column 
                     body={(data)=> 
-                        <Button className="button"
+                        <Button className='p-button-outlined p-button-success'
+                            style={{height:'4vw'}}
                             icon={"pi pi-pencil"}
                             onClick={()=> useClickButton(data.login)}
                         />

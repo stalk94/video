@@ -4,6 +4,7 @@ import '@mantine/core/styles.css';
 import 'primeicons/primeicons.css';
 import { createTheme, MantineProvider } from '@mantine/core';
 import React from 'react';
+import { checkCameraPermission, errorMedia } from "./function";
 import { io, Socket } from "socket.io-client";
 import { EVENT, send } from "./lib/engine";
 import globalState from "./global.state";
@@ -93,9 +94,7 @@ function App() {
                 }, 1000);
 
             })
-            .catch((err)=> { 
-                console.log(err.name + ": " + err.message); 
-            });
+            .catch(errorMedia);
     }
     // проверим сессию
     const chekSessionToken =(socket, peerId: string)=> {
@@ -186,7 +185,9 @@ function App() {
 
         init();
     });
-    
+    useIntervalWhen(()=> {
+        if(socket) socket.emit('chek', {peerId: globalThis.peerId});
+    }, 2000, view==='load' ? false : true);
 
 
     return(

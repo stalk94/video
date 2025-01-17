@@ -1,6 +1,7 @@
 const fs = require('fs');
 const { db } = require('./db');
 const { Socket } = require("socket.io");
+const { chekType } = require('./function');
 const pricesConfig = JSON.parse(fs.readFileSync('config/prices.json'));
 
 
@@ -10,11 +11,11 @@ const pricesConfig = JSON.parse(fs.readFileSync('config/prices.json'));
  * нет свободных идешь сосyт болт
  */
 class User {
-    /**
-     * @type {'m'|'f'}
-     */
-    sex = undefined
-    timeshtamp = Date.now()
+    timeshtampRegistration = Date.now()     
+    timeshtamp = Date.now()                 // last online
+    timeSuperFind = undefined               // если активирован супер поиск
+    timeNewUser = (1000*60)*5               // время до окончания режима "Новичек"
+    
     onStart = false                         // нажата кнопка поиска
     permision = 0                           // 0 - 2
     money = 0
@@ -23,7 +24,7 @@ class User {
     peerId = ''                             // идентификатор для связи
     likes = 0                               // лайкм от юзеров
     galery = []                             // файлы пользователя
-    story = []
+    story = {SYSTEM:0}                    // история просмотра
     info = {
         country: 'UA'
     }
@@ -32,11 +33,15 @@ class User {
         f: false,
         mf: false,
         search: false
-    }
+    }                                       // уточнить модель
     socket = Socket.prototype
     curentCall = undefined                  // peerId текушего сеанса
-    timeSuperFind = undefined               // если активирован супер поиск
     avatar = 'img/non-avatar.jpg'
+    /**
+     * @type {'m'|'f'}
+    */
+    sex = undefined
+
 
     /**
      * 
@@ -61,6 +66,9 @@ class User {
         if(this.timeSuperFind) {
             return 100;
         }
+        else if(this.timeNewUser) {
+            return 80;
+        }
         else if(this.status === 'premium') {
             return 60;
         }
@@ -68,14 +76,18 @@ class User {
             return 20;
         }
     }
+    getSexActivate() {
+        if(this.activate.m) return 'm';
+        else if(this.activate.f) return 'fem';
+        else return 'mf';
+    }
     addStory(login) {
-        if(this.story.length > 4) {
-            this.story.shift();
-        }
+        const arr = Object.keys(this.story);
 
-        this.story.push({
-            [login]: false
-        });
+        if(this.story[login]) this.story[login] += 1;
+        else this.story[login] = 1;
+
+        if(arr.length > 5) delete this.story[arr[0]];
     }
     _create() {
 
@@ -85,22 +97,31 @@ class User {
             this[key] = data[key];
         });
 
-        //this.bonusTime = data.bonusTime ?? 5 * (60 * 1000);
+        if(Array.isArray(this.story)) this.story = {};
+        this.timeshtamp = Date.now();
         this.money = data.money ?? 0;
         this.status = data.status ?? 'free';
         this.galery = data.galery ?? [];
     }
-    // чекалка возможности выбрать пол
-    _chekSexActivate() {
-        if(this.status === 'premium' || this.money >= 50) {
-            return true;
+    // вызывается каждые 2 секунды
+    refresh() {
+        this.timeshtamp = Date.now();
+        // вырубаем поиски если менее 50 coin
+        if(this.money < 50) {
+            this.activate.m = false;
+            this.activate.f = false;
+            this.activate.mf = false;
         }
-    }
-    // отправка по сокету
-    emit(eventName, data) {
-        if(this.socket) {
-            this.socket.emit(eventName, data);
+        // проверка таймера суперпоиска
+        if(this.timeSuperFind) {
+            if((this.timeSuperFind - 2) < 0) {
+                this.timeSuperFind = undefined;
+                this.activate.search = false;
+            }
+            else this.timeSuperFind -= 2;
         }
+
+        this.emit('refreshed', this.get());
     }
 
     start() {
@@ -149,8 +170,8 @@ class User {
      * @param {'m'|'mf'|'f'} type 
      */
     activateSex(type) {
-        if(this._chekSexActivate()) {
-            this.activate[type] = true;
+        if(this.status === 'premium' || this.money >= 50) {
+            chekType(this);
             this.dump();
 
             this.emit('refreshed', {
@@ -192,7 +213,12 @@ class User {
             status: this.status
         });
     }
-
+    // отправка по сокету
+    emit(eventName, data) {
+        if(this.socket) {
+            this.socket.emit(eventName, data);
+        }
+    }
     dump() {
         const data = {};
         Object.keys(this).forEach((key)=> {
@@ -207,9 +233,9 @@ class User {
     exit() {
         console.log('USER EXIT: ', this.login);
         delete this.curentCall;
-        this.activate.f = false;
-        this.activate.mf = false;
-        this.activate.m = false;
+        //this.activate.f = false;
+        //this.activate.mf = false;
+        //this.activate.m = false;
         this.dump();
     }
 }

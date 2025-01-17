@@ -50,12 +50,8 @@ module.exports = class FakeUser {
 
         return data;
     }
-    #addStory(login) {
-        if(this.story.length > 4) {
-            this.story.shift();
-        }
-
-        this.story.push(login);
+    addStory(login) {
+        
     }
     _create(data) {
         this.peerId = Date.now().toString();
@@ -88,6 +84,7 @@ module.exports = class FakeUser {
             this.time.endDay = 6;
 
         }
+        this.isOnline = true;
         this.money = data.money ?? 0;
         this.sex = data.sex ?? 'fem';
         this.status = data.status ?? 'free';
