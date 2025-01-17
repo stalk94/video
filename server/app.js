@@ -227,12 +227,7 @@ const APP = {
         const ovner = online.online[peerIdLike];
 
         if(user && ovner) {
-            const find = user.story.find((elem)=> {
-                if(elem[ovner.login]) return true;
-            });
-
-            //console.log(find)
-            if(!find) {
+            if(!user.story[ovner.login]) {
                 ovner.likes++;
                 user.story.forEach((elem)=> elem[ovner.login] = true);
                 ovner.dump();
