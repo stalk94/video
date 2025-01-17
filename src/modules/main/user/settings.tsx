@@ -84,8 +84,10 @@ export default function() {
 
     return(
         <div className='IO'>
-            <div>
-                <var>Видео input0: </var>
+            <div className='IoRow'>
+                <div style={{color:'gray',marginTop:'auto',marginBottom:'auto'}}>
+                    Видео input: &nbsp; &nbsp;
+                </div>
                 <Dropdown 
                     value={selectVideos} 
                     options={inputVideos} 
@@ -94,8 +96,10 @@ export default function() {
                     editable 
                 />
             </div>
-            <div style={{marginTop:'5px'}}>
-                <var>Аудио output: </var>
+            <div className='IoRow' style={{marginTop:'5px'}}>
+                <div style={{color:'gray',marginTop:'auto',marginBottom:'auto'}}>
+                    Аудио output: &nbsp;
+                </div>
                 <Dropdown 
                     value={selectAudios} 
                     options={inputAudios} 

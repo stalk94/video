@@ -25,7 +25,10 @@
     margin-top: 3px;
     margin-left: 15px;
 }
-
+.IoRow {
+    display: flex;
+    flex-direction: row;
+}
 
 .p-overlaypanel-content {
     padding: 0;

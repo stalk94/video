@@ -98,6 +98,11 @@ class User {
         });
 
         if(Array.isArray(this.story)) this.story = {};
+        if(this.status !== 'premium' && this.money < 50) {
+            this.activate.f = false;
+            this.activate.mf = false;
+            this.activate.m = false;
+        }
         this.timeshtamp = Date.now();
         this.money = data.money ?? 0;
         this.status = data.status ?? 'free';

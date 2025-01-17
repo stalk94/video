@@ -85,7 +85,7 @@ export default function({ start }) {
                 { massages.map((msg, index)=> 
                     <div key={index} className='MassageContainer'>
                         <div className='MassageHeader'
-                            style={{color: chek(msg.login) ? 'red' : 'green'}}
+                            style={{color: chek(msg.login) ? '#e63228' : '#89ed7e'}}
                         >
                             { msg.login }:
                         </div>
