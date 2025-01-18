@@ -144,6 +144,9 @@ const VideoPreview =({ data, useUpdate, setUpload })=> {
             setUpload(false);
         });
     }
+    React.useEffect(()=> {
+        setDuration();
+    }, [data]);
     
 
     return(

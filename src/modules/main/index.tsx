@@ -11,6 +11,7 @@ import Indicator from "./left-panel";
 import rand from "random-percentage";
 import { checkCameraPermission, errorMedia } from "../../function";
 import "../../css/base.css";
+import Animations from "./animations";
 let task;
 
 
@@ -215,10 +216,10 @@ export default function({ peerId }) {
                 peerId={peerId}
                 useCall={useCall}
             />
-            
             <div className="Container">
                 <Indicator />
                 <div className="ovnerVideo-container" id={start ? "ovnerDark" : ""}>
+                    <Animations />
                     <video id='ovnerVideo'
                         playsInline
                         controls={false}
@@ -236,6 +237,7 @@ export default function({ peerId }) {
                         start={start}
                     />
                 </div>
+                
                 <div className="myVideo-container">
                     <video id='myVideo'
                         playsInline
@@ -256,7 +258,7 @@ export default function({ peerId }) {
             </div>
 
             <Footer
-                start={input}
+                input={input}
             />
         </div>
     );

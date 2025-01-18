@@ -7,11 +7,12 @@ import { FaRegHeart } from "react-icons/fa";
 import { IoGiftSharp } from "react-icons/io5";
 import { OverlayPanel } from 'primereact/overlaypanel';
 import { useDidMount, useWillUnmount } from "rooks";
+import Gift from "./gift";
 import "../../css/footer.css";
 
 
 
-export default function({ start }: {start: boolean}) {
+export default function({ input }: {input: boolean}) {
     const op = React.useRef(null);
     const ovnerState = useHookstate(globalState.ovner);
     const [text, setText] = React.useState<string>();
@@ -73,7 +74,10 @@ export default function({ start }: {start: boolean}) {
     return(
         <footer>
             <OverlayPanel ref={op}>
-                В разработке!
+                { import.meta.env.DEV 
+                    ? <Gift input={input} />
+                    : <div style={{padding:'2%'}}>В разработке!</div>
+                }
             </OverlayPanel>
             <div className='FooterWraper'>
             <div className='PanelFooter'>

@@ -102,7 +102,7 @@ export default function({useCall, peerId}: {useCall:(peerId:string)=> void, peer
                     ? <DropMain 
                         type={curent} 
                      />
-                    : <div style={{padding:'10px'}}>
+                    : <div style={{padding:'2vh'}}>
                         В beta версии не все функции работают, а так же могут быть баги. 
                      </div>
                 }

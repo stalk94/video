@@ -238,9 +238,6 @@ class User {
     exit() {
         console.log('USER EXIT: ', this.login);
         delete this.curentCall;
-        //this.activate.f = false;
-        //this.activate.mf = false;
-        //this.activate.m = false;
         this.dump();
     }
 }

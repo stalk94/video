@@ -62,7 +62,6 @@ const Sex =({ type })=> {
         fem: <IoMdFemale style={{color: 'red', fontSize: window.innerWidth > 1280 ? "28px" : "75px", marginTop: '4px'}}/>,
         mf: <IoMaleFemale style={{color: 'silver', fontSize: window.innerWidth > 1280 ? "28px" : "75px", marginTop: '4px'}} />
     }
-    console.log(type)
 
     return(
         <React.Fragment>
