@@ -11,34 +11,33 @@ import fire from '../../img/fire.png'
 import fire1 from '../../img/fire1.png'
 import fire2 from '../../img/fire2.png'
 import fire3 from '../../img/fire3.png'
-import star from '../../img/star.png'
+import rose from '../../img/rose.png'
 import star1 from '../../img/star1.png'
-let animationTask, task;
+let animationTask, task, taskCur;
+
+const images = {
+    heart: heart,
+    petal: petal,
+    star: star1,
+    lips: lips,
+    rose: rose
+}
+export type EventAnimation = {
+    type: 'fall' | 'kiss' | 'fier' | 'imgFier' | 'exp' | 'expRainbow' | 'rocket'
+    image?: 'heart' | 'rose' | 'star' | 'lips' 
+    count?: number
+    x?: number
+    y?: number
+}
 
 
 export default function() {
     const canvasRef = React.useRef(null);
-    const kisses = [];
-  
-    const stop =(timeout?: number)=> {
-        const canvas = canvasRef.current;
-        const ctx = canvas.getContext('2d');
-        
-        if(task!==undefined) {
-            cancelAnimationFrame(animationTask);
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            clearTimeout(task);
-            canvas.style.background = '';
-        }
-        task = setTimeout(()=> {
-            cancelAnimationFrame(animationTask);
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            canvas.style.background = '';
-        }, timeout ?? 12000);
-    }
+
     // салют конфети
-    const standart =(maxCount?:number)=> {
-        const canvas = canvasRef.current;
+    const standart =(maxCount?: number)=> {
+        //const canvas = canvasRef.current;
+        const canvas = document.querySelector('.animCanvas');
         const ctx = canvas.getContext('2d');
         const particles = [];
         const colors = ['#FF5733', '#FFBD33', '#33FF57', '#33A1FF', '#9B33FF'];
@@ -117,14 +116,15 @@ export default function() {
         animate();
     }
     // салют из картинок
-    const imageFireworks =(imgSrc, count?:number)=> {
+    const imageFireworks =(imgSrc, count?: number)=> {
         const heartImage = new Image();
         heartImage.src = imgSrc ?? heart;
         const colors = ['#FF5733', '#FFBD33', '#33FF57', '#33A1FF', '#9B33FF'];
         const numFireworks = count ?? 6;         // кол-во салютов
         const numParticles = 100;                // частиц в салюте
 
-        const canvas = canvasRef.current;
+        //const canvas = canvasRef.current;
+        const canvas = document.querySelector('.animCanvas');
         const ctx = canvas.getContext('2d');
         const particles = [];
 
@@ -153,7 +153,7 @@ export default function() {
                     this.alpha -= this.fadeSpeed;
         
                     if (this.alpha <= 0) {
-                    this.alpha = 0;
+                        this.alpha = 0;
                     }
                 }
                 draw() {
@@ -197,16 +197,15 @@ export default function() {
         };
     }
     // дождь из картинок
-    const imgFall =(imgSrc, maxCount?:number)=> {
-        const canvas = canvasRef.current;
+    const imgFall =(imgSrc, maxCount?: number)=> {
+        const canvas = document.querySelector('.animCanvas');
         const ctx = canvas.getContext('2d');
         
-        const particles = [];
+        let particles = [];
         const petalImage = new Image();
         petalImage.src = imgSrc ?? petal;             // Путь к изображению лепестка
         const maxParticles = maxCount ?? 80;          // Максимальное количество частиц на экране
         const numParticles = 3;                       // количество новых картинок за один цикл
-        stop();
 
         petalImage.onload =()=> {
             canvas.width = window.innerWidth;
@@ -257,12 +256,12 @@ export default function() {
 
                 // Обновление и отрисовка частиц
                 particles.forEach((particle, index) => {
-                particle.update();
-                particle.draw();
-                // Если частица вышла за пределы экрана, удаляем её
-                if (particle.y > canvas.height) {
-                    particles.splice(index, 1);
-                }
+                    particle.update();
+                    particle.draw();
+                    // Если частица вышла за пределы экрана, удаляем её
+                    if (particle.y > canvas.height) {
+                        particles.splice(index, 1);
+                    }
                 });
 
                 // Создание новых частиц постепенно
@@ -275,16 +274,18 @@ export default function() {
             };
       
             animate();
+            stop(14000);
         };
     }
     // поцелуйчики
     const kiss =()=> {
-        const canvas = canvasRef.current;
+        //const canvas = canvasRef.current;
+        const canvas = document.querySelector('.animCanvas');
         const ctx = canvas.getContext('2d');
         const kissImage = new Image();
         kissImage.src = lips;
         const maxKisses = 1;            // Максимальное количество поцелуев на экране
-        stop();
+        const kisses = [];
 
         kissImage.onload =()=> {
             canvas.width = window.innerWidth;
@@ -353,97 +354,114 @@ export default function() {
             };
 
             animate();
+            stop(8000);
         };
     }
     // салют обычный с искрами
-    const explosion =(count?:number)=> {
-        const canvas = canvasRef.current;
-        const ctx = canvas.getContext('2d');
+    const explosion =(count?: number)=> {
+        if(taskCur) clearInterval(taskCur);
+        let r = 0;
+        const start =()=> {
+            const canvas = document.querySelector('.animCanvas');
+            const ctx = canvas.getContext('2d');
 
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        const particles = [];
-        const sparkImage = new Image();
-        sparkImage.src = fire;
-        const numParticles = rand.getRandom(80, 180);  // Количество частиц
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            const particles = [];
+            const sparkImage = new Image();
+            sparkImage.src = fire;
+            const numParticles = rand.getRandom(80, 180);  // Количество частиц
 
-        class Particle {
-            constructor(x, y) {
-                this.x = x; // Положение частицы
-                this.y = y;
-                this.size = Math.random() * 70; // Начальный размер частицы
-                this.speedX = Math.random() * 6 - 3; // Горизонтальная скорость
-                this.speedY = Math.random() * 6 - 3; // Вертикальная скорость
-                this.alpha = 1; // Начальная прозрачность
-                this.decay = Math.random() * 0.0001; // Скорость исчезновения
-                this.rotation = Math.random() * Math.PI * 2; // Случайный угол
-                this.rotationSpeed = Math.random() * 0.1 - 0.05; // Скорость вращения
-            }
+            class Particle {
+                constructor(x, y) {
+                    this.x = x; // Положение частицы
+                    this.y = y;
+                    this.size = Math.random() * 70; // Начальный размер частицы
+                    this.speedX = Math.random() * 6 - 3; // Горизонтальная скорость
+                    this.speedY = Math.random() * 6 - 3; // Вертикальная скорость
+                    this.alpha = 1; // Начальная прозрачность
+                    this.decay = Math.random() * 0.0001; // Скорость исчезновения
+                    this.rotation = Math.random() * Math.PI * 2; // Случайный угол
+                    this.rotationSpeed = Math.random() * 0.1 - 0.05; // Скорость вращения
+                }
 
-            update() {
-                this.x += this.speedX; // Обновляем положение
-                this.y += this.speedY;
-                this.alpha -= this.decay; // Уменьшаем прозрачность
-                this.size *= 0.991; // Постепенно уменьшаем размер
-                this.rotation += this.rotationSpeed; // Добавляем вращение
-            }
-            draw() {
-                if(sparkImage.complete) {
-                    ctx.save();
-                    ctx.globalAlpha = this.alpha;
-                    ctx.translate(this.x, this.y);
-                    ctx.rotate(this.rotation);
-                    ctx.drawImage(
-                        sparkImage,
-                        -this.size / 2,
-                        -this.size / 2,
-                        this.size,
-                        this.size
-                    );
-                    ctx.restore();
+                update() {
+                    this.x += this.speedX; // Обновляем положение
+                    this.y += this.speedY;
+                    this.alpha -= this.decay; // Уменьшаем прозрачность
+                    this.size *= 0.991; // Постепенно уменьшаем размер
+                    this.rotation += this.rotationSpeed; // Добавляем вращение
+                }
+                draw() {
+                    if(sparkImage.complete) {
+                        ctx.save();
+                        ctx.globalAlpha = this.alpha;
+                        ctx.translate(this.x, this.y);
+                        ctx.rotate(this.rotation);
+                        ctx.drawImage(
+                            sparkImage,
+                            -this.size / 2,
+                            -this.size / 2,
+                            this.size,
+                            this.size
+                        );
+                        ctx.restore();
+                    }
+                }
+                isAlive() {
+                    return this.alpha > 0 && this.size > 1; // Частьцы "умирают", когда становятся совсем маленькими или прозрачными
                 }
             }
-            isAlive() {
-                return this.alpha > 0 && this.size > 1; // Частьцы "умирают", когда становятся совсем маленькими или прозрачными
-            }
-        }
 
-        const createExplosion =(x, y)=> {
-            for (let i = 0; i < numParticles; i++) {
-                particles.push(new Particle(x, y));
-            }
-        };
-
-        const animate =()=> {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
-            particles.forEach((particle, index)=> {
-                if (particle.isAlive()) {
-                    particle.update();
-                    particle.draw();
-                } 
-                else {
-                    particles.splice(index, 1); // Удаляем "мертвые" частицы
+            const createExplosion =(x, y)=> {
+                for (let i = 0; i < numParticles; i++) {
+                    particles.push(new Particle(x, y));
                 }
-            });
-      
-            requestAnimationFrame(animate);
-        };
+            };
 
-        for (let i = 0; i < (count ?? 1); i++) {
-            const x = Math.random() * canvas.width;         // случайная позиция по оси X
-            const y = Math.random() * (canvas.height-200);  // случайная позиция по оси Y
-            createExplosion(x, y);
+            const animate =()=> {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+                particles.forEach((particle, index)=> {
+                    if (particle.isAlive()) {
+                        particle.update();
+                        particle.draw();
+                    } 
+                    else {
+                        particles.splice(index, 1); // Удаляем "мертвые" частицы
+                    }
+                });
+        
+                requestAnimationFrame(animate);
+            };
+
+            for (let i = 0; i < (count ?? 1); i++) {
+                const x = Math.random() * canvas.width;         // случайная позиция по оси X
+                const y = Math.random() * (canvas.height-200);  // случайная позиция по оси Y
+                createExplosion(x, y);
+            }
+            animate();
         }
-        animate();
+
+        taskCur = setInterval(()=> {
+            if(r < 5 ) {
+                count = r+2
+                start();
+                r++;
+            }
+            else clearInterval(taskCur);
+        }, 1000);
     }
     // салют с разноцветными искрами
-    const explosionRainbow =(count?:number)=> {
-        const canvas = canvasRef.current;
+    const explosionRainbow =(count?: number)=> {
+        const canvas = document.querySelector('.animCanvas');
         const ctx = canvas.getContext('2d');
 
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
+        canvas.style.background = '#0000004d';
+
+        let oneExplosion = false;
         const particles = [];
         const textures = [fire, fire1, fire2, fire3];
         const numParticles = rand.getRandom(80, 180);  // Количество частиц
@@ -497,13 +515,14 @@ export default function() {
                 const texture = textures[Math.floor(Math.random() * textures.length)];
                 particles.push(new Particle(x, y, texture));
             }
+            oneExplosion = true;
         };
 
         const animate =()=> {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
       
             particles.forEach((particle, index)=> {
-                if (particle.isAlive()) {
+                if(particle.isAlive()) {
                     particle.update();
                     particle.draw();
                 } 
@@ -512,7 +531,8 @@ export default function() {
                 }
             });
       
-            requestAnimationFrame(animate);
+            animationTask = requestAnimationFrame(animate);
+            if(oneExplosion && !particles[0]) clear();
         };
 
         for (let i = 0; i < (count ?? 1); i++) {
@@ -523,16 +543,17 @@ export default function() {
         animate();
     }
     // салют с разноцветными искрами и ракетой
-    const rocket =(count?:number)=> {
-        const canvas = canvasRef.current;
+    const rocket =(xStart?: number, yStart?: number, count?: number)=> {
+        const canvas = document.querySelector('.animCanvas');
         const ctx = canvas.getContext('2d');
 
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
-        canvas.style.background = '#0000005c';
+        canvas.style.background = '#0000004d';
 
-        const x = 60;
-        const y = canvas.height;
+        let oneExplosion = false;
+        const x = xStart ?? 60;
+        const y = yStart ?? canvas.height;
         const rockets = [];
         const explosions = [];
         const textures = [fire, fire1, fire2, fire3];
@@ -548,11 +569,10 @@ export default function() {
                 this.trail = []; // След ракеты
                 this.maxTrailLength = 10;
             }
-
             update() {
                 this.trail.push({ x: this.x, y: this.y });
                 if (this.trail.length > this.maxTrailLength) {
-                this.trail.shift();
+                    this.trail.shift();
                 }
 
                 const dx = Math.cos(this.angle) * this.speed;
@@ -563,7 +583,9 @@ export default function() {
                 // Проверка, достигла ли ракета точки взрыва
                 const distanceToTarget = Math.hypot(this.targetX - this.x, this.targetY - this.y);
                 if (distanceToTarget < this.speed) {
-                this.explode();
+                    canvas.style.background = '#f3f2f24d';
+                    this.explode();
+                    setTimeout(()=> canvas.style.background = '#0000004d', 100);
                 }
             }
             draw() {
@@ -574,7 +596,7 @@ export default function() {
                 ctx.beginPath();
                 this.trail.forEach((point, index) => {
                 if (index === 0) ctx.moveTo(point.x, point.y);
-                else ctx.lineTo(point.x, point.y);
+                    else ctx.lineTo(point.x, point.y);
                 });
                 ctx.stroke();
                 ctx.restore();
@@ -591,7 +613,9 @@ export default function() {
                 // Создание салюта
                 explosions.push(new Explosion(this.targetX, this.targetY));
                 const index = rockets.indexOf(this);
-                if (index > -1) rockets.splice(index, 1); // Удаляем ракету
+                if(index > -1) rockets.splice(index, 1); // Удаляем ракету
+                oneExplosion = true;
+                if(!rockets[0]) setTimeout(()=> canvas.style.background = '', 200);
             }
         }
         class Explosion {
@@ -599,17 +623,22 @@ export default function() {
                 this.x = x;
                 this.y = y;
                 this.particles = [];
+
                 for (let i = 0; i < 50; i++) {
                     const texture = textures[Math.floor(Math.random() * textures.length)]; // Случайная текстура
                     this.particles.push(new Particle(x, y, texture));
                 }
             }
             update() {
-                this.particles = this.particles.filter((particle) => particle.isAlive());
-                this.particles.forEach((particle) => particle.update());
+                this.particles = this.particles.filter((particle)=> particle.isAlive());
+                this.particles.forEach((particle)=> particle.update());
+                if(!this.particles[0]) {
+                    const index = explosions.indexOf(this);
+                    explosions.splice(index, 1);
+                }
             }
             draw() {
-                this.particles.forEach((particle) => particle.draw());
+                this.particles.forEach((particle)=> particle.draw());
             }
         }
         class Particle {
@@ -627,7 +656,6 @@ export default function() {
                 this.image = new Image();
                 this.image.src = textureSrc;
             }
-
             update() {
                 this.x += this.speedX; // Обновляем положение
                 this.y += this.speedY;
@@ -676,7 +704,8 @@ export default function() {
                 explosion.draw();
             });
 
-            requestAnimationFrame(animate);
+            animationTask = requestAnimationFrame(animate);
+            if(oneExplosion && !explosions[0]) clear();
         };
 
 
@@ -687,15 +716,252 @@ export default function() {
         }
         else launchRocket(x, y);
         animate();
-        stop(3500);
+    }
+    // салют с кастомными картинками и ракетой
+    const customRocket =(image?:any, count?: number)=> {
+        const canvas = document.querySelector('.animCanvas');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const x = 60;
+        const y = canvas.height;
+        let oneExplosion = false;
+        const rockets = [];
+        const explosions = [];
+
+        class Rocket {
+            constructor(startX, startY, targetX, targetY) {
+                this.x = startX; // Стартовые координаты
+                this.y = startY;
+                this.targetX = targetX; // Точка взрыва
+                this.targetY = targetY;
+                this.speed = 4 + Math.random() * 3; // Скорость ракеты
+                this.angle = Math.atan2(targetY - startY, targetX - startX);
+                this.trail = []; // След ракеты
+                this.maxTrailLength = 10;
+            }
+
+            update() {
+                this.trail.push({ x: this.x, y: this.y });
+                if (this.trail.length > this.maxTrailLength) {
+                    this.trail.shift();
+                }
+
+                const dx = Math.cos(this.angle) * this.speed;
+                const dy = Math.sin(this.angle) * this.speed;
+                this.x += dx;
+                this.y += dy;
+
+                // Проверка, достигла ли ракета точки взрыва
+                const distanceToTarget = Math.hypot(this.targetX - this.x, this.targetY - this.y);
+                if (distanceToTarget < this.speed) {
+                    this.explode();
+                }
+            }
+            draw() {
+                // Рисуем след ракеты
+                ctx.save();
+                ctx.strokeStyle = 'white';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                this.trail.forEach((point, index) => {
+                    if (index === 0) ctx.moveTo(point.x, point.y);
+                    else ctx.lineTo(point.x, point.y);
+                });
+                ctx.stroke();
+                ctx.restore();
+
+                // Рисуем ракету
+                ctx.save();
+                ctx.fillStyle = 'white';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, 4, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
+            explode() {
+                // Создание салюта
+                explosions.push(new Explosion(this.targetX, this.targetY));
+                const index = rockets.indexOf(this);
+                if(index > -1) rockets.splice(index, 1); // Удаляем ракету
+                oneExplosion = true;
+            }
+        }
+        class Explosion {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.particles = [];
+
+                if(!image) {
+                    const random = Object.values(images);
+                    const src = random[rand.getRandom(0, random.length-1)];
+
+                    for (let i = 0; i < 50; i++) {
+                        this.particles.push(new Particle(x, y, src));
+                    }
+                }
+                else for (let i = 0; i < 50; i++) {
+                    this.particles.push(new Particle(x, y, images[image]));
+                }
+            }
+            update() {
+                this.particles = this.particles.filter((particle)=> particle.isAlive());
+                this.particles.forEach((particle)=> particle.update());
+
+                if(!this.particles[0]) {
+                    const index = explosions.indexOf(this);
+                    explosions.splice(index, 1);
+                }
+            }
+            draw() {
+                this.particles.forEach((particle)=> particle.draw());
+            }
+        }
+        class Particle {
+            constructor(x, y, texture) {
+                this.x = x;
+                this.y = y;
+                this.size = Math.random() * 50; // Размер сердечка
+                this.speed = Math.random() * 3;
+                this.angle = Math.random() * Math.PI * 2;
+                this.velocityX = Math.cos(this.angle) * this.speed;
+                this.velocityY = Math.sin(this.angle) * this.speed;
+                this.gravity = 0.05;
+                this.alpha = 1;
+                this.fadeSpeed = Math.random() * 0.01 + 0.003;
+                this.texture = new Image();
+                this.texture.src = texture;
+            }
+            update() {
+                this.x += this.velocityX;
+                this.y += this.velocityY;
+                this.velocityY += this.gravity;
+                this.alpha -= this.fadeSpeed;
+    
+                if (this.alpha <= 0) {
+                    this.alpha = 0;
+                }
+            }
+            draw() {
+                if(this.texture.complete) {
+                    ctx.save();
+                    ctx.globalAlpha = this.alpha;
+                    ctx.drawImage(this.texture, this.x - this.size / 2, this.y - this.size / 2, this.size, this.size);
+                    ctx.restore();
+                }
+            }
+            isAlive() {
+                return this.alpha > 0 && this.size > 1; // Частьцы "умирают", когда становятся совсем маленькими или прозрачными
+            }
+        }
+
+        const launchRocket =(startX, startY)=> {
+            //const startX = Math.random() * canvas.width;
+            //const startY = canvas.height;
+            const targetX = Math.random() * canvas.width;
+            const targetY = Math.random() * (canvas.height - (canvas.height*0.3));
+            rockets.push(new Rocket(startX, startY, targetX, targetY));
+        };
+        const animate =()=> {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            rockets.forEach((rocket) => {
+                rocket.update();
+                rocket.draw();
+            });
+
+            explosions.forEach((explosion) => {
+                explosion.update();
+                explosion.draw();
+            });
+
+            animationTask = requestAnimationFrame(animate);
+            if(oneExplosion && !explosions[0]) clear();
+        };
+
+
+        if(count) {
+            for(let i = 0; i < count; i++) {
+                launchRocket(x, y);
+            }
+        }
+        else launchRocket(x, y);
+        animate();
     }
 
-    const controller =(data)=> {
 
+    const clear =()=> {
+        const canvas = document.querySelector('.animCanvas');
+
+        if(canvas) {
+            cancelAnimationFrame(animationTask);
+            clearTimeout(task);
+            task = undefined;
+            canvas.remove();
+        }
+    }
+    const stop =(timeout?: number)=> {
+        if(task !== undefined) clear();
+        task = setTimeout(()=> {
+            clear();
+        }, timeout ?? 4000);
+    }
+    const create =()=> {
+        const style = { 
+            'z-index': 100,
+            position: "absolute",
+            display: "block", 
+            width: '100%',
+            height: '100%',
+            pointerEvents: 'none'
+        }
+        const canvas = document.createElement('canvas');
+        canvas.className = 'animCanvas';
+        Object.keys(style).forEach((key)=> {
+            canvas.style[key] = style[key];
+        });
+
+        document.querySelector('.Container').appendChild(canvas);
+    }
+    const controller =(data: EventAnimation)=> {
+        clear();
+        create();
+        if(taskCur) clearInterval(taskCur);
+        if(data.type === 'kiss') kiss();
+        else if(data.type === 'fier') standart(data.count);
+        else if(data.type === 'exp') explosion(data.count);
+        else if(data.type === 'rocket') rocket(data.x, data.y, data.count);
+        else if(data.type === 'fall') imgFall(images[data.image], data.count);
+        else if(data.type === 'imgFier') imageFireworks(images[data.image], data.count);
+        else if(data.type === 'expRainbow') explosionRainbow(data.count);
     }
     useDidMount(()=> {
         EVENT.on('anim', (data)=> {
             controller(data);
+        });
+        document.addEventListener("keydown", (ev)=> {
+            if(ev.key === '1') EVENT.emit('anim', {type: 'kiss'});
+            else if(ev.key === '2') EVENT.emit('anim', {type: 'fier', count: 3});
+            else if(ev.key === '3') EVENT.emit('anim', {type: 'exp', count: 3});
+            else if(ev.key === '4') EVENT.emit('anim', {type: 'rocket', count: 12});
+            else if(ev.key === '5') EVENT.emit('anim', {type: 'fall', image: 'petal'});
+            else if(ev.key === '6') EVENT.emit('anim', {type: 'expRainbow', count: 6});
+            else if(ev.key === '7') EVENT.emit('anim', {type: 'imgFier', image: 'heart', count: 3});
+            else if(ev.key === '8') EVENT.emit('anim', {type: 'imgFier', image: 'star', count: 3});
+            else if(ev.key === '9') EVENT.emit('anim', {type: 'imgFier', image: 'lips', count: 3});
+            else if(ev.key === '0') {
+                clear();
+                create();
+                customRocket(undefined, 12);
+            }
+            else if(ev.key === '-') {
+                clear();
+                create();
+                customRocket('lips', 12);
+            }
         });
     });
     useWillUnmount(()=> {
@@ -705,18 +971,26 @@ export default function() {
     });
     
 
-
+    
     return(
-        <canvas 
+        <React.Fragment>
+
+        </React.Fragment>
+    );
+}
+
+
+/**
+ * <canvas 
             style={{ 
                 zIndex: 100,
                 position: "absolute",
                 display: "block", 
                 width: '100%',
                 height: '100%',
-                pointerEvents: 'none'
+                pointerEvents: 'none',
+                visibility: view ? 'visible' : 'hidden'
             }}
             ref={canvasRef} 
         />
-    );
-}
+ */

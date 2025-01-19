@@ -1,7 +1,6 @@
 import React from 'react';
 import globalState from "../../global.state";
 import { Button } from 'primereact/button';
-import { ScrollPanel } from 'primereact/scrollpanel';
 import { useDidMount, useWillUnmount } from 'rooks';
 import "../../css/chat.css";
 

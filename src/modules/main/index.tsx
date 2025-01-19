@@ -249,6 +249,7 @@ export default function({ peerId }) {
 
                     </video>
                 </div>
+
                 <ButtonsPanel 
                     start={start}
                     useStart={useSetStart}
@@ -256,10 +257,7 @@ export default function({ peerId }) {
                 />
                 <Chat start={start} />
             </div>
-
-            <Footer
-                input={input}
-            />
+            <Footer input={input} />
         </div>
     );
 }

@@ -80,34 +80,30 @@ export default function({ input }: {input: boolean}) {
                 }
             </OverlayPanel>
             <div className='FooterWraper'>
-            <div className='PanelFooter'>
-                <Button className="button" id="like"
-                    icon={
-                        <FaRegHeart />
-                    }
-                    onClick={useClickLike}
-                />
-                <Button className="button" id="gift"
-                    icon={
-                        <IoGiftSharp />
-                    }
-                    onClick={useClickGift}
-                />
-            </div>
-            <div className='InputChatContainer'>
-                <InputText className='InputChat'
-                    value={text} 
-                    onChange={(e)=> setText(e.target.value)}
-                    placeholder='max 100 simbol'
-                />
-            </div>
-            <div className='PanelFooterRight'>
-                <Button className='ButtonInputChat'
-                    icon="pi pi-send"
-                    label='Отправить'
-                    onClick={useSend}
-                />
-            </div>
+                <div className='PanelFooter'>
+                    <Button className="button" id="like"
+                        icon={ <FaRegHeart /> }
+                        onClick={useClickLike}
+                    />
+                    <Button className="button" id="gift"
+                        icon={ <IoGiftSharp /> }
+                        onClick={useClickGift}
+                    />
+                </div>
+                <div className='InputChatContainer'>
+                    <InputText className='InputChat'
+                        value={text} 
+                        onChange={(e)=> setText(e.target.value)}
+                        placeholder='max 100 simbol'
+                    />
+                </div>
+                <div className='PanelFooterRight'>
+                    <Button className='ButtonInputChat'
+                        icon="pi pi-send"
+                        label='Отправить'
+                        onClick={useSend}
+                    />
+                </div>
             </div>
         </footer>
     );

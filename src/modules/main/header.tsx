@@ -125,9 +125,7 @@ export default function({useCall, peerId}: {useCall:(peerId:string)=> void, peer
                     money={userState.money.get()} 
                 />
                 <Button className="button" id="ls"
-                    icon={
-                        <TbMessageDots />
-                    }
+                    icon={ <TbMessageDots /> }
                     onClick={useClickLs}
                 />
                 <Avatar
