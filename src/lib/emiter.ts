@@ -1,3 +1,5 @@
+import { MediaConnection } from "peerjs";
+
 type EventAnimation = {
     type: 'fall' | 'kiss' | 'fier' | 'imgFier' | 'exp' | 'expRainbow' | 'rocket'
     image?: 'heart' | 'rose' | 'star' | 'lips' | 'petal'
@@ -13,6 +15,7 @@ interface Events {
     inputChange: ()=> void
     'input.start': ()=> void
     anim: (data: EventAnimation)=> void
+    callanswer: (data: MediaConnection)=> void
 }
 
 

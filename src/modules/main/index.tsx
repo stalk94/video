@@ -94,8 +94,9 @@ export default function({ peerId }) {
     const useCallBot =(data: BotDataState)=> {
         const myVideo: HTMLVideoElement = document.querySelector('#myVideo');
         const ovnerVideo: HTMLVideoElement = document.querySelector('#ovnerVideo');
-
-        if(data.videos[0]) {
+        useClearTask();
+        
+        if(data.videos[0] && !data.isEmpty) {
             setStart(true);
             setInput(true);
             globalState.ovner.set(data);
@@ -106,16 +107,23 @@ export default function({ peerId }) {
             ovnerVideo.src = src;
             ovnerVideo.loop = true;
             myVideo.volume = 0;
+
+            task = setTimeout(()=> {
+                socket.emit('next', {
+                    peerId: globalThis.peerId
+                });
+            }, data.timerNext * 1000);
         }
+        else if(data.isEmpty) {
+            setStart(true);
+            setInput(true);
+            globalState.ovner.set(data);
 
-        useClearTask();
-        const timer = data.timerNext * 1000;
-
-        task = setTimeout(()=> {
-            socket.emit('next', {
-                peerId: globalThis.peerId
-            });
-        }, rand.getRandom(timer-5, timer+5));
+            delete ovnerVideo.srcObject;
+            ovnerVideo.src = '';
+            ovnerVideo.loop = true;
+            myVideo.volume = 0;
+        }
     }
     // завершить вызов
     const useEndCall =()=> {

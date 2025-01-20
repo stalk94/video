@@ -7,6 +7,7 @@ import { IoMdFemale, IoMdMale } from "react-icons/io";
 import { FaSearchengin } from "react-icons/fa6";
 import { FaPlay, FaAngleDoubleRight } from "react-icons/fa";
 import { FaRegCircleStop } from "react-icons/fa6";
+import { FaStop } from "react-icons/fa6";
 import Modal from "../../component/modal";
 import { useOrientation, useWindowSize } from "react-use";
 import { PropsButtonsPanel, PropsButtonsPanelMobail } from "./type";
@@ -15,8 +16,7 @@ import { PropsButtonsPanel, PropsButtonsPanelMobail } from "./type";
 function Buttons({ useClickButton }: { useClickButton: (type: 'search'|'m'|'f'|'mf')=> void }) {
     const activate = useHookstate(globalState.user.activate);
     const styleActiv = {
-        color: '#4dcdf5',
-        backgroundColor: '#2b253a7a'
+        border:'2px solid gold'
     }
 
     return(
@@ -25,7 +25,7 @@ function Buttons({ useClickButton }: { useClickButton: (type: 'search'|'m'|'f'|'
                 style={activate?.m?.get() ? styleActiv : {}}
                 disabled={activate?.m?.get()}
                 icon={
-                    <IoMdMale />
+                    <IoMdMale style={{color: activate.m.get() ? 'gold' : ''}} />
                 }
                 onClick={()=> useClickButton('m')}
             />
@@ -33,7 +33,7 @@ function Buttons({ useClickButton }: { useClickButton: (type: 'search'|'m'|'f'|'
                 style={activate?.f?.get() ? styleActiv : {}}
                 disabled={activate?.f?.get()}
                 icon={
-                    <IoMdFemale />
+                    <IoMdFemale style={{color: activate.f.get() ? 'gold' : ''}} />
                 }
                 onClick={()=> useClickButton('f')}
             />
@@ -41,15 +41,15 @@ function Buttons({ useClickButton }: { useClickButton: (type: 'search'|'m'|'f'|'
                 style={activate?.mf?.get() ? styleActiv : {}}
                 disabled={activate?.mf?.get()}
                 icon={
-                    <IoMaleFemale />
+                    <IoMaleFemale style={{marginTop:'0.2rem', color: activate.mf.get() ? 'gold' : ''}} />
                 }
                 onClick={()=> useClickButton('mf')}
             />
             <Button className="button"
-                style={globalState?.user?.timeSuperFind?.get() ? styleActiv : {}}
-                disabled={globalState?.user?.timeSuperFind?.get()}
+                style={activate.search.get() ? styleActiv : {}}
+                disabled={activate.search.get()}
                 icon={
-                    <FaSearchengin />
+                    <FaSearchengin style={{color: activate.search.get() ? 'gold' : ''}} />
                 }
                 onClick={()=> useClickButton('search')}
             />
@@ -65,24 +65,18 @@ function ButtonsPlay({ start, useStart, useNext }: PropsButtonsPanel) {
             {!start &&
                 <div style={{ marginLeft: '46%', display: 'flex', flexDirection: 'row' }}>
                     <Button className="button" id="start"
-                        icon={
-                            <FaPlay />
-                        }
+                        icon={ <FaPlay /> }
                         onClick={()=> useStart(true)}
                     />
                 </div>
             }
             { start &&
                 <div style={{ marginLeft: '46%', display: 'flex', flexDirection: 'row' }}>
-                    <Button className="button"
-                        style={{ marginRight: '10px', paddingLeft: '12px' }}
-                        icon={
-                            <FaRegCircleStop />
-                        }
+                    <Button className="button" id="stop"
+                        icon={ <FaStop /> }
                         onClick={()=> useStart(false)}
                     />
-                    <Button className="button"
-                        style={{ marginLeft: '10px', paddingLeft: '12px' }}
+                    <Button className="button" id="next"
                         icon={
                             <FaAngleDoubleRight />
                         }
@@ -96,73 +90,67 @@ function ButtonsPlay({ start, useStart, useNext }: PropsButtonsPanel) {
 function ButtonsMobail({ useClickButton, start, useStart, useNext }: PropsButtonsPanelMobail) {
     const activate = useHookstate(globalState.user.activate);
     const styleActiv = {
-        color: '#4dcdf5',
-        backgroundColor: '#2b253a7a'
+        border:'2px solid gold'
     }
 
 
     return(
         <div className='PanelButtonsMobail'>
             <div className='ButtonsMobailLeft'>
-                <Button className="button"
-                    style={globalState?.user?.timeSuperFind?.get() ? {...styleActiv, marginRight: '10px'} :{marginRight: '10px'}}
-                    disabled={globalState?.user?.timeSuperFind?.get()}
+                <Button className="button functionButton"
+                    style={activate.search.get() ? {...styleActiv, marginRight: '10px'} :{marginRight: '10px'}}
+                    disabled={activate.search.get()}
                     icon={
-                        <FaSearchengin />
+                        <FaSearchengin style={{color: activate.search.get() ? 'gold' : ''}} />
                     }
                     onClick={()=> useClickButton('search')}
                 />
-                <Button className="button"
+                <Button className="button functionButton" 
                     style={activate?.mf?.get() ? styleActiv : {}}
                     disabled={activate?.mf?.get()}
                     icon={
-                        <IoMaleFemale />
+                        <IoMaleFemale style={{marginTop:'0.5rem', color: activate.mf.get() ? 'gold' : ''}} />
                     }
                     onClick={()=> useClickButton('mf')}
                 />
             </div>
+
             { !start &&
                 <div style={{ display: 'flex', flexDirection: 'row' }}>
                     <Button className="button" id="start"
-                        icon={
-                            <FaPlay />
-                        }
+                        icon={ <FaPlay /> }
                         onClick={()=> useStart(true)}
                     />
                 </div>
             }
             { start &&
                 <div style={{ display: 'flex', flexDirection: 'row' }}>
-                    <Button className="button"
-                        style={{ marginRight: '10px', paddingLeft: '12px' }}
-                        icon={
-                            <FaRegCircleStop />
-                        }
+                    <Button className="button" id="stop"
+                        icon={ <FaStop /> }
                         onClick={()=> useStart(false)}
                     />
-                    <Button className="button"
-                        style={{ marginLeft: '10px', paddingLeft: '12px' }}
-                        icon={
-                            <FaAngleDoubleRight />
-                        }
+                    <Button className="button" id="next"
+                        style={{ marginLeft: '10px' }}
+                        icon={ <FaAngleDoubleRight /> }
                         onClick={()=> useNext()}
                     />
                 </div>
             }
+
             <div className='ButtonsMobailRight'>
-                <Button className="button"
+                <Button className="button functionButton"
                     style={activate?.m?.get() ? {...styleActiv, marginRight: '10px'} : {marginRight: '10px'}}
                     disabled={activate?.m?.get()}
                     icon={
-                        <IoMdMale />
+                        <IoMdMale style={{color: activate.m.get() ? 'gold' : ''}} />
                     }
                     onClick={()=> useClickButton('m')}
                 />
-                <Button className="button"
+                <Button className="button functionButton"
                     style={activate?.f?.get() ? styleActiv : {}}
                     disabled={activate?.f?.get()}
                     icon={
-                        <IoMdFemale />
+                        <IoMdFemale style={{color: activate.f.get() ? 'gold' : ''}} />
                     }
                     onClick={()=> useClickButton('f')}
                 />
@@ -197,6 +185,13 @@ export default function({start, useStart, useNext}: PropsButtonsPanel) {
     }
     const useClickButton =(type: 'search'|'m'|'f'|'mf')=> {
         const ps = `P.S: активация данной способности увеличивает шанс!`;
+
+        useConfirm('Активация способности', 
+            'В beta версии данная функция не доступна!',
+            ()=> console.log('cancel'),
+            ()=> console.log('cancel')
+        );
+        return true;
 
         if(type !== 'search') {
             useConfirm('Активация способности', 

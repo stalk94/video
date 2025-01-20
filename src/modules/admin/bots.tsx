@@ -221,10 +221,11 @@ export default function() {
     const [checkedOnline, setChekedOnline] = React.useState(false);
     const [checkedCurDay, setChekedCurDay] = React.useState(0);
     const [selectDay, setSelectDay] = React.useState<{day:number, login:string}>();
+    const [filtreDay, setFiltreDay] = React.useState<{name:string, code:string}>({name:'нет', code:-1});
     const [country, setCountry] = React.useState<string>();
     const [login, setLogin] = React.useState<string>();
     const [products, setProducts] = React.useState<BotDataState[] | []>([]);
-
+    
    
     const useEdit =(key: string, value: any, login: string)=> {
         const findIndex = products.findIndex((elem)=> elem.login === login);
@@ -240,7 +241,7 @@ export default function() {
                 old[findIndex].time[key] = value;
             }
 
-            return old;
+            return [...old];
         });
     }
     const useClickButton =(login: string)=> {
@@ -248,6 +249,17 @@ export default function() {
         
         if(findIndex !== -1) {
             socket.emit('admin.botRead', {
+                peerId: globalThis.peerId,
+                data: products[findIndex]
+            });
+            setTimeout(useUpdate, 400);
+        }
+    }
+    const useDelete =(login: string)=> {
+        const findIndex = products.findIndex((elem)=> elem.login === login);
+
+        if(findIndex !== -1) {
+            socket.emit('admin.botDelete', {
                 peerId: globalThis.peerId,
                 data: products[findIndex]
             });
@@ -300,11 +312,15 @@ export default function() {
             const day = new Date().getDay();
             result = result.filter((elem)=> elem.time.startDay===day);
         }
+        if(filtreDay.code!==-1) result = result.filter((elem)=> elem.time.startDay===filtreDay.code);
 
         return result;
     }
     useDidMount(()=> {
         useUpdate();
+        document.addEventListener("keydown", (ev)=> {
+            if(ev.key === 'Escape') setFiltreDay({name:'нет', code:-1});
+        });
     });
     
 
@@ -319,7 +335,7 @@ export default function() {
             </OverlayPanel>
             <DataTable 
                 scrollable
-                scrollHeight="78vh"
+                scrollHeight="79vh"
                 value={useChekedFiltre(login)}
                 header={
                     <NewBot useUpdate={useUpdate} />
@@ -371,16 +387,29 @@ export default function() {
                 />
                 <Column field="time.startDay"
                     header={
-                        <div className='FiltreStartDay' 
-                            onClick={(e)=> {
-                                if(checkedCurDay===0) setChekedCurDay(1);
-                                else if(checkedCurDay===1) setChekedCurDay(2);
-                                else setChekedCurDay(0);
-                            }}
-                        >
-                            {checkedCurDay===0 && <div style={{color:'#efed9f'}}>Вход 🡇</div>}
-                            {checkedCurDay===1 && <div style={{color:'#e7c573'}}>Вход 🡅</div>}
-                            {checkedCurDay===2 && <div style={{color:'#73e77d'}}>Вход ◉</div>}
+                        <div>
+                            <div className='FiltreStartDay' 
+                                onClick={(e)=> {
+                                    if(checkedCurDay===0) setChekedCurDay(1);
+                                    else if(checkedCurDay===1) setChekedCurDay(2);
+                                    else setChekedCurDay(0);
+                                }}
+                            >
+                                {checkedCurDay===0 && <div style={{color:'#efed9f'}}>Вход 🡇</div>}
+                                {checkedCurDay===1 && <div style={{color:'#e7c573'}}>Вход 🡅</div>}
+                                {checkedCurDay===2 && <div style={{color:'#73e77d'}}>Вход ◉</div>}
+                            </div>
+                            <Dropdown 
+                                style={{width:'100px', height:'35px',marginTop:'15px'}}
+                                value={filtreDay}
+                                options={(()=> {
+                                    const days = ['нет', 'ВС', 'ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ'];
+                                    return days.map((elem, index)=> ({name: elem, code: index-1}));
+                                })()}
+                                onChange={(e)=> setFiltreDay(e.value)}
+                                optionLabel="name"
+                                editable 
+                            />
                         </div>
                     }
                     body={(data: BotDataState)=> 
@@ -413,6 +442,14 @@ export default function() {
                             onValueChange={(e)=> useEdit('end', e.value, data.login)} 
                             min={0} 
                             max={23} 
+                        />
+                    }
+                />
+                <Column header="Пустышка" field="isEmpty" sortable
+                    body={(data)=> 
+                        <Checkbox 
+                            onChange={(e)=> useEdit('isEmpty', e.checked, data.login)} 
+                            checked={data.isEmpty}
                         />
                     }
                 />
@@ -451,11 +488,18 @@ export default function() {
                         />
                     }
                     body={(data)=> 
-                        <Button className='p-button-outlined p-button-success'
-                            style={{height:'4vw'}}
-                            icon={"pi pi-pencil"}
-                            onClick={()=> useClickButton(data.login)}
-                        />
+                        <div style={{display:'flex', flexDirection:'row'}}>
+                            <Button className='p-button-outlined p-button-success'
+                                style={{height:'4vw'}}
+                                icon={"pi pi-pencil"}
+                                onClick={()=> useClickButton(data.login)}
+                            />
+                            <Button className='p-button-outlined p-button-danger'
+                                style={{height:'4vw', marginLeft:'20px'}}
+                                icon={"pi pi-trash"}
+                                onClick={()=> useDelete(data.login)}
+                            />
+                        </div>
                     }
                 />
             </DataTable>

@@ -219,6 +219,12 @@ io.on('connection', (socket)=> {
             botManager.edit(msg.peerId, msg.data);
         }
     });
+    // удалить бота
+    socket.on('admin.botDelete', (msg)=> {
+        if(msg && msg.peerId && msg.data) {
+            botManager.delete(msg.peerId, msg.data);
+        }
+    });
     // изменить свойства юзера
     socket.on('admin.userRead', (msg)=> {
         if(msg && msg.peerId && msg.data) {

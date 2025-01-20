@@ -62,6 +62,7 @@ interface UserDataState {
 interface BotDataState {
     login: string
     _bot: true
+    isEmpty: boolean
     isOnline: boolean
     time: {
         startDay: number | 0

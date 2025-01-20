@@ -1,3 +1,4 @@
+const fs = require('fs');
 const FakeUser = require('./fake_user');
 const User = require('./user');
 const { online } = require('./online');
@@ -87,6 +88,19 @@ module.exports = {
 
             if(online.online[bot.peerId]) {
                 online.online[bot.peerId] = bot;
+            }
+        }
+    },
+    async delete(peerId, data) {
+        const user = online.online[peerId];
+        const hasBot = await db.get(`FAKE.${data.login}`);
+
+        if(user && user.permision > 0 && hasBot) {
+            await db.delete(`FAKE.${data.login}`);
+            fs.rmdir(`src/upload/${data.login}`, console.log);
+
+            if(online.online[hasBot.peerId]) {
+                delete online.online[hasBot.peerId];
             }
         }
     },

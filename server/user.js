@@ -35,7 +35,7 @@ class User {
     activate = {
         m: false,
         f: false,
-        mf: false,
+        mf: true,
         search: false
     }                                       // уточнить модель
     socket = Socket.prototype
@@ -111,6 +111,7 @@ class User {
         this.money = data.money ?? 0;
         this.status = data.status ?? 'free';
         this.galery = data.galery ?? [];
+        this.activate.mf = true;        //?
     }
     // вызывается каждые 2 секунды
     refresh() {
@@ -119,7 +120,7 @@ class User {
         if(this.money < 50) {
             this.activate.m = false;
             this.activate.f = false;
-            this.activate.mf = false;
+            this.activate.mf = true;
         }
         // проверка таймера суперпоиска
         if(this.timeSuperFind) {

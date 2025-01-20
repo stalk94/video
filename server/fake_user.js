@@ -10,6 +10,7 @@ module.exports = class FakeUser {
      */
     sex = 'fem'
     onStart = true
+    isEmpty = false
     timeshtap = Date.now()
     time = {
         startDay: 0,
