@@ -11,10 +11,24 @@
     border-radius:50%;
     margin: 2px;
 }
-
+.buttonLike {
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    background-color: #2b253a;
+    font-size: 1.5rem;
+    padding: 1vh;
+    margin-right: 5px;
+}
+.specialLike {
+    border: 1px solid rgba(255, 217, 0, 0.268);
+    background-color: rgba(202, 199, 182, 0.09);
+}
 .button:hover {
     border: 1px solid rgba(0, 0, 0, 0.2);
     background-color: #2b253a7a;
+}
+.buttonLike:hover {
+    background-color: #ed4e183d;
+    font-size: 3vh;
 }
 
 
@@ -52,7 +66,15 @@
 #start {
    font-size: 22px;     
 }
-
+#specialLikeIcon {
+    font-size: 2rem;
+    animation: flikGold 2s ease infinite;
+    animation-direction: normal;
+}
+@keyframes flikGold {
+    from { color: rgb(255, 0, 183); }
+    to { color: gold; } 
+}
 
 /* нижние кнопки */
 #like {
@@ -64,10 +86,9 @@
 #like:hover {
     color: red;
 }
-#gift {
+.giftButton {
     margin-left: 10px;
     padding-left: 11px;
-   
 }
 
 
@@ -83,6 +104,24 @@
         font-size: 3.2vh;
         border-radius:50%;
         margin: 2px;
+    }
+    .buttonLike {
+        border: 1px solid rgba(0, 0, 0, 0.2);
+        background-color: #2b253a;
+        font-size: 3.5rem;
+        padding: 1vh;
+        margin-right: 1vh;
+        min-width: 12vw;
+        min-height: 12vw;
+    }
+    .specialLike {
+        border: 1px solid rgba(255, 217, 0, 0.268);
+        background-color: rgba(202, 199, 182, 0.09);
+    }
+    #specialLikeIcon {
+        font-size: 4rem;
+        animation: flikGold 2s ease infinite;
+        animation-direction: normal;
     }
     #ls {
         cursor: pointer;
@@ -113,7 +152,7 @@
     #like {
         
     }
-    #gift {
+    .giftButton {
         margin-left: 10px;
         padding-top: 2px;
     }

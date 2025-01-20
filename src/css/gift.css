@@ -1,3 +1,93 @@
+/* окно подарков */
+.mantine-Popover-dropdown {
+    background: #262626;
+    border-radius: 10px;
+    padding: 15px;
+    max-width: 72%;
+    max-height: 35%;
+    border: 0px;
+    box-shadow: 2px 7px 9px rgba(2, 2, 2, 0.5);
+    overflow-y: auto;
+}
+.GiftWraper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
 .GiftContainer {
-    
+    max-width: 115px;
+    padding: 10px;
+    border: 1px solid rgba(192, 192, 192, 0.367);
+    border-radius: 5px;
+    background-color: #2b253a;
+}
+.GiftImageContainer {
+    position: relative;
+    display: flex;
+    height: 65px;
+}
+.GiftImage {
+    width: 65px;
+    max-height: 65px;
+    margin: auto;
+}
+.GiftPrice {
+    position: absolute;
+    top: 0px;
+    left: 3px;
+    color: gold;
+    font-weight: 600;
+}
+.GiftLabel {
+    color: gold;
+    font-weight: 100;
+    margin-left: 3px;
+    margin-right: 3px;
+}
+.GiftButtonPay {
+    width: 100%;
+    height: 35px;
+    padding-left: 11px;
+    background-color: rgba(162, 234, 161, 0.1);
+}
+.GiftButtonPay:hover {
+    background-color: rgba(210, 216, 100, 0.2);
+    color: gold;
+}
+
+
+@media screen and (max-width: 1280px) { 
+    .mantine-Popover-dropdown {
+        padding: 1.7vh;
+        max-width: 82%;
+        max-height: 40%;
+    }
+    .GiftWraper {
+        gap: 1.2rem;
+    }
+    .GiftContainer {
+        max-width: 14rem;
+        padding: 0.6rem;
+        border-radius: 10px;
+    }
+    .GiftImageContainer {
+        height: 10rem;
+    }
+    .GiftImage {
+        width: 10rem;
+        max-height: 10rem;
+    }
+    .GiftPrice {
+        font-weight: 600;
+        font-size: 2rem;
+    }
+    .GiftLabel {
+        font-weight: 200;
+        font-size: 1.8rem;
+    }
+    .GiftButtonPay {
+        height: 4rem;
+        padding: auto;
+        font-size: 1.8rem;
+    }
 }

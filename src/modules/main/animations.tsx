@@ -724,6 +724,7 @@ export default function() {
 
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
+        canvas.style.background = '#0000004d';
 
         const x = 60;
         const y = canvas.height;
@@ -757,7 +758,9 @@ export default function() {
                 // Проверка, достигла ли ракета точки взрыва
                 const distanceToTarget = Math.hypot(this.targetX - this.x, this.targetY - this.y);
                 if (distanceToTarget < this.speed) {
+                    canvas.style.background = '#f3f2f24d';
                     this.explode();
+                    setTimeout(()=> canvas.style.background = '#0000004d', 100);
                 }
             }
             draw() {
@@ -787,6 +790,7 @@ export default function() {
                 const index = rockets.indexOf(this);
                 if(index > -1) rockets.splice(index, 1); // Удаляем ракету
                 oneExplosion = true;
+                if(!rockets[0]) setTimeout(()=> canvas.style.background = '', 200);
             }
         }
         class Explosion {
@@ -937,6 +941,7 @@ export default function() {
         else if(data.type === 'fall') imgFall(images[data.image], data.count);
         else if(data.type === 'imgFier') imageFireworks(images[data.image], data.count);
         else if(data.type === 'expRainbow') explosionRainbow(data.count);
+        else if(data.type === 'specRocket') customRocket(data.image, data.count);
     }
     useDidMount(()=> {
         EVENT.on('anim', (data)=> {
@@ -978,19 +983,3 @@ export default function() {
         </React.Fragment>
     );
 }
-
-
-/**
- * <canvas 
-            style={{ 
-                zIndex: 100,
-                position: "absolute",
-                display: "block", 
-                width: '100%',
-                height: '100%',
-                pointerEvents: 'none',
-                visibility: view ? 'visible' : 'hidden'
-            }}
-            ref={canvasRef} 
-        />
- */

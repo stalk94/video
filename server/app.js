@@ -1,7 +1,10 @@
+const fs = require('fs');
 const { online } = require('./online');
 const actions = require('./action');
 const User = require('./user');
+const { chekUserLogin } = require('./function');
 const rand = require('random-percentage');
+const pricesConfig = JSON.parse(fs.readFileSync('config/prices.json'));
 
 
 
@@ -220,22 +223,78 @@ const APP = {
      * Поставлен лайк
      * @param {*} myPeerId 
      * @param {*} peerIdLike 
+     * @param {'heart'|'fire'|'lips'|'rose'} type
      * @returns {number | undefined}
      */
-    like(myPeerId, peerIdLike) {
+    like(myPeerId, peerIdLike, type) {
         const user = online.online[myPeerId];
         const ovner = online.online[peerIdLike];
 
         if(user && ovner) {
-            if(!user.story[ovner.login]) {
-                ovner.likes++;
-                user.story.forEach((elem)=> elem[ovner.login] = true);
-                ovner.dump();
+            if(type === 'rose') {
+                if(user.money > 0) {
+                    ovner.superLikes++;
+                    user.money--
+                    ovner.dump();
+                    user.dump();
+
+                    ovner?.emit('refreshed', {superLikes: ovner.superLikes});
+                    ovner?.emit('set.like', {likes: ovner.likes, type: type});
+                }
+                else user.emit('warn', {
+                    title: `Внимание!`,
+                    text: 'Не хватает 1 COINS.'
+                });
             }
-            // оповещаем о лайке
-            if(ovner.emit) ovner.emit('set.like', {likes: ovner.likes});
+            else {
+                if(!user.story[ovner.login]) {
+                    ovner.likes++;
+                    user.story.forEach((elem)=> elem[ovner.login] = true);
+                    ovner.dump();
+                }
+
+                ovner?.emit('set.like', {likes: ovner.likes, type: type});
+            }
 
             return ovner.likes;
+        }
+    },
+    /**
+     * дарим подарок
+     * @param {*} myPeerId 
+     * @param {*} peerIdOvner 
+     * @param {{
+     *  id: number
+     *  name: string
+     *  cost: number
+     *  src: string
+     *  anim?: 'fall.petal'|'rocket'
+     *  text?: string
+     * }} data
+     */
+    gift(myPeerId, peerIdOvner, data) {
+        const user = online.online[myPeerId];
+        const ovner = online.online[peerIdOvner];
+        const gift = pricesConfig.find((elem)=> elem.id === data.id);
+
+        if(user && ovner && gift) {
+            if(user.money >= gift.cost) {
+                user.money -= gift.cost;
+
+                const giftData = {
+                    timeshtamp: Date.now(),
+                    from: chekUserLogin(user),
+                    ...gift
+                }
+                
+                if(giftData.text && data.text) giftData.text = data.text;
+                ovner.addGift(giftData);
+                user.emit('gift.pay', gift);
+            }
+            else user.emit('warn', {
+                title: `Внимание!`,
+                text: 'Не хватает COINS.'
+            });
         }
     },
     /**

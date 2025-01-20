@@ -1,8 +1,7 @@
-const fs = require('fs');
 const { db } = require('./db');
 const { Socket } = require("socket.io");
 const { chekType } = require('./function');
-const pricesConfig = JSON.parse(fs.readFileSync('config/prices.json'));
+
 
 
 /**
@@ -23,8 +22,10 @@ class User {
     token = ''                              // для сессий
     peerId = ''                             // идентификатор для связи
     likes = 0                               // лайкм от юзеров
+    superLikes = 0                          // спец
     galery = []                             // файлы пользователя
-    story = {SYSTEM:0}                    // история просмотра
+    story = {SYSTEM:0}                      // история просмотра
+    gifts = []                              // подаренные подарки
     info = {
         country: 'UA'
     }
@@ -55,7 +56,7 @@ class User {
     get() {
         const data = {};
         Object.keys(this).forEach((key)=> {
-            if(key !== 'socket') {
+            if(key !== 'socket' && key !== 'gifts') {
                 data[key] = this[key];
             }
         });
@@ -198,6 +199,11 @@ class User {
                 text: 'Не достаточно COINS. Либо купите premium статус.'
             });
         }
+    }
+    addGift(gift) {
+        this.gifts.push(gift);
+        this.emit('gift.add', gift);
+        this.dump();
     }
     // поплнение счета либо изменение баланса юзера
     addMoney(value) {

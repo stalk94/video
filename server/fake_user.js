@@ -22,7 +22,9 @@ module.exports = class FakeUser {
     money = 0
     status = 'free'
     likes = 0                               // лайкм от юзеров
+    superLikes = 0
     galery = []                             // файлы пользователя
+    gifts = []                              // подаренные подарки
     story = []
     videos = [] 
     info = {
@@ -98,6 +100,9 @@ module.exports = class FakeUser {
        
     }
 
+    addGift(gift) {
+        //this.gifts.push(gift);
+    }
     async dump() {
         const data = {};
         Object.keys(this).forEach((key)=> {

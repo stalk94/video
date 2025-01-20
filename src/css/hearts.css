@@ -55,4 +55,15 @@
         left: 0;
         top: 0;
     }
+    @keyframes float {
+        0% {
+            opacity: 1;
+            transform: translateY(0) translateX(0) scale(1) rotate(45deg);
+        }
+    
+        100% {
+            opacity: 0;
+            transform: translateY(-70vh) translateX(1vh) scale(1.5) rotate(85deg);
+        }
+    }
 }

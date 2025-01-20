@@ -175,9 +175,14 @@ io.on('connection', (socket)=> {
         if(msg && msg.peerId) APP.finish(msg.peerId);
     });
     socket.on('like', (msg)=> {
-        if(msg && msg.peerId && msg.peerIdLike) {
-            const likeCount = APP.like(msg.peerId, msg.peerIdLike);
+        if(msg && msg.peerId && msg.peerIdLike && msg.type) {
+            const likeCount = APP.like(msg.peerId, msg.peerIdLike, msg.type);
             if(likeCount) socket.emit('ovner.refresh', {likes: likeCount});
+        }
+    });
+    socket.on('gift', (msg)=> {
+        if(msg && msg.peerId && msg.peerIdOvner) {
+            APP.gift(msg.peerId, msg.peerIdOvner, msg.data);
         }
     });
     socket.on('activate', (msg)=> {

@@ -1,4 +1,23 @@
-{
-    "search": 50,
-    "pol": 10 
-}
+[
+    {
+        "id": 0,
+        "name": "Тестовый подарок",
+        "cost": 10,
+        "src": "img/rose.png",
+        "text": ""
+    },
+    {
+        "id": 1,
+        "name": "Тестовый подарок",
+        "cost": 10,
+        "src": "img/rose1.png",
+        "anim": "fall"
+    },
+    {
+        "id": 2,
+        "name": "Тестовый подарок",
+        "cost": 10,
+        "src": "img/bokals.png",
+        "anim": "rocket"
+    }
+]

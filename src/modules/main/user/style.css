@@ -47,16 +47,5 @@
     .ActionText {
         font-size: 1.2vh;
     }
-    .p-menuitem-text {
-        font-size: 1.4vh;
-    }
-    .p-overlaypanel {
-        width: 50%;
-    }
-    .p-menu {
-        width: 100%;
-    }
-    .p-menuitem-icon {
-        font-size: 1.6vh;
-    }
+    
 }

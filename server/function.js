@@ -28,7 +28,12 @@ exports.chekType =(user, newType)=> {
 
     user.activate[newType] = true;
 }
-
+exports.chekUserLogin =(userData)=> {
+    if(userData.googleData) {
+        return `${userData.googleData.name} ${userData.googleData.familyName}`;
+    }
+    else return userData.login;
+}
 
 
 exports.scheme = {
