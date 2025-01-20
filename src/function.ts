@@ -30,6 +30,9 @@ export function errorMedia(err) {
         EVENT.emit('error', { text: 'Вы не дали разрешения на доступ к камере или микрофону!' });
     }
 }
+export function isMobile() {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|Windows Phone/i.test(navigator.userAgent);
+}
 export async function checkCameraPermission() {
     try {
         const status = await navigator.permissions.query({ name: 'camera' });

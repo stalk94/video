@@ -1,6 +1,7 @@
+import "../../global.d.ts";
 import React from 'react';
 import globalState from "../../global.state";
-import { Button } from 'primereact/button';
+import { Message } from "./type";
 import { useDidMount, useWillUnmount } from 'rooks';
 import "../../css/chat.css";
 
@@ -25,9 +26,9 @@ const test2 = [
 ];
 
 
-export default function({ start }) { 
-    const [massages, setMassages] = React.useState([]);
-    const messagesContainerRef = React.useRef(null);
+export default function({ start }: { start: boolean }) { 
+    const [massages, setMassages] = React.useState<Message[]>([]);
+    const messagesContainerRef = React.useRef<HTMLDivElement | null>(null);
 
     
     const chek =(login: string)=> {

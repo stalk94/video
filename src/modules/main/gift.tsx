@@ -1,3 +1,4 @@
+import "../../global.d.ts";
 import React from 'react';
 import globalState from "../../global.state";
 import { useHookstate } from '@hookstate/core';

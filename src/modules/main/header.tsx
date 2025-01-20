@@ -7,11 +7,12 @@ import { OverlayPanel } from 'primereact/overlaypanel';
 import { FiUser } from "react-icons/fi";
 import { TbMessageDots } from "react-icons/tb";
 import DropMain from "./user/index";
+import { PropsClick } from "./type";
 import "../../css/header.css";
 
 
 
-const Test =({useCall, peerId})=> {
+const Test =({ useCall, peerId })=> {
     const ref = React.useRef(null);
     const [val, setVal] = React.useState();
 
@@ -39,7 +40,7 @@ const Test =({useCall, peerId})=> {
         </OverlayPanel>
     );
 }
-const Coins =({ money })=> {
+const Coins =({ money }: { money: number})=> {
     return(
         <div className='CoinsContainer'>
             <div style={{}}>
@@ -51,7 +52,7 @@ const Coins =({ money })=> {
         </div>
     );
 }
-const Avatar =({ useClickUser })=> {
+const Avatar =({ useClickUser }: PropsClick)=> {
     const user = useHookstate(globalState.user);
     
     const useSize =()=> {
@@ -76,20 +77,20 @@ const Avatar =({ useClickUser })=> {
 }
 
 
-export default function({useCall, peerId}: {useCall:(peerId:string)=> void, peerId:string}) { 
+export default function({ useCall, peerId }: { useCall: (peerId: string)=> void, peerId: string }) { 
     const [curent, setCurent] = React.useState<'ls'|'user'|'beta'>();
-    const op = React.useRef(null);
+    const op = React.useRef<OverlayPanel | null>(null);
     const userState = useHookstate(globalState.user);
 
-    const useClickBeta =(e)=> {
+    const useClickBeta =(e: React.MouseEvent<HTMLElement, MouseEvent>)=> {
         setCurent('beta');
         op.current.toggle(e);
     }
-    const useClickUser =(e)=> {
+    const useClickUser =(e: React.MouseEvent<HTMLElement, MouseEvent>)=> {
         setCurent('user');
         op.current.toggle(e);
     }
-    const useClickLs =(e)=> {
+    const useClickLs =(e: React.MouseEvent<HTMLElement, MouseEvent>)=> {
         setCurent('ls');
         op.current.toggle(e);
     }

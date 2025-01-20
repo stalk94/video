@@ -1,3 +1,4 @@
+import "../../global.d.ts";
 import React from 'react';
 import { EVENT, send } from '../../lib/engine';
 import { Button } from 'primereact/button';
@@ -17,7 +18,7 @@ import "../../css/footer.css";
 
 
 export default function({ input }: {input: boolean}) {
-    const likeRef = React.useRef(null);
+    const likeRef = React.useRef<OverlayPanel | null>(null);
     const ovnerState = useHookstate(globalState.ovner);
     const [text, setText] = React.useState<string>();
     const [opened, setOpened] = React.useState(false);
@@ -69,7 +70,7 @@ export default function({ input }: {input: boolean}) {
             heart.remove();
         });
     }
-    const useClickLike =(e, type: 'heart'|'fire'|'lips'|'rose')=> {
+    const useClickLike =(e: React.MouseEvent<HTMLElement, MouseEvent>, type: 'heart'|'fire'|'lips'|'rose')=> {
         useLike(type);
         if(ovnerState?.peerId?.get() !== undefined) socket.emit('like', {
             peerId: globalThis.peerId,
@@ -77,7 +78,7 @@ export default function({ input }: {input: boolean}) {
             type: type
         });
     }
-    const useClickGift =(e)=> {
+    const useClickGift =(e: React.MouseEvent<HTMLElement, MouseEvent>)=> {
         //if(window.innerWidth < 1280) setVisible(true);
         setOpened(true)
     }

@@ -9,10 +9,10 @@ import { FaPlay, FaAngleDoubleRight } from "react-icons/fa";
 import { FaRegCircleStop } from "react-icons/fa6";
 import Modal from "../../component/modal";
 import { useOrientation, useWindowSize } from "react-use";
+import { PropsButtonsPanel, PropsButtonsPanelMobail } from "./type";
 
 
-
-function Buttons({ useClickButton }) {
+function Buttons({ useClickButton }: { useClickButton: (type: 'search'|'m'|'f'|'mf')=> void }) {
     const activate = useHookstate(globalState.user.activate);
     const styleActiv = {
         color: '#4dcdf5',
@@ -56,7 +56,7 @@ function Buttons({ useClickButton }) {
         </div>
     );
 }
-function ButtonsPlay({ start, useStart, useNext }) {
+function ButtonsPlay({ start, useStart, useNext }: PropsButtonsPanel) {
     const ovnerState = useHookstate(globalState.ovner);
 
 
@@ -93,7 +93,7 @@ function ButtonsPlay({ start, useStart, useNext }) {
         </div>
     );
 }
-function ButtonsMobail({ useClickButton, start, useStart, useNext }) {
+function ButtonsMobail({ useClickButton, start, useStart, useNext }: PropsButtonsPanelMobail) {
     const activate = useHookstate(globalState.user.activate);
     const styleActiv = {
         color: '#4dcdf5',
@@ -173,17 +173,17 @@ function ButtonsMobail({ useClickButton, start, useStart, useNext }) {
 
 
 
-export default function({start, useStart, useNext}) {
-    const [modal, setModal] = React.useState();
+export default function({start, useStart, useNext}: PropsButtonsPanel) {
+    const [modal, setModal] = React.useState<React.ReactElement | undefined>();
     const resize = useWindowSize();
-
+    
     const texts = {
         m: 'Выбор пола доступен при балансе выше 50 COINS. Вы хотите активировать поиск по мужскому полу. ',
         f: 'Выбор пола доступен при балансе выше 50 COINS. Вы хотите активировать поиск по женскому полу. ',
         mf: 'Выбор пола доступен при балансе выше 50 COINS. Вы хотите активировать поиск по М/Ж полу. ',
         search: 'Активация супер поиска стоит 10 COINS на 60 минут. '
     }
-    const useConfirm =(header, message, accept, reject)=> {
+    const useConfirm =(header:React.ReactNode, message:React.ReactNode, accept:()=> void, reject:()=> void)=> {
         setModal(
             <Modal
                 visible={true}

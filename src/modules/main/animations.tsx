@@ -3,7 +3,9 @@ import globalState from "../../global.state";
 import { useHookstate } from '@hookstate/core';
 import { EVENT, send } from '../../lib/engine';
 import { useDidMount, useWillUnmount } from 'rooks';
+import { isMobile } from "../../function";
 import rand from "random-percentage";
+import { EventAnimation } from "./type";
 import heart from '../../img/heart.png';
 import petal from '../../img/rose-petal.png';
 import lips from '../../img/lips.png'
@@ -21,13 +23,6 @@ const images = {
     star: star1,
     lips: lips,
     rose: rose
-}
-export type EventAnimation = {
-    type: 'fall' | 'kiss' | 'fier' | 'imgFier' | 'exp' | 'expRainbow' | 'rocket'
-    image?: 'heart' | 'rose' | 'star' | 'lips' 
-    count?: number
-    x?: number
-    y?: number
 }
 
 
@@ -140,11 +135,18 @@ export default function() {
                     this.color = color;
                     this.speed = Math.random() * 3;
                     this.angle = Math.random() * Math.PI * 2;
-                    this.velocityX = Math.cos(this.angle) * this.speed;
-                    this.velocityY = Math.sin(this.angle) * this.speed;
                     this.gravity = 0.05;
                     this.alpha = 1;
                     this.fadeSpeed = Math.random() * 0.01 + 0.003;
+
+                    if(isMobile()) {
+                        this.speed *= 3;
+                        this.fadeSpeed *= 3;
+                        this.gravity *= 3;
+                    }
+
+                    this.velocityX = Math.cos(this.angle) * this.speed;
+                    this.velocityY = Math.sin(this.angle) * this.speed;
                 }
                 update() {
                     this.x += this.velocityX;
@@ -219,11 +221,18 @@ export default function() {
                     this.size = rand.getRandom(40, 50); // Размер лепестка
                     this.speed = Math.random() * 2; // Увеличена скорость падения
                     this.angle = Math.random() * Math.PI * 2;
-                    this.velocityX = Math.cos(this.angle) * 0.5;
-                    this.velocityY = Math.sin(this.angle) * this.speed; // Увеличена скорость падения
                     this.gravity = 0.005; // Меньшая гравитация
                     this.rotationSpeed = Math.random() * 0.05 - 0.025; // Вращение
                     this.rotation = Math.random() * Math.PI * 2;
+
+                    if(isMobile()) {
+                        this.speed *= 3;
+                        this.fadeSpeed *= 3;
+                        this.gravity *= 3;
+                    }
+
+                    this.velocityX = Math.cos(this.angle) * 0.5;
+                    this.velocityY = Math.sin(this.angle) * this.speed; // Увеличена скорость падения
                 }
                 update() {
                     this.x += this.velocityX;
@@ -383,6 +392,12 @@ export default function() {
                     this.decay = Math.random() * 0.0001; // Скорость исчезновения
                     this.rotation = Math.random() * Math.PI * 2; // Случайный угол
                     this.rotationSpeed = Math.random() * 0.1 - 0.05; // Скорость вращения
+
+                    if(isMobile()) {
+                        this.speed *= 3;
+                        this.decay *= 3;
+                        this.rotationSpeed *= 3;
+                    }
                 }
 
                 update() {
@@ -481,7 +496,6 @@ export default function() {
                 this.image = new Image();
                 this.image.src = textureSrc;
             }
-
             update() {
                 this.x += this.speedX; // Обновляем положение
                 this.y += this.speedY;
@@ -564,17 +578,18 @@ export default function() {
                 this.y = startY;
                 this.targetX = targetX; // Точка взрыва
                 this.targetY = targetY;
-                this.speed = 4 + Math.random() * 3; // Скорость ракеты
+                this.speed = 4 + Math.random() * 4; // Скорость ракеты
                 this.angle = Math.atan2(targetY - startY, targetX - startX);
                 this.trail = []; // След ракеты
                 this.maxTrailLength = 10;
+                if(isMobile()) this.speed *= 3;
             }
             update() {
                 this.trail.push({ x: this.x, y: this.y });
                 if (this.trail.length > this.maxTrailLength) {
                     this.trail.shift();
                 }
-
+                
                 const dx = Math.cos(this.angle) * this.speed;
                 const dy = Math.sin(this.angle) * this.speed;
                 this.x += dx;
@@ -655,6 +670,10 @@ export default function() {
 
                 this.image = new Image();
                 this.image.src = textureSrc;
+                if(isMobile()) {
+                    this.speed *= 3;
+                    this.decay *= 3;
+                }
             }
             update() {
                 this.x += this.speedX; // Обновляем положение
@@ -691,7 +710,7 @@ export default function() {
             const targetY = Math.random() * (canvas.height - (canvas.height*0.3));
             rockets.push(new Rocket(startX, startY, targetX, targetY));
         };
-        const animate =()=> {
+        const animate =(timeshtamp)=> {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
             rockets.forEach((rocket) => {
@@ -742,8 +761,11 @@ export default function() {
                 this.angle = Math.atan2(targetY - startY, targetX - startX);
                 this.trail = []; // След ракеты
                 this.maxTrailLength = 10;
-            }
 
+                if(isMobile()) {
+                    this.speed *= 3;
+                }
+            }
             update() {
                 this.trail.push({ x: this.x, y: this.y });
                 if (this.trail.length > this.maxTrailLength) {
@@ -838,6 +860,12 @@ export default function() {
                 this.fadeSpeed = Math.random() * 0.01 + 0.003;
                 this.texture = new Image();
                 this.texture.src = texture;
+
+                if(isMobile()) {
+                    this.speed *= 3;
+                    this.fadeSpeed *= 3;
+                    this.gravity *= 3;
+                }
             }
             update() {
                 this.x += this.velocityX;

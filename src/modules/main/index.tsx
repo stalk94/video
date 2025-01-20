@@ -1,3 +1,5 @@
+import "../../global.d.ts";
+import { BotDataState } from "../../global.d.ts";
 import React from 'react';
 import { EVENT, send } from '../../lib/engine';
 import globalState, { actions } from "../../global.state";
@@ -89,7 +91,7 @@ export default function({ peerId }) {
             });
     }
     // вызов бота
-    const useCallBot =(data)=> {
+    const useCallBot =(data: BotDataState)=> {
         const myVideo: HTMLVideoElement = document.querySelector('#myVideo');
         const ovnerVideo: HTMLVideoElement = document.querySelector('#ovnerVideo');
 

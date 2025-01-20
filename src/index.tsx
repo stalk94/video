@@ -1,3 +1,4 @@
+import "./global.d.ts";
 import "primereact/resources/themes/md-dark-indigo/theme.css";
 import "primereact/resources/primereact.min.css";
 import '@mantine/core/styles.css';
@@ -10,7 +11,7 @@ import { EVENT, send } from "./lib/engine";
 import globalState from "./global.state";
 import { createRoot } from 'react-dom/client'
 import { useHookstate } from '@hookstate/core';
-import { Peer, MediaConnection } from "peerjs";
+import { Peer } from "peerjs";
 import { useDidMount, useIntervalWhen } from "rooks";
 import { Toast } from 'primereact/toast';
 import Base from "./modules/main/index";
@@ -34,10 +35,9 @@ const icon = {
 }
 
 
-
 function App() {
     const state = useHookstate(globalState);
-    const toast = React.useRef(null);
+    const toast = React.useRef<Toast | null>(null);
     const [peerID, setPeerId] = React.useState<string>();
     const [view, setView] = React.useState<'base'|'load'|'admin'>('base');
     
@@ -97,7 +97,7 @@ function App() {
             .catch(errorMedia);
     }
     // проверим сессию
-    const chekSessionToken =(socket, peerId: string)=> {
+    const chekSessionToken =(socket: Socket, peerId: string)=> {
         const token = window.localStorage.getItem('TOKEN');
         
         if(token) {

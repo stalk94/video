@@ -3,7 +3,7 @@ import { getSizeElement } from "../../function";
 let task;
 
 
-export function Spiner({start, input}: {start:boolean, input:boolean}) {
+export function Spiner({start, input}: { start: boolean, input: boolean }) {
     return(
         <React.Fragment>
             { (start && !input) &&
@@ -22,7 +22,7 @@ export function Spiner({start, input}: {start:boolean, input:boolean}) {
 }
 
 
-export default function BlurFrame({ start }: {start: boolean}) {
+export default function BlurFrame({ start }: { start: boolean }) {
     React.useEffect(()=> {
         if(start) {
             const video: HTMLVideoElement = document.querySelector('#ovnerVideo');

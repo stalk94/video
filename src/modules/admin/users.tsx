@@ -1,3 +1,4 @@
+import { UserDataState } from "../../global.d.ts";
 import React from 'react';
 import { EVENT, send } from "../../lib/engine";
 import { DataTable } from 'primereact/datatable';
@@ -11,11 +12,11 @@ import { useDidMount, useIntervalWhen } from 'rooks';
 
 
 export default function() {
-    const [login, setLogin] = React.useState();
-    const [country, setCountry] = React.useState();
-    const [products, setProducts] = React.useState([]);
+    const [login, setLogin] = React.useState<string>();
+    const [country, setCountry] = React.useState<string>();
+    const [products, setProducts] = React.useState<UserDataState[] | []>([]);
 
-    const chek =(userData)=> {
+    const chek =(userData: UserDataState)=> {
         if(userData.googleData) {
             return `${userData.googleData.name} ${userData.googleData.familyName}`;
         }
@@ -99,7 +100,7 @@ export default function() {
             >
                 <Column sortable field="login" header="Login"/>
                 <Column field="sex" header="Пол" sortable
-                    body={(data) =>
+                    body={(data: UserDataState)=>
                         <div>
                             {data.sex === 'fem'
                                 ? <IoMdFemale style={{ color: 'red', fontSize: "25px" }} />
@@ -109,14 +110,14 @@ export default function() {
                     }
                 />
                 <Column sortable header="Страна" field="info.country"
-                    body={(data)=> 
+                    body={(data: UserDataState)=> 
                         <div className='Country' onClick={()=> useCountryFilter(data.info.country)}>
                             { data.info?.country }
                         </div>
                     }
                 />
                 <Column header="Лайки"
-                    body={(data)=> 
+                    body={(data: UserDataState)=> 
                         <InputNumber showButtons
                             size={3}
                             value={data.likes} 
@@ -126,7 +127,7 @@ export default function() {
                     }
                 />
                 <Column sortable header="Coins" field="coins"
-                    body={(data)=> 
+                    body={(data: UserDataState)=> 
                         <InputNumber showButtons
                             size={3}
                             value={data.money} 
@@ -136,7 +137,7 @@ export default function() {
                     }
                 />
                 <Column 
-                    body={(data)=> 
+                    body={(data: UserDataState)=> 
                         <Button className='p-button-outlined p-button-success'
                             style={{height:'4vw'}}
                             icon={"pi pi-pencil"}

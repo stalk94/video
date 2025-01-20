@@ -1,3 +1,4 @@
+import { BotDataState } from "../../global.d.ts";
 import React from 'react';
 import axios from 'axios';
 import { EVENT, send } from "../../lib/engine";
@@ -24,7 +25,7 @@ const Uploader =()=> {
         </div>
     );
 }
-const NewBot =({ useUpdate })=> {
+const NewBot =({ useUpdate }: { useUpdate: ()=> void })=> {
     const [login, setLogin] = React.useState('');
     const [sex, setSex] = React.useState({name:'Ж',code:'fem'});
     const [country, setCountry] = React.useState('RU');
@@ -55,7 +56,7 @@ const NewBot =({ useUpdate })=> {
         }
         else EVENT.emit('error', {text: 'Логин менее 3х символов'});
     }
-    const useState =(key, value)=> {
+    const useState =(key:string, value:any)=> {
         setState((old)=> {
             if(key === 'login') old[key] = value;
             else old.time[key] = value;
@@ -115,9 +116,12 @@ const NewBot =({ useUpdate })=> {
         </div>
     );
 }
-const VideoPreview =({ data, useUpdate, setUpload })=> {
-    const [duration, setDuration] = React.useState();
-    const op = React.useRef(null);
+const VideoPreview =(
+    { data, useUpdate, setUpload }: 
+    { data: BotDataState, useUpdate: ()=> void, setUpload: (t: boolean)=> void }
+)=> {
+    const [duration, setDuration] = React.useState<number>();
+    const op = React.useRef<HTMLVideoElement | null>(null);
     const choseOptions = {
         label: 'Выбрать', 
         icon: 'pi pi-fw pi-file',
@@ -191,7 +195,10 @@ const VideoPreview =({ data, useUpdate, setUpload })=> {
         </div>
     );
 }
-const SelectDay =({ select, onChange })=> {
+const SelectDay =(
+    { select, onChange }: 
+    { select: {day:number, login:string}, onChange: (index:number, login:string)=> void }
+)=> {
     return(
         <div className='SelectDayContainer'>
             {['ВС', 'ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ'].map((name, index)=> 
@@ -208,17 +215,17 @@ const SelectDay =({ select, onChange })=> {
 
 
 export default function() {
-    const op = React.useRef(null);
+    const op = React.useRef<OverlayPanel | null>(null);
     const [upload, setUpload] = React.useState(false);
     const [checked, setCheked] = React.useState(false);
     const [checkedOnline, setChekedOnline] = React.useState(false);
     const [checkedCurDay, setChekedCurDay] = React.useState(0);
-    const [selectDay, setSelectDay] = React.useState();
-    const [country, setCountry] = React.useState();
-    const [login, setLogin] = React.useState();
-    const [products, setProducts] = React.useState([]);
+    const [selectDay, setSelectDay] = React.useState<{day:number, login:string}>();
+    const [country, setCountry] = React.useState<string>();
+    const [login, setLogin] = React.useState<string>();
+    const [products, setProducts] = React.useState<BotDataState[] | []>([]);
 
-
+   
     const useEdit =(key: string, value: any, login: string)=> {
         const findIndex = products.findIndex((elem)=> elem.login === login);
 
@@ -252,12 +259,12 @@ export default function() {
             setProducts(Object.values(data));
         });
     }
-    const getWeekDay =(date)=> {
+    const getWeekDay =(date: number)=> {
         const days = ['ВС', 'ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ'];
 
         return days[date];
     }
-    const handlerSelectDay =(day, login)=> {
+    const handlerSelectDay =(day: number, login: string)=> {
         useEdit('startDay', day, login);
         setSelectDay({day, login});
         op.current.hide();
@@ -266,7 +273,7 @@ export default function() {
         if(country!==curCountry) setCountry(curCountry);
         else setCountry();
     }
-    const useFiltre =(login)=> {
+    const useFiltre =(login: string)=> {
         if(!login || login.length===0) return products;
         else {
             const filters = products.filter((elem)=> 
@@ -275,7 +282,7 @@ export default function() {
             return filters;
         }
     }
-    const useChekedFiltre =(login)=> {
+    const useChekedFiltre =(login: string)=> {
         let result = useFiltre(login);
         
         if(checked) {
@@ -325,7 +332,7 @@ export default function() {
                             checked={checkedOnline}
                         />
                     }
-                    body={(data)=> 
+                    body={(data: BotDataState)=> 
                         <div>
                             { data.isOnline === true
                                 ? <div style={{color: 'green'}}>on</div>
@@ -336,7 +343,7 @@ export default function() {
                 />
                 <Column field="login" header="Login" sortable/>
                 <Column field="sex" header="Пол" sortable
-                    body={(data)=> 
+                    body={(data: BotDataState)=> 
                         <div>
                             { data.sex === 'fem' 
                                 ? <IoMdFemale style={{color: 'red', fontSize: "25px"}}/>
@@ -346,14 +353,14 @@ export default function() {
                     }
                 />
                 <Column header="Страна" field="info.country"
-                    body={(data)=> 
+                    body={(data: BotDataState)=> 
                         <div className='Country' onClick={()=> useCountryFilter(data.info.country)}>
                             { data.info.country }
                         </div>
                     }
                 />
                 <Column header="Лайки"
-                    body={(data)=> 
+                    body={(data: BotDataState)=> 
                         <InputNumber showButtons
                             size={1}
                             value={data.likes} 
@@ -376,7 +383,7 @@ export default function() {
                             {checkedCurDay===2 && <div style={{color:'#73e77d'}}>Вход ◉</div>}
                         </div>
                     }
-                    body={(data)=> 
+                    body={(data: BotDataState)=> 
                         <div className='PreviewSelectDay'
                             onClick={(e)=> {
                                 setSelectDay({day:data.time.startDay,login:data.login});
@@ -388,7 +395,7 @@ export default function() {
                     }
                 />
                 <Column header="Время вход" field="time.start" sortable
-                    body={(data)=> 
+                    body={(data: BotDataState)=> 
                         <InputNumber showButtons
                             size={1}
                             value={data.time.start} 

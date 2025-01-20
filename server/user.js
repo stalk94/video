@@ -24,7 +24,10 @@ class User {
     likes = 0                               // лайкм от юзеров
     superLikes = 0                          // спец
     galery = []                             // файлы пользователя
-    story = {SYSTEM:0}                      // история просмотра
+    /** 
+     * @type {{[key: string]: number}} 
+     * */
+    story = {}                              // история просмотра
     gifts = []                              // подаренные подарки
     info = {
         country: 'UA'
@@ -39,7 +42,7 @@ class User {
     curentCall = undefined                  // peerId текушего сеанса
     avatar = 'img/non-avatar.jpg'
     /**
-     * @type {'m'|'f'}
+     * @type {'m'|'fem'}
     */
     sex = undefined
 

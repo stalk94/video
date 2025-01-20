@@ -74,7 +74,6 @@ const Sex =({ type })=> {
 
 
 export default function() {
-    const user = useHookstate(globalState.user);
     const ovnerState = useHookstate(globalState.ovner); 
 
 
