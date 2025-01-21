@@ -1,8 +1,9 @@
 import EventEmiter from "./emiter";
-import store, { useLocalStorage } from "./rxStorage";
+
 
 // http://localhost:3000/ https://intimalive.com/
 window.gurl = import.meta.env.DEV ? 'http://localhost:3000/' : 'https://intimalive.com/';
+window.languages = ['GB', 'RU', 'CN', 'DE'];
 export const EVENT = new EventEmiter();
 
 /**

@@ -1,16 +1,18 @@
 import React from 'react';
 import { Button } from 'primereact/button';
-
+import { useTranslation } from 'react-i18next';
 
 
 export default function({mod, useMod}: {mod: 'auth'|'reg', useMod: (type: 'auth'|'reg')=> void}) {
+    const { t, i18n } = useTranslation();
+
     return(
         <div className='Toogler'>
             <Button className='TooglerButton'
                 style={{
                     opacity: mod === 'auth' ? '0.4' : 1
                 }}
-                label='ВХОД'
+                label={ t('togler_auth') }
                 onClick={()=> useMod('auth')}
             />
             <Button className='TooglerButton'
@@ -18,7 +20,7 @@ export default function({mod, useMod}: {mod: 'auth'|'reg', useMod: (type: 'auth'
                     marginLeft: '20px',
                     opacity: mod === 'reg' ? '0.4' : 1
                 }}
-                label='РЕГИСТРАЦИЯ'
+                label={ t('togler_reg') }
                 onClick={()=> useMod('reg')}
             />
         </div>

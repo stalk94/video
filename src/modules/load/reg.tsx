@@ -4,6 +4,7 @@ import { getIp } from "../../function";
 import { PasswordInput, TextInput } from '@mantine/core';
 import { Button } from 'primereact/button';
 import { useDidMount } from 'rooks';
+import { useTranslation } from 'react-i18next';
 
 
 const statusIcon = {
@@ -17,6 +18,7 @@ export default function({ useReg }) {
     const [login, setLogin] = React.useState<string>();
     const [email, setEmail] = React.useState<string>();
     const [password, setPassword] = React.useState<string>();
+    const { t, i18n } = useTranslation();
 
     const useSetReg =()=> {
         if(login && login.length > 5) {
@@ -26,9 +28,9 @@ export default function({ useReg }) {
                 password: password,
                 ipData: ipData
             });
-            else EVENT.emit('error', {text: 'В пароле минимум 6 символов!'});
+            else EVENT.emit('error', {text: 'password min 6 simbol!'});
         }
-        else EVENT.emit('error', {text: 'В логине минимум 6 символов'});
+        else EVENT.emit('error', {text: 'login min 6 simbol'});
     }
     const chekLogin =()=> {
         if(login && login.length > 5) return statusIcon.valid;
@@ -54,7 +56,7 @@ export default function({ useReg }) {
         <React.Fragment>
             <TextInput
                 size={window.innerWidth > 1280 ? "lg" : "xl"}
-                placeholder="Логин"
+                placeholder="Login"
                 value={login}
                 onChange={(event)=> setLogin(event.currentTarget.value)}
                 rightSection={chekLogin()}
@@ -68,14 +70,14 @@ export default function({ useReg }) {
             />
             <PasswordInput style={{ marginTop: '20px' }}
                 size={window.innerWidth > 1280 ? "lg" : "xl"}
-                placeholder="Пароль"
+                placeholder="Password"
                 rightSection={chekPassword()}
                 value={password}
                 onChange={(event)=> setPassword(event.currentTarget.value)}
             />
             <Button className='FormButton'
                 icon='pi pi-check-square'
-                label='Регистрация'
+                label={ t('label_reg') }
                 onClick={useSetReg}
             />
         </React.Fragment>

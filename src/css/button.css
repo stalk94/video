@@ -89,6 +89,12 @@
     from { color: rgb(255, 0, 183); }
     to { color: gold; } 
 }
+.Timer {
+    position: absolute;
+    z-index: 2;
+    color: #7ae826;
+    font-size: 1.1rem;
+}
 
 /* нижние кнопки */
 #like {
@@ -106,6 +112,13 @@
     margin-left: 10px;
 }
 
+/* Modal */
+.rejectButtonModal {
+    visibility: hidden;
+}
+.aceptButtonModal {
+    width: 40%;
+}
 
 @media screen and (max-width: 1280px) {
     .button {
@@ -125,6 +138,7 @@
         height: 100px;
         max-width: 100px;
         max-height: 100px;
+        margin-left: 0.6rem;
     }
     .buttonLike {
         border: 1px solid rgba(0, 0, 0, 0.2);
@@ -189,5 +203,8 @@
     }
     .giftButton {
         margin-left: 10px;
+    }
+    .Timer {
+        font-size: 2rem;
     }
 }

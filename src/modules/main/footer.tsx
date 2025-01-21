@@ -12,6 +12,7 @@ import { Sidebar } from 'primereact/sidebar';
 import { useDidMount, useWillUnmount } from "rooks";
 import Gift, { Likes } from "./gift";
 import { Popover, Text } from '@mantine/core';
+import { useTranslation } from 'react-i18next';
 import { SetLikeEvent, GiftData } from "./type";
 import "../../css/footer.css";
 
@@ -22,6 +23,7 @@ export default function({ input }: {input: boolean}) {
     const ovnerState = useHookstate(globalState.ovner);
     const [text, setText] = React.useState<string>();
     const [opened, setOpened] = React.useState(false);
+    const { t, i18n } = useTranslation();
 
     const useSend =()=> {
         if(text.length >= 2 && text.length < 100 && ovnerState?.peerId?.get() !== undefined) {
@@ -154,7 +156,7 @@ export default function({ input }: {input: boolean}) {
                 <div className='PanelFooterRight'>
                     <Button className='ButtonInputChat'
                         icon="pi pi-send"
-                        label='Отправить'
+                        label={ t('label_btn_send') }
                         onClick={useSend}
                     />
                 </div>

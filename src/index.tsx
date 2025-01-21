@@ -1,3 +1,4 @@
+import './lib/i18n';
 import "./global.d.ts";
 import "primereact/resources/themes/md-dark-indigo/theme.css";
 import "primereact/resources/primereact.min.css";
@@ -5,18 +6,19 @@ import '@mantine/core/styles.css';
 import 'primeicons/primeicons.css';
 import { createTheme, MantineProvider } from '@mantine/core';
 import React from 'react';
-import { checkCameraPermission, errorMedia } from "./function";
+import { errorMedia, getIp, translateText } from "./function";
 import { io, Socket } from "socket.io-client";
 import { EVENT, send } from "./lib/engine";
 import globalState from "./global.state";
 import { createRoot } from 'react-dom/client'
 import { useHookstate } from '@hookstate/core';
-import { Peer } from "peerjs";
+import { Peer, MediaConnection } from "peerjs";
 import { useDidMount, useIntervalWhen } from "rooks";
 import { Toast } from 'primereact/toast';
 import Base from "./modules/main/index";
 import Loader from "./modules/load";
 import Admin from "./modules/admin/index";
+import { useTranslation } from 'react-i18next';
 import "./css/index.css";
 import "./css/hearts.css";
 import "./css/button.css";
@@ -24,9 +26,16 @@ import "./sw.js";
 //import "./pwa.js";
 
 
-globalThis.peercall;
-globalThis.peerId;
-globalThis.peer = new Peer();
+globalThis.twoLine;
+globalThis.mediaStream;
+globalThis.peer = new Peer({
+    config: {
+        iceServers: [
+            { urls: 'stun:stun.l.google.com:19302' },
+            { urls: 'turn:turnserver.example.com', username: 'user', credential: 'password' },
+        ],
+    },
+});
 globalThis.creditionals = { audio: true, video: true };
 const icon = {
     sucess: "✔️",
@@ -40,19 +49,45 @@ function App() {
     const toast = React.useRef<Toast | null>(null);
     const [peerID, setPeerId] = React.useState<string>();
     const [view, setView] = React.useState<'base'|'load'|'admin'>('base');
+    const { t, i18n } = useTranslation();
     
 
     const init =()=> {
+        const useDefaultLang =()=> {
+            getIp((ipData)=> {
+                if(ipData.country && languages.find((elem)=> elem===ipData.country)) {
+                    i18n.changeLanguage(ipData.country);
+                    localStorage.setItem('LANGUAGE', ipData.country);
+                    globalThis.lang = ipData.country;
+                }
+                else if(ipData?.country === 'UA') {
+                    i18n.changeLanguage('RU');
+                    localStorage.setItem('LANGUAGE', 'RU');
+                    ipData.country = 'RU';
+                }
+                else {
+                    i18n.changeLanguage('GB');
+                    localStorage.setItem('LANGUAGE', 'GB');
+                    ipData.country = 'GB';
+                }
+            });
+        }
         const constructConfig =(deviceId: string, type: 'video'|'audio')=> {
             if(type === 'video') globalThis.creditionals.video = { deviceId: { exact: deviceId } };
             else globalThis.creditionals.audio = { deviceId: { exact: deviceId } };
         }
 
+        const lang = localStorage.getItem('LANGUAGE');
         const videos = localStorage.getItem('video');
         const audios = localStorage.getItem('audio');
-
+        
         if(videos) constructConfig(JSON.parse(videos).code, 'video');
         if(audios) constructConfig(JSON.parse(audios).code, 'audio');
+        if(lang) {
+            globalThis.lang = lang;
+            i18n.changeLanguage(lang);
+        }
+        else useDefaultLang();
     }
     const showToast =(type:'error'|'success'|'warn', title:string, text:string)=> {
         toast.current.clear();
@@ -69,7 +104,7 @@ function App() {
             password: password,
             peerId: globalThis.peerId
         });
-        else console.error('нет соединения с сокетом');
+        else console.error('socket not connect');
     }
     // прием входящего
     const callanswer =()=> {
@@ -81,6 +116,7 @@ function App() {
 
         navigator.mediaDevices.getUserMedia(globalThis.creditionals)
             .then((mediaStream)=> {
+                globalThis.mediaStream = mediaStream;   //*
                 peercall.answer(mediaStream); // отвечаем на звонок и передаем свой медиапоток собеседнику
                 //peercall.on ('close', onCallClose); //можно обработать закрытие-обрыв звонка
                 
@@ -95,6 +131,15 @@ function App() {
 
             })
             .catch(errorMedia);
+    }
+    const answerTwoLine =(call: MediaConnection)=> {
+        globalThis.twoLine = call;
+        globalThis.twoLine.answer(globalThis.mediaStream);
+        
+        globalThis.twoLine.on('close', ()=> {
+            globalThis.twoLine?.close();
+            delete globalThis.twoLine;
+        });
     }
     // проверим сессию
     const chekSessionToken =(socket: Socket, peerId: string)=> {
@@ -112,10 +157,18 @@ function App() {
     }
     useDidMount(()=> {
         EVENT.on('error', (data)=> {
-            showToast('error', 'Ошибка!', data.text);
+            translateText(data.text, globalThis.lang)
+                .then((text)=> 
+                    showToast('error', t('error'), text)
+                )
+                .catch(()=> showToast('error', t('error'), data.text));
         });
         EVENT.on('success', (data)=> {
-            showToast('success', 'Успешно!', data.text);
+            translateText(data.text, globalThis.lang)
+                .then((text)=> 
+                    showToast('success', t('info_label'), text)
+                )
+                .catch(()=> showToast('success', t('info_label'), data.text));
         });
         EVENT.on('exit', (data)=> {
             setView('load');
@@ -135,6 +188,18 @@ function App() {
             setView('base');
             window.localStorage.setItem('TOKEN', data.token);
             state.user.set(data.user);
+
+            // кнопка админки
+            window.addEventListener("keydown", (e)=> {
+                const permision = state?.user?.permision?.get();
+                
+                if(permision && permision > 0 && e.key==='*') {
+                    setView((old)=> {
+                        if(old !== 'admin') return 'admin';
+                        else return 'base';
+                    });
+                }
+            });
         });
         // сессия не совпадает
         socket.on('autorize.filed', (data)=> {
@@ -153,33 +218,59 @@ function App() {
         });
         // оповещения от сервера
         socket.on('info', (data)=> {
-            showToast('success', data.title, data.text);
+            if(data.type) showToast('success', t('info_label'), t(data.type));
+            else {
+                translateText(data.text, globalThis.lang)
+                    .then((text)=> 
+                        showToast('success', t('info_label'), text)
+                    )
+                    .catch(()=> showToast('success', t('info_label'), data.text));
+            }
         });
         // оповещения от сервера warning
         socket.on('warn', (data)=> {
-            showToast('warn', data.title, data.text);
+            if(data.type) showToast('warn', t('warn_label'), t(data.type));
+            else {
+                translateText(data.text, globalThis.lang)
+                    .then((text)=> 
+                        showToast('warn', t('warn_label'), text)
+                    )
+                    .catch(()=> showToast('warn', t('warn_label'), data.text));
+            }
+        });
+        // сервер разьединил
+        socket.on('kikc', (data)=> {
+            console.log('KICK SERVER');
+            setView('load');
+            localStorage.removeItem('TOKEN');
         });
 
         peer.on('open', (peerID)=> {
+            console.log(`%cPEERID: %c${peerID}`, "color: gray", "color: green");
             globalThis.peerId = peerID;
             setPeerId(peerID);
             chekSessionToken(socket, peerID);
 		});
         // нам звонок
         peer.on('call', (call)=> {
-            EVENT.emit('callanswer', call);
-            globalThis.peercall = call;
-            callanswer();
+            if(globalThis.peercall) {
+                console.log('Вторая линия!');
+                answerTwoLine(call);
+            }
+            else {
+                EVENT.emit('callanswer', call);
+                globalThis.peercall = call;
+                callanswer();
+            }
         });
-
-        window.addEventListener("keydown", (e)=> {
-            const permision = state.user.permision.get();
-            
-            if(permision && permision > 0 && e.key==='*') {
-                setView((old)=> {
-                    if(old !== 'admin') return 'admin';
-                    else return 'base';
-                });
+        // проверка на сворачивание вкладки
+        document.addEventListener('visibilitychange', ()=> {
+            if(document.visibilityState === 'hidden') {
+                console.log('Вкладка свернута');
+                
+            } 
+            else if(document.visibilityState === 'visible') {
+                console.log('Вкладка активна');
             }
         });
 

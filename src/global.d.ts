@@ -7,7 +7,11 @@ declare global {
     var peer: Peer;
     var peercall: MediaConnection | undefined;
     var peerId: string;
-    var gurl: 'http://localhost:3000/' | 'https://intimalive.com/'
+    var gurl: 'http://localhost:3000/' | 'https://intimalive.com/';
+    var languages: ['GB', 'RU', 'CN', 'DE'];
+    var lang: 'GB' | 'RU' | 'CN' | 'DE';
+    var mediaStream: MediaStream | undefined;
+    var twoLine: MediaConnection | undefined;
 }
 
 

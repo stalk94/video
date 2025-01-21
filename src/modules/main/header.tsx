@@ -7,6 +7,7 @@ import { OverlayPanel } from 'primereact/overlaypanel';
 import { FiUser } from "react-icons/fi";
 import { TbMessageDots } from "react-icons/tb";
 import DropMain from "./user/index";
+import { useTranslation } from 'react-i18next';
 import { PropsClick } from "./type";
 import "../../css/header.css";
 
@@ -81,6 +82,7 @@ export default function({ useCall, peerId }: { useCall: (peerId: string)=> void,
     const [curent, setCurent] = React.useState<'ls'|'user'|'beta'>();
     const op = React.useRef<OverlayPanel | null>(null);
     const userState = useHookstate(globalState.user);
+    const { t, i18n } = useTranslation();
 
     const useClickBeta =(e: React.MouseEvent<HTMLElement, MouseEvent>)=> {
         setCurent('beta');
@@ -104,7 +106,7 @@ export default function({ useCall, peerId }: { useCall: (peerId: string)=> void,
                         type={curent} 
                      />
                     : <div style={{padding:'2vh'}}>
-                        В beta версии не все функции работают, а так же могут быть баги. 
+                        { t('beta_logo_info') }
                      </div>
                 }
             </OverlayPanel>

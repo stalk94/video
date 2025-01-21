@@ -13,7 +13,7 @@ header {
     display: flex;
     flex-direction: row;
     height: 7.5%;
-    min-height: 50px;
+    min-height: 55px;
     width: 100%;
     z-index: 5;
     border-bottom: 2px solid rgba(3, 3, 3, 0.1);
@@ -132,9 +132,12 @@ footer {
     padding: auto;
     padding-top: 5px;
     padding-bottom: 5px;
+    position: relative;
 }
 .ButtonsMobailLeft {
     margin: auto;
+    display: flex;
+    flex-direction: row;
 }
 .ButtonsMobailRight {
     margin: auto;
@@ -162,6 +165,7 @@ footer {
         flex-direction: row;
         height: 10%;
         max-height: 100px;
+        min-height: 50px;
         width: 100%;
         z-index: 5;
         border: 1px solid rgb(31, 30, 30);

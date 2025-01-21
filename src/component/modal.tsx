@@ -1,6 +1,7 @@
 import React from 'react';
 import { ConfirmDialog } from 'primereact/confirmdialog';
 import { Button } from 'primereact/button';
+import { useTranslation } from 'react-i18next';
 
 type PropsModal = {
     message: string
@@ -13,6 +14,8 @@ type PropsModal = {
 
 
 export default function({visible, setVisible, message, header, accept, reject}: PropsModal) {
+    const { t, i18n } = useTranslation();
+
     return(
         <React.Fragment>
             <ConfirmDialog style={{
@@ -24,7 +27,11 @@ export default function({visible, setVisible, message, header, accept, reject}: 
                 message={message}
                 header={header} 
                 accept={accept} 
-                reject={reject} 
+                reject={reject}
+                acceptLabel={ t('modal_acept') }
+                rejectClassName="rejectButtonModal"
+                acceptClassName="aceptButtonModal p-button-outlined p-button-success"
+                acceptIcon="pi pi-check"
             />
         </React.Fragment>
     );

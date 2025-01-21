@@ -32,11 +32,11 @@ const APP = {
                 // инициация вызова на стороне клиента
                 user.emit('call', {
                     peerId: ovner.peerId,
-                    userData: ovner.get()
+                    userData: ovner.get(true)
                 });
                 // второй стороне отправим наши данные
                 ovner.emit('data.ovner', {
-                    userData: user.get()
+                    userData: user.get(true)
                 });
             }
             // ботяра
@@ -162,8 +162,9 @@ const APP = {
                     if(ovner.emit) ovner.emit('set.like', {likes: ovner.likes, type: type});
                 }
                 else user.emit('warn', {
-                    title: `Внимание!`,
-                    text: 'Не хватает 1 COINS.'
+                    title: `Warning!`,
+                    text: 'Not enough 1 COINS.',
+                    type: 'warn_coins_like'
                 });
             }
             else {
@@ -212,8 +213,9 @@ const APP = {
                 user.emit('gift.pay', gift);
             }
             else user.emit('warn', {
-                title: `Внимание!`,
-                text: 'Не хватает COINS.'
+                title: `Warning!`,
+                text: 'Not enough COINS.',
+                type: 'warn_coins'
             });
         }
     },

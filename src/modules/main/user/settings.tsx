@@ -1,9 +1,20 @@
 import React from 'react';
 import { Dropdown } from 'primereact/dropdown';
+import { SelectButton } from 'primereact/selectbutton';
 import { useDidMount } from 'rooks';
+import { useTranslation } from 'react-i18next';
 //import { DropDown } from '../component/dropDown';
 
 
+const Flag =({ code })=> (
+    <img style={{
+        width: window.innerWidth > 1280 ? "25px" : "65px", 
+        height: window.innerWidth > 1280 ? "25px" : "65px",
+        marginLeft: '4px'
+    }}
+        src={`http://purecatamphetamine.github.io/country-flag-icons/3x2/${code}.svg`}
+    />
+)
 const getIo =(type: 'video'|'audio')=> {
     return navigator.mediaDevices.enumerateDevices().then((devices)=> {
         const devicesFilter = devices.filter((device)=> device.kind === `${type}input`);
@@ -18,10 +29,12 @@ const constructConfig =(deviceId: string, type: 'video'|'audio')=> {
 
 
 export default function() {
-    const [selectAudios, setSelectAudios] = React.useState(null);
-    const [selectVideos, setSelectVideos] = React.useState(null);
+    const [selectLang, setSelectLang] = React.useState('GB');
+    const [selectAudios, setSelectAudios] = React.useState();
+    const [selectVideos, setSelectVideos] = React.useState();
     const [inputVideos, setInputVideos] = React.useState([]);
     const [inputAudios, setInputAudios] = React.useState([]);
+    const { t, i18n } = useTranslation();
 
     const useOptionsVideo =()=> {
         const newArr = [];
@@ -61,6 +74,12 @@ export default function() {
         constructConfig(value.code, 'audio');
         useStorage('audio', value);
     }
+    const useSelectLang =(value)=> {
+        setSelectLang(value);
+        i18n.changeLanguage(value);
+        globalThis.lang = value;
+        localStorage.setItem('LANGUAGE', value);
+    }
     const useStorage =(type: 'video'|'audio', value: {name:string,code:string})=> {
         localStorage.setItem(type, JSON.stringify(value));
     }
@@ -68,9 +87,13 @@ export default function() {
         useOptionsVideo();
         useOptionsAudio();
 
+        const lang = localStorage.getItem('LANGUAGE');
         const videos = localStorage.getItem('video');
         const audios = localStorage.getItem('audio');
 
+        if(lang) {
+            setSelectLang(lang);
+        }
         if(videos) {
             setSelectVideos(JSON.parse(videos));
             //constructConfig(JSON.parse(videos).code, 'video');
@@ -84,9 +107,24 @@ export default function() {
 
     return(
         <div className='IO'>
-            <div className='IoRow'>
-                <div style={{color:'gray',marginTop:'auto',marginBottom:'auto'}}>
-                    Видео input: &nbsp; &nbsp;
+            <div className='IoRow' style={{marginTop:'0.6rem'}}>
+                <div id="labelSettings">
+                    { t('settings_lang_label') }
+                </div>
+                <SelectButton 
+                    value={selectLang} 
+                    options={[
+                        {label: <Flag code='RU'/>, value: 'RU'},
+                        {label: <Flag code='GB'/>, value: 'GB'},
+                        {label: <Flag code='CN'/>, value: 'CN'},
+                        {label: <Flag code='DE'/>, value: 'DE'},
+                    ]} 
+                    onChange={(e)=> useSelectLang(e.value)}
+                />
+            </div>
+            <div className='IoRow' style={{marginTop:'1rem'}}>
+                <div id="labelSettings">
+                    { t('settings_video_label') }
                 </div>
                 <Dropdown 
                     value={selectVideos} 
@@ -96,9 +134,9 @@ export default function() {
                     editable 
                 />
             </div>
-            <div className='IoRow' style={{marginTop:'5px'}}>
-                <div style={{color:'gray',marginTop:'auto',marginBottom:'auto'}}>
-                    Аудио output: &nbsp;
+            <div className='IoRow' style={{marginTop:'0.6rem'}}>
+                <div id="labelSettings">
+                    { t('settings_audio_label') }
                 </div>
                 <Dropdown 
                     value={selectAudios} 

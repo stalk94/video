@@ -10,11 +10,11 @@ import { useDidMount, useIntervalWhen } from 'rooks';
 import ButtonsPanel from "./buttons";
 import BlurCanvas, { Spiner } from "./canvas";
 import Indicator from "./left-panel";
-import rand from "random-percentage";
 import { checkCameraPermission, errorMedia } from "../../function";
 import "../../css/base.css";
 import Animations from "./animations";
 let task;
+
 
 
 
@@ -38,6 +38,7 @@ export default function({ peerId }) {
         if(type) {
             navigator.mediaDevices.getUserMedia(globalThis.creditionals)
                 .then((mediaStream)=> {	
+                    globalThis.mediaStream = mediaStream;       //*
                     myVideo.srcObject = mediaStream;
                     myVideo.volume = 0;
                     socket.emit('start', {
@@ -71,8 +72,10 @@ export default function({ peerId }) {
     
         navigator.mediaDevices.getUserMedia(globalThis.creditionals)
             .then((mediaStream)=> {	
+                globalThis.mediaStream = mediaStream;   //*
                 //звоним, указав peerId-партнера и передав свой mediaStream		  
                 globalThis.peercall = peer.call(peerId, mediaStream);
+
                 peercall.on('stream', (stream)=> {
                     //нам ответили, получим стрим
                     setTimeout(()=> {

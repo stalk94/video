@@ -10,9 +10,27 @@ import { FaRegCircleStop } from "react-icons/fa6";
 import { FaStop } from "react-icons/fa6";
 import Modal from "../../component/modal";
 import { useOrientation, useWindowSize } from "react-use";
+import { useTranslation } from 'react-i18next';
 import { PropsButtonsPanel, PropsButtonsPanelMobail } from "./type";
 
+const Timer =({ time }: { time: number })=> {
+    const convertMilliseconds =(ms: number)=> {
+        //const hours = Math.floor(ms / (1000 * 60 * 60)); // Получаем часы
+        let minutes = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60)); // Получаем минуты
+        let seconds = Math.floor((ms % (1000 * 60)) / 1000); // Получаем секунды
+        if(minutes < 10) minutes = '0' + minutes;
+        if(seconds < 10) seconds = '0' + seconds;
+      
+        return `${minutes}:${seconds}`;
+    }
+    
 
+    return(
+        <div className='Timer'>
+            { time && convertMilliseconds(time) }
+        </div>
+    );
+}
 function Buttons({ useClickButton }: { useClickButton: (type: 'search'|'m'|'f'|'mf')=> void }) {
     const activate = useHookstate(globalState.user.activate);
     const styleActiv = {
@@ -45,14 +63,17 @@ function Buttons({ useClickButton }: { useClickButton: (type: 'search'|'m'|'f'|'
                 }
                 onClick={()=> useClickButton('mf')}
             />
-            <Button className="button"
-                style={activate.search.get() ? styleActiv : {}}
-                disabled={activate.search.get()}
-                icon={
-                    <FaSearchengin style={{color: activate.search.get() ? 'gold' : ''}} />
-                }
-                onClick={()=> useClickButton('search')}
-            />
+            <div style={{position:'relative'}}>
+                <Timer time={globalState.user.timeSuperFind.get()}/>
+                <Button className="button"
+                    style={activate.search.get() ? styleActiv : {}}
+                    disabled={activate.search.get()}
+                    icon={
+                        <FaSearchengin style={{color: activate.search.get() ? 'gold' : ''}} />
+                    }
+                    onClick={()=> useClickButton('search')}
+                />
+            </div>
         </div>
     );
 }
@@ -97,14 +118,17 @@ function ButtonsMobail({ useClickButton, start, useStart, useNext }: PropsButton
     return(
         <div className='PanelButtonsMobail'>
             <div className='ButtonsMobailLeft'>
-                <Button className="button functionButton"
-                    style={activate.search.get() ? {...styleActiv, marginRight: '10px'} :{marginRight: '10px'}}
-                    disabled={activate.search.get()}
-                    icon={
-                        <FaSearchengin style={{color: activate.search.get() ? 'gold' : ''}} />
-                    }
-                    onClick={()=> useClickButton('search')}
-                />
+                <div style={{position:'relative'}}>
+                    <Timer time={globalState.user.timeSuperFind.get()}/>
+                    <Button className="button functionButton"
+                        style={activate.search.get() ? {...styleActiv, marginRight: '10px'} :{marginRight: '10px'}}
+                        disabled={activate.search.get()}
+                        icon={
+                            <FaSearchengin style={{color: activate.search.get() ? 'gold' : ''}} />
+                        }
+                        onClick={()=> useClickButton('search')}
+                    />
+                </div>
                 <Button className="button functionButton" 
                     style={activate?.mf?.get() ? styleActiv : {}}
                     disabled={activate?.mf?.get()}
@@ -163,13 +187,14 @@ function ButtonsMobail({ useClickButton, start, useStart, useNext }: PropsButton
 
 export default function({start, useStart, useNext}: PropsButtonsPanel) {
     const [modal, setModal] = React.useState<React.ReactElement | undefined>();
+    const { t, i18n } = useTranslation();
     const resize = useWindowSize();
     
     const texts = {
-        m: 'Выбор пола доступен при балансе выше 50 COINS. Вы хотите активировать поиск по мужскому полу. ',
-        f: 'Выбор пола доступен при балансе выше 50 COINS. Вы хотите активировать поиск по женскому полу. ',
-        mf: 'Выбор пола доступен при балансе выше 50 COINS. Вы хотите активировать поиск по М/Ж полу. ',
-        search: 'Активация супер поиска стоит 10 COINS на 60 минут. '
+        m: t('modal_m'),
+        f: t('modal_fem'),
+        mf: t('modal_mf'),
+        search: t('modal_search')
     }
     const useConfirm =(header:React.ReactNode, message:React.ReactNode, accept:()=> void, reject:()=> void)=> {
         setModal(
@@ -184,29 +209,27 @@ export default function({start, useStart, useNext}: PropsButtonsPanel) {
         );
     }
     const useClickButton =(type: 'search'|'m'|'f'|'mf')=> {
-        const ps = `P.S: активация данной способности увеличивает шанс!`;
-
-        useConfirm('Активация способности', 
-            'В beta версии данная функция не доступна!',
+        if(import.meta.env.DEV) {
+            if(type !== 'search') {
+                useConfirm(t('label_modal'), 
+                    texts[type],
+                    ()=> socket.emit('activate', {peerId: globalThis.peerId, type: type}),
+                    ()=> console.log('cancel')
+                );
+            }
+            else {
+                useConfirm(t('label_modal'), 
+                    texts[type],
+                    ()=> socket.emit('activate', {peerId: globalThis.peerId, type: type}),
+                    ()=> console.log('cancel')
+                );
+            }
+        }
+        else useConfirm(t('label_modal'), 
+            t('beta_modal'),
             ()=> console.log('cancel'),
             ()=> console.log('cancel')
         );
-        return true;
-
-        if(type !== 'search') {
-            useConfirm('Активация способности', 
-                texts[type] + ps,
-                ()=> socket.emit('activate', {peerId: globalThis.peerId, type: type}),
-                ()=> console.log('cancel')
-            );
-        }
-        else {
-            useConfirm('Активация способности', 
-                texts[type] + ps,
-                ()=> socket.emit('activate', {peerId: globalThis.peerId, type: type}),
-                ()=> console.log('cancel')
-            );
-        }
     }
     
 

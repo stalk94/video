@@ -6,12 +6,14 @@ import { useHookstate } from '@hookstate/core';
 import { Menu } from 'primereact/menu';
 import Modal from "../../../component/modal";
 import Settings from "./settings";
+import { useTranslation } from 'react-i18next';
 import "./style.css";
-import { useDidMount } from 'rooks';
+
 
 
 export default function() {
     const [modal, setModal] = React.useState();
+    const { t, i18n } = useTranslation();
     const state = useHookstate(globalState);
 
     const useConfirm = (header, message, accept, reject) => {
@@ -42,11 +44,11 @@ export default function() {
                         }
                     },
                     {
-                        label: 'Настройки',
+                        label: t('menu_settings'),
                         icon: 'pi pi-wrench',
                         command: ()=> {
                             useConfirm(
-                                'Настройки', 
+                                t('menu_settings'), 
                                 <Settings/>, 
                                 ()=> EVENT.emit('inputChange', {})
                             );
@@ -56,7 +58,9 @@ export default function() {
                         separator:true
                     },
                     {
-                        label: <div style={{color:'#f58080'}}>Выход</div>,
+                        label: <div style={{color:'#f58080'}}>
+                            { t('menu_exit') }
+                        </div>,
                         icon: 'pi pi-power-off',
                         command: ()=> {
                             send('exit', {peerId:globalThis.peerId}, 'POST');

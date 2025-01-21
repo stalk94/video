@@ -33,8 +33,20 @@
 .p-overlaypanel-content {
     padding: 0;
 }
-/* меню юзера */
-
+#labelSettings {
+    color: gray;
+    margin-top: auto;
+    margin-bottom: auto;
+    width: 20%;
+}
+/* выбор языка, пункт выбранный */
+.p-highlight {
+    animation: blik 2s linear infinite;
+}
+@keyframes blik {
+    from {border: 1px solid rgba(60, 199, 39, 0);}
+    to {border: 1px solid rgba(61, 199, 39, 0.732);}
+}
 
 
 @media screen and (max-width: 1280px) {

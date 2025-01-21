@@ -88,34 +88,23 @@ export function googleOut() {
         });
     }
 }
+export async function translateText(text: string, targetLang = 'ru') {
+    if(targetLang === 'CN') targetLang = 'zh-CN';
+    const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=${targetLang}&dt=t&q=${encodeURIComponent(text)}`;
+  
+    const response = await fetch(url);
+    const result = await response.json();
+  
+    return result[0][0][0];  // Получение переведённого текста
+}
 
 
-/**
- * 
- * @param time 
- * @returns 
- */
-export const useTime =(time: number)=> {
-    let hours = 0;
-    let min = 0;
-    let sec = 0;
-
-    const s = time / 1000;
-    min = Math.floor(s / 60);
-    sec = s % 60;
-
-    if(min > 59) {
-        const fl = min / 60;
-        hours = Math.floor(fl);
-        min = Math.floor(min % 60);
-    }
-
-    if((hours + '').length === 1) hours = `0${hours}`;
-    if((min + '').length === 1) min = `0${min}`;
-    if((sec + '').length === 1) sec = `0${sec}`;
-
-    if(hours === '00') return(min + ':' + sec);
-    else return(hours + ':' + min + ':' + sec);
+export function convertMilliseconds(ms) {
+    const hours = Math.floor(ms / (1000 * 60 * 60)); // Получаем часы
+    const minutes = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60)); // Получаем минуты
+    const seconds = Math.floor((ms % (1000 * 60)) / 1000); // Получаем секунды
+  
+    return `${hours} час(ов) ${minutes} минут(ы) ${seconds} секунд(ы)`;
 }
 export const useUploadForm =(url: string)=> {
     const [isSuccess, setIsSuccess] = useState(false);

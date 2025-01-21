@@ -240,6 +240,7 @@ io.on('connection', (socket)=> {
     });
 
     socket.on("disconnect", ()=> {
+        //console.log('DISCONECT SOCKET');
         if(socket?.userInfo?.peerId) {
             APP.exit(socket.userInfo.peerId);
         }

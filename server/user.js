@@ -56,7 +56,7 @@ class User {
         this.login = login;
         this.password = passwordHash;
     }
-    get() {
+    get(isPassword) {
         const data = {};
         Object.keys(this).forEach((key)=> {
             if(key !== 'socket' && key !== 'gifts') {
@@ -64,6 +64,7 @@ class User {
             }
         });
 
+        if(isPassword) delete data.password;
         return data;
     }
     getRevality() {
@@ -107,11 +108,14 @@ class User {
             this.activate.mf = false;
             this.activate.m = false;
         }
+        if(!this.timeSuperFind) this.activate.search = false;
         this.timeshtamp = Date.now();
         this.money = data.money ?? 0;
         this.status = data.status ?? 'free';
         this.galery = data.galery ?? [];
+
         this.activate.mf = true;        //?
+        //this.timeSuperFind = undefined;
     }
     // вызывается каждые 2 секунды
     refresh() {
@@ -123,15 +127,12 @@ class User {
             this.activate.mf = true;
         }
         // проверка таймера суперпоиска
-        if(this.timeSuperFind) {
-            if((this.timeSuperFind - 2) < 0) {
-                this.timeSuperFind = undefined;
-                this.activate.search = false;
-            }
-            else this.timeSuperFind -= 2;
+        if(this?.timeSuperFind <= 0) {
+            delete this.timeSuperFind;
+            this.activate.search = false;
         }
-
-        this.emit('refreshed', this.get());
+        else if(this.timeSuperFind !== undefined) this.timeSuperFind -= 2000;
+        this.emit('refreshed', this.get(true));
     }
 
     start() {
@@ -145,7 +146,7 @@ class User {
     activateSuperFind() {
         if((this.money - 10) >= 0 && !this.timeSuperFind) {
             this.money -= 10;
-            this.timeSuperFind = 60 * (60 * 1000);          //? 60 min
+            this.timeSuperFind = (60 * (60 * 1000));          //? 60 min
             this.activate.search = true;
             this.dump();
 
@@ -155,7 +156,8 @@ class User {
             });
             this.emit('info', {
                 title: `Удачно`,
-                text: 'Супер поиск был активирован на 60 min.'
+                text: 'Супер поиск был активирован на 60 min.',
+                type: 'info_activation_super'
             });
             APP.createIndividualAction(this.login, {
                 header: 'Активация',
@@ -165,13 +167,15 @@ class User {
         else if(this.money < 10) {
             this.emit('warn', {
                 title: `Внимание!`,
-                text: 'Не хватает COINS.'
+                text: 'Не хватает COINS.',
+                type: 'warn_coins'
             });
         }
         else if(this.timeSuperFind) {
             this.emit('warn', {
                 title: `Внимание!`,
-                text: 'Супер поиск был ранее активирован.'
+                text: 'Супер поиск был ранее активирован.',
+                type: 'warn_activation_superFind'
             });
         }
     }
@@ -190,7 +194,8 @@ class User {
             });
             this.emit('info', {
                 title: `Удачно`,
-                text: 'Выбор пола активирован.'
+                text: 'Выбор пола активирован.',
+                type: 'info_activation_sex'
             });
             APP.createIndividualAction(this.login, {
                 header: 'Активация',
@@ -200,7 +205,8 @@ class User {
         else {
             this.emit('warn', {
                 title: `Внимание!`,
-                text: 'Не достаточно COINS. Либо купите premium статус.'
+                text: 'Не достаточно COINS. Либо купите premium статус.',
+                type: 'warn_activation_sex'
             });
         }
     }
@@ -217,7 +223,8 @@ class User {
 
             this.emit('info', {
                 title: 'PREMIUM',
-                text: 'Премиум активирован на один месяц!'
+                text: 'Премиум активирован на один месяц!',
+                type: 'info_activation_premium'
             });
         }
 
@@ -226,6 +233,10 @@ class User {
         this.emit('refreshed', {
             money: this.money,
             status: this.status
+        });
+        this.emit('info', {
+            title: 'Счет пополнен',
+            text: `Счет пополнен на ${value} COINS. Спасибо за покупку.`
         });
     }
     // отправка по сокету

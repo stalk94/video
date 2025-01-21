@@ -3,6 +3,7 @@ import React from 'react';
 import globalState from "../../global.state";
 import { Message } from "./type";
 import { useDidMount, useWillUnmount } from 'rooks';
+import { translateText } from "../../function";
 import "../../css/chat.css";
 
 const test = [
@@ -36,6 +37,14 @@ export default function({ start }: { start: boolean }) {
 
         if(login !== user?.login) return true;
     }
+    const useTranslate =(data, clb: (text)=> void)=> {
+        if(chek(data.login) && globalState.ovner.info.country.get() !== globalThis.lang) {
+            translateText(data.text, lang)
+                .then(clb)
+                .catch(()=> clb(data.text))
+        }
+        else clb(data.text);
+    }
     useDidMount(()=> {
         const placehold = import.meta.env.DEV ? test2 : [];
 
@@ -45,7 +54,14 @@ export default function({ start }: { start: boolean }) {
         socket.on('endCall.bot', ()=> setMassages([]));
 
         socket.on('massage', (data)=> {
-            setMassages((old)=> {
+            useTranslate(data, (text)=> {
+                setMassages((old)=> {
+                    data.text = text;
+                    return [data, ...old];
+                });
+            });
+
+            if(false) setMassages((old)=> {
                 return [data, ...old];
             });
         });
@@ -59,7 +75,14 @@ export default function({ start }: { start: boolean }) {
         socket.off('endCall.bot', ()=> setMassages([]));
         
         socket.off('massage', (data)=> {
-            setMassages((old)=> {
+            useTranslate(data, (text)=> {
+                setMassages((old)=> {
+                    data.text = text;
+                    return [data, ...old];
+                });
+            });
+
+            if(false) setMassages((old)=> {
                 return [data, ...old];
             });
         });
