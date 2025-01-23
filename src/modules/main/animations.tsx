@@ -1,7 +1,5 @@
 import React from 'react';
-import globalState from "../../global.state";
-import { useHookstate } from '@hookstate/core';
-import { EVENT, send } from '../../lib/engine';
+import { EVENT } from '../../lib/engine';
 import { useDidMount, useWillUnmount } from 'rooks';
 import { isMobile } from "../../function";
 import rand from "random-percentage";
@@ -976,24 +974,26 @@ export default function() {
             controller(data);
         });
         document.addEventListener("keydown", (ev)=> {
-            if(ev.key === '1') EVENT.emit('anim', {type: 'kiss'});
-            else if(ev.key === '2') EVENT.emit('anim', {type: 'fier', count: 3});
-            else if(ev.key === '3') EVENT.emit('anim', {type: 'exp', count: 3});
-            else if(ev.key === '4') EVENT.emit('anim', {type: 'rocket', count: 12});
-            else if(ev.key === '5') EVENT.emit('anim', {type: 'fall', image: 'petal'});
-            else if(ev.key === '6') EVENT.emit('anim', {type: 'expRainbow', count: 6});
-            else if(ev.key === '7') EVENT.emit('anim', {type: 'imgFier', image: 'heart', count: 3});
-            else if(ev.key === '8') EVENT.emit('anim', {type: 'imgFier', image: 'star', count: 3});
-            else if(ev.key === '9') EVENT.emit('anim', {type: 'imgFier', image: 'lips', count: 3});
-            else if(ev.key === '0') {
-                clear();
-                create();
-                customRocket(undefined, 12);
-            }
-            else if(ev.key === '-') {
-                clear();
-                create();
-                customRocket('lips', 12);
+            if(import.meta.env.DEV) {
+                if(ev.key === '1') EVENT.emit('anim', {type: 'kiss'});
+                else if(ev.key === '2') EVENT.emit('anim', {type: 'fier', count: 3});
+                else if(ev.key === '3') EVENT.emit('anim', {type: 'exp', count: 3});
+                else if(ev.key === '4') EVENT.emit('anim', {type: 'rocket', count: 12});
+                else if(ev.key === '5') EVENT.emit('anim', {type: 'fall', image: 'petal'});
+                else if(ev.key === '6') EVENT.emit('anim', {type: 'expRainbow', count: 6});
+                else if(ev.key === '7') EVENT.emit('anim', {type: 'imgFier', image: 'heart', count: 3});
+                else if(ev.key === '8') EVENT.emit('anim', {type: 'imgFier', image: 'star', count: 3});
+                else if(ev.key === '9') EVENT.emit('anim', {type: 'imgFier', image: 'lips', count: 3});
+                else if(ev.key === '0') {
+                    clear();
+                    create();
+                    customRocket(undefined, 12);
+                }
+                else if(ev.key === '-') {
+                    clear();
+                    create();
+                    customRocket('lips', 12);
+                }
             }
         });
     });

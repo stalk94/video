@@ -125,6 +125,10 @@ module.exports = class FakeUser {
                         clb(err);
                         this.videos = shell.ls(`src/upload/${this.login}`);
                         db.set(`FAKE.${this.login}.videos`, this.videos);
+                        // чистка временной папки
+                        shell.ls(`uploads`).forEach((name)=> {
+                            fs.unlink(`uploads/${name}`, console.log);
+                        });
                     });
                 }
             });
@@ -134,6 +138,10 @@ module.exports = class FakeUser {
                 clb(err);
                 this.videos = shell.ls(`src/upload/${this.login}`);
                 db.set(`FAKE.${this.login}.videos`, this.videos);
+                // чистка временной папки
+                shell.ls(`uploads`).forEach((name)=> {
+                    fs.unlink(`uploads/${name}`, console.log);
+                });
             });
         }
     }

@@ -16,10 +16,10 @@
     border: 1px solid rgba(0, 0, 0, 0.2);
     background-color: #2b253a;
     font-size: 1.5rem;
-    padding: 1vh;
     margin-right: 5px;
 }
 .specialLike {
+    padding: 0;
     border: 1px solid rgba(255, 217, 0, 0.268);
     background-color: rgba(202, 199, 182, 0.09);
 }
@@ -51,7 +51,7 @@
     background-color: rgba(240, 248, 255, 0.1);
     border-color: rgba(240, 248, 255, 0.2);
 }
-#user {
+.userButton {
     cursor: pointer;
     margin-left: 10px;
     width: 54px;
@@ -60,7 +60,7 @@
     color: rgb(176, 176, 176);
     border-radius: 50%;
 }
-#user:hover {
+.userButton:hover {
     background-color: rgba(240, 248, 255, 0.1);
     border-color: rgba(240, 248, 255, 0.2);
 }
@@ -81,6 +81,7 @@
     min-width: 57px;
 }
 #specialLikeIcon {
+    padding-top: 3px;
     font-size: 2rem;
     animation: flikGold 2s ease infinite;
     animation-direction: normal;
@@ -92,7 +93,7 @@
 .Timer {
     position: absolute;
     z-index: 2;
-    color: #7ae826;
+    color: #7af71b;
     font-size: 1.1rem;
 }
 
@@ -111,13 +112,17 @@
     min-width: 57px;
     margin-left: 10px;
 }
+.p-button:disabled {
+    opacity: 0.45;
+}
 
 /* Modal */
 .rejectButtonModal {
     visibility: hidden;
 }
 .aceptButtonModal {
-    width: 40%;
+    width: 35%;
+    min-width: 170px;
 }
 
 @media screen and (max-width: 1280px) {
@@ -154,6 +159,7 @@
         background-color: rgba(202, 199, 182, 0.09);
     }
     #specialLikeIcon {
+        padding-top: 7px;
         font-size: 4rem;
         animation: flikGold 2s ease infinite;
         animation-direction: normal;
@@ -168,7 +174,7 @@
         font-size: 3.4vh;
         border-radius: 50%;
     }
-    #user {
+    .userButton {
         cursor: pointer;
         margin-left: 10px;
         max-width: 90px;
@@ -177,6 +183,7 @@
         height: 100%;
         font-size: 3.2vh;
         border-radius: 50%;
+        color: rgb(176, 176, 176);
     }
     #start {
         width: 120px;

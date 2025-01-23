@@ -2,10 +2,7 @@ import "../../global.d.ts";
 import React from 'react';
 import globalState from "../../global.state";
 import { useHookstate } from '@hookstate/core';
-import { EVENT, send } from '../../lib/engine';
 import { Button } from 'primereact/button';
-import { useDidMount, useWillUnmount } from 'rooks';
-import { IoIosFlash } from "react-icons/io";
 import giftsConfig from "../../../config/prices.json";
 import { TbCoins } from "react-icons/tb";
 import { GiftData } from "./type";
@@ -29,7 +26,7 @@ export const Likes =({ useClickLike })=> {
                 onClick={(e)=> useClickLike(e, 'fire')}
             />
             <Button className="buttonLike specialLike"
-                label={ <IoIosFlash id='specialLikeIcon' /> }
+                label={ '🎉' }
                 onClick={(e)=> useClickLike(e, 'rose')}
             />
         </div>

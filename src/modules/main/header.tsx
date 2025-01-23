@@ -1,14 +1,15 @@
 import React from 'react';
 import globalState from "../../global.state";
 import { useHookstate } from '@hookstate/core';
-import { useDidMount, useIntervalWhen } from 'rooks';
+import { useDidMount } from 'rooks';
 import { Button } from 'primereact/button';
 import { OverlayPanel } from 'primereact/overlaypanel';
+import { Popover } from '@mantine/core';
 import { FiUser } from "react-icons/fi";
 import { TbMessageDots } from "react-icons/tb";
-import DropMain from "./user/index";
+import User from "./user/user";
+import Action from "./user/action";
 import { useTranslation } from 'react-i18next';
-import { PropsClick } from "./type";
 import "../../css/header.css";
 
 
@@ -53,35 +54,61 @@ const Coins =({ money }: { money: number})=> {
         </div>
     );
 }
-const Avatar =({ useClickUser }: PropsClick)=> {
+const Avatar =({ setModal })=> {
     const user = useHookstate(globalState.user);
+    const [opened, setOpened] = React.useState(false);
     
     const useSize =()=> {
-        if(window.innerHeight < 1280) return '50px';
-        else return '90px'
+        if(window.innerWidth < 1280) return '100px';
+        else return '50px'
     }
+    const useAvatar =()=> {
+        const userState = user.get({ noproxy: true });
+
+        if(userState.avatar) return gurl + userState.avatar;
+        else if(userState?.googleData?.img) return userState.googleData.img;
+    }
+    
 
     return(
-        <Button className="button" id="user"
-            icon={
-                user.get({ noproxy: true })?.googleData?.img
-                    ? <img style={{}}
-                        src={user.get({ noproxy: true }).googleData.img}
-                        width={useSize()}
-                        width={useSize()}
-                    />
-                    : <FiUser />
-            }
-            onClick={useClickUser}
-        />
+        <Popover
+            opened={opened}
+            onChange={setOpened}
+            position="bottom-end"
+            offset={{ mainAxis: 15, crossAxis: -70 }}
+            withArrow
+            arrowPosition="side"
+            arrowOffset={80}
+            arrowSize={12}
+            id="UserMainDropDown"
+        >
+            <Popover.Target>
+                <Button className="button userButton" id="user"
+                    icon={
+                        useAvatar()
+                            ? <img style={{}}
+                                src={ useAvatar() }
+                                onError={(e)=> e.target.src = gurl + '/img/non-avatar.jpg'}
+                                width={useSize()}
+                            />
+                            : <FiUser />
+                    }
+                    onClick={()=> setOpened(true)}
+                />
+            </Popover.Target>
+            <Popover.Dropdown>
+                <User setModal={setModal} />
+            </Popover.Dropdown>
+        </Popover>
     );
 }
 
 
 export default function({ useCall, peerId }: { useCall: (peerId: string)=> void, peerId: string }) { 
-    const [curent, setCurent] = React.useState<'ls'|'user'|'beta'>();
+    const [curent, setCurent] = React.useState<'ls'|'beta'>();
     const op = React.useRef<OverlayPanel | null>(null);
     const userState = useHookstate(globalState.user);
+    const [modal, setModal] = React.useState();
     const { t, i18n } = useTranslation();
 
     const useClickBeta =(e: React.MouseEvent<HTMLElement, MouseEvent>)=> {
@@ -100,11 +127,10 @@ export default function({ useCall, peerId }: { useCall: (peerId: string)=> void,
 
     return(
         <header>
+            { modal }
             <OverlayPanel ref={op} style={{maxWidth:'50vw'}}>
                 { curent !== 'beta'
-                    ? <DropMain 
-                        type={curent} 
-                     />
+                    ? <Action />
                     : <div style={{padding:'2vh'}}>
                         { t('beta_logo_info') }
                      </div>
@@ -132,7 +158,7 @@ export default function({ useCall, peerId }: { useCall: (peerId: string)=> void,
                     onClick={useClickLs}
                 />
                 <Avatar
-                    useClickUser={useClickUser}
+                    setModal={setModal}
                 />
             </section>
         </header>

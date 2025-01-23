@@ -6,10 +6,10 @@ import { IoMaleFemale } from "react-icons/io5";
 import { IoMdFemale, IoMdMale } from "react-icons/io";
 import { FaSearchengin } from "react-icons/fa6";
 import { FaPlay, FaAngleDoubleRight } from "react-icons/fa";
-import { FaRegCircleStop } from "react-icons/fa6";
+import { RiTimerFlashLine } from "react-icons/ri";
 import { FaStop } from "react-icons/fa6";
 import Modal from "../../component/modal";
-import { useOrientation, useWindowSize } from "react-use";
+import { useWindowSize } from "react-use";
 import { useTranslation } from 'react-i18next';
 import { PropsButtonsPanel, PropsButtonsPanelMobail } from "./type";
 
@@ -27,14 +27,14 @@ const Timer =({ time }: { time: number })=> {
 
     return(
         <div className='Timer'>
-            { time && convertMilliseconds(time) }
+            { time && time < 2 && convertMilliseconds(time) }
         </div>
     );
 }
 function Buttons({ useClickButton }: { useClickButton: (type: 'search'|'m'|'f'|'mf')=> void }) {
     const activate = useHookstate(globalState.user.activate);
     const styleActiv = {
-        border:'2px solid gold'
+        
     }
 
     return(
@@ -42,25 +42,19 @@ function Buttons({ useClickButton }: { useClickButton: (type: 'search'|'m'|'f'|'
             <Button className="button"
                 style={activate?.m?.get() ? styleActiv : {}}
                 disabled={activate?.m?.get()}
-                icon={
-                    <IoMdMale style={{color: activate.m.get() ? 'gold' : ''}} />
-                }
+                icon={ <IoMdMale /> }
                 onClick={()=> useClickButton('m')}
             />
             <Button className="button"
                 style={activate?.f?.get() ? styleActiv : {}}
                 disabled={activate?.f?.get()}
-                icon={
-                    <IoMdFemale style={{color: activate.f.get() ? 'gold' : ''}} />
-                }
+                icon={ <IoMdFemale /> }
                 onClick={()=> useClickButton('f')}
             />
             <Button className="button"
                 style={activate?.mf?.get() ? styleActiv : {}}
-                disabled={activate?.mf?.get()}
-                icon={
-                    <IoMaleFemale style={{marginTop:'0.2rem', color: activate.mf.get() ? 'gold' : ''}} />
-                }
+                disabled={activate.mf.get()}
+                icon={ <IoMaleFemale style={{marginTop:'0.2rem'}} /> }
                 onClick={()=> useClickButton('mf')}
             />
             <div style={{position:'relative'}}>
@@ -69,7 +63,9 @@ function Buttons({ useClickButton }: { useClickButton: (type: 'search'|'m'|'f'|'
                     style={activate.search.get() ? styleActiv : {}}
                     disabled={activate.search.get()}
                     icon={
-                        <FaSearchengin style={{color: activate.search.get() ? 'gold' : ''}} />
+                        activate.search.get()
+                            ? <RiTimerFlashLine style={{fontSize:'2rem'}} />
+                            : <FaSearchengin />
                     }
                     onClick={()=> useClickButton('search')}
                 />
@@ -111,7 +107,7 @@ function ButtonsPlay({ start, useStart, useNext }: PropsButtonsPanel) {
 function ButtonsMobail({ useClickButton, start, useStart, useNext }: PropsButtonsPanelMobail) {
     const activate = useHookstate(globalState.user.activate);
     const styleActiv = {
-        border:'2px solid gold'
+
     }
 
 
@@ -124,7 +120,9 @@ function ButtonsMobail({ useClickButton, start, useStart, useNext }: PropsButton
                         style={activate.search.get() ? {...styleActiv, marginRight: '10px'} :{marginRight: '10px'}}
                         disabled={activate.search.get()}
                         icon={
-                            <FaSearchengin style={{color: activate.search.get() ? 'gold' : ''}} />
+                            activate.search.get()
+                                ? <RiTimerFlashLine style={{fontSize:'4.7rem'}} />
+                                : <FaSearchengin />
                         }
                         onClick={()=> useClickButton('search')}
                     />
@@ -132,9 +130,7 @@ function ButtonsMobail({ useClickButton, start, useStart, useNext }: PropsButton
                 <Button className="button functionButton" 
                     style={activate?.mf?.get() ? styleActiv : {}}
                     disabled={activate?.mf?.get()}
-                    icon={
-                        <IoMaleFemale style={{marginTop:'0.5rem', color: activate.mf.get() ? 'gold' : ''}} />
-                    }
+                    icon={ <IoMaleFemale style={{marginTop:'0.5rem'}} /> }
                     onClick={()=> useClickButton('mf')}
                 />
             </div>
@@ -165,17 +161,13 @@ function ButtonsMobail({ useClickButton, start, useStart, useNext }: PropsButton
                 <Button className="button functionButton"
                     style={activate?.m?.get() ? {...styleActiv, marginRight: '10px'} : {marginRight: '10px'}}
                     disabled={activate?.m?.get()}
-                    icon={
-                        <IoMdMale style={{color: activate.m.get() ? 'gold' : ''}} />
-                    }
+                    icon={ <IoMdMale /> }
                     onClick={()=> useClickButton('m')}
                 />
                 <Button className="button functionButton"
                     style={activate?.f?.get() ? styleActiv : {}}
                     disabled={activate?.f?.get()}
-                    icon={
-                        <IoMdFemale style={{color: activate.f.get() ? 'gold' : ''}} />
-                    }
+                    icon={ <IoMdFemale /> }
                     onClick={()=> useClickButton('f')}
                 />
             </div>

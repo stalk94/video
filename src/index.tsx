@@ -1,16 +1,17 @@
 import './lib/i18n';
 import "./global.d.ts";
-import "primereact/resources/themes/md-dark-indigo/theme.css";
+import "./css/theme.css";
 import "primereact/resources/primereact.min.css";
 import '@mantine/core/styles.css';
 import 'primeicons/primeicons.css';
-import { createTheme, MantineProvider } from '@mantine/core';
+import { Helmet, HelmetProvider } from 'react-helmet-async';
+import { MantineProvider } from '@mantine/core';
 import React from 'react';
 import { errorMedia, getIp, translateText } from "./function";
 import { io, Socket } from "socket.io-client";
 import { EVENT, send } from "./lib/engine";
 import globalState from "./global.state";
-import { createRoot } from 'react-dom/client'
+import { createRoot } from 'react-dom/client';
 import { useHookstate } from '@hookstate/core';
 import { Peer, MediaConnection } from "peerjs";
 import { useDidMount, useIntervalWhen } from "rooks";
@@ -18,16 +19,13 @@ import { Toast } from 'primereact/toast';
 import Base from "./modules/main/index";
 import Loader from "./modules/load";
 import Admin from "./modules/admin/index";
-import { useTranslation } from 'react-i18next';
+import { useTranslation, I18nextProvider } from 'react-i18next';
 import "./css/index.css";
 import "./css/hearts.css";
 import "./css/button.css";
-import "./sw.js";
+//import "./sw.js";
 //import "./pwa.js";
 
-
-globalThis.twoLine;
-globalThis.mediaStream;
 globalThis.peer = new Peer({
     config: {
         iceServers: [
@@ -279,23 +277,34 @@ function App() {
     useIntervalWhen(()=> {
         if(socket) socket.emit('chek', {peerId: globalThis.peerId});
     }, 2000, view==='load' ? false : true);
-
+   
 
     return(
-        <MantineProvider theme={{}}>
-            <div className="rootTop">
-                <Toast style={{
-                        width: '35%',
-                        fontSize: window.innerWidth > 1300 ? '13px' : '11px'
-                    }} 
-                    ref={toast} 
-                />
-                { view==='admin' && <Admin />}
-                { view==='base' && <Base peerId={peerID} /> }
-                { view==='load' && <Loader useAuth={useAuth} /> }
-            </div>
-            <div id="heart-container"></div>
-        </MantineProvider>
+        <React.Fragment>
+            <HelmetProvider>
+                <I18nextProvider i18n={i18n}>
+                    <Helmet>
+                        <html lang={i18n.language.toLowerCase()==='gb' ? 'en' : i18n.language.toLowerCase()} />
+                        <title>{t('title')}</title>
+                        <meta name="description" content={t('description')} />
+                    </Helmet>
+                </I18nextProvider>
+            </HelmetProvider>
+            <MantineProvider theme={{}}>
+                <div className="rootTop">
+                    <Toast style={{
+                            width: '35%',
+                            fontSize: window.innerWidth > 1300 ? '13px' : '11px'
+                        }} 
+                        ref={toast} 
+                    />
+                    { view==='admin' && <Admin />}
+                    { view==='base' && <Base peerId={peerID} /> }
+                    { view==='load' && <Loader useAuth={useAuth} /> }
+                </div>
+                <div id="heart-container"></div>
+            </MantineProvider>
+        </React.Fragment>
     );
 }
 

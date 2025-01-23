@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { EVENT } from './lib/engine';
+import * as faceapi from 'face-api.js';
 import { loadGapiInsideDOM } from 'gapi-script';
 import axios from "axios";
+
 
 
 export function getSizeElement(selector?: string) {
@@ -97,6 +99,19 @@ export async function translateText(text: string, targetLang = 'ru') {
   
     return result[0][0][0];  // Получение переведённого текста
 }
+export async function detectFaces(video: HTMLVideoElement, clb?:(countFace: number)=> void) {
+    await faceapi.nets.tinyFaceDetector.loadFromUri(gurl + '/models');
+
+    setInterval(async()=> {
+        const detections = await faceapi.detectAllFaces(
+            video,
+            new faceapi.TinyFaceDetectorOptions()
+        );
+    console.log('Лиц:', detections.length);
+    if(clb) clb(detections.length);
+    }, 1000);
+}
+
 
 
 export function convertMilliseconds(ms) {

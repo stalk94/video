@@ -40,7 +40,7 @@ class User {
     }                                       // уточнить модель
     socket = Socket.prototype
     curentCall = undefined                  // peerId текушего сеанса
-    avatar = 'img/non-avatar.jpg'
+    avatar = undefined
     /**
      * @type {'m'|'fem'}
     */
@@ -109,6 +109,7 @@ class User {
             this.activate.m = false;
         }
         if(!this.timeSuperFind) this.activate.search = false;
+        if(this.avatar === 'img/non-avatar.jpg') delete this.avatar;
         this.timeshtamp = Date.now();
         this.money = data.money ?? 0;
         this.status = data.status ?? 'free';

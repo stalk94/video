@@ -1,5 +1,5 @@
 import React from 'react';
-import globalState, { actions } from "../../../global.state";
+import { actions } from "../../../global.state";
 import { useHookstate } from '@hookstate/core';
 import { ScrollPanel } from 'primereact/scrollpanel';
 import "./style.css";

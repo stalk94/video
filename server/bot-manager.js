@@ -104,6 +104,13 @@ module.exports = {
             }
         }
     },
+    /**
+     * 
+     * @param {string} login 
+     * @param {string} videoName 
+     * @param {*} videoData 
+     * @param {Function} clb 
+     */
     async loadVideo(login, videoName, videoData, clb) {
         const data = await db.get(`FAKE.${login}`);
 

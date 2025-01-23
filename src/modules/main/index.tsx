@@ -1,7 +1,7 @@
 import "../../global.d.ts";
 import { BotDataState } from "../../global.d.ts";
 import React from 'react';
-import { EVENT, send } from '../../lib/engine';
+import { EVENT } from '../../lib/engine';
 import globalState, { actions } from "../../global.state";
 import Footer from "./footer";
 import Header from "./header";
@@ -10,7 +10,7 @@ import { useDidMount, useIntervalWhen } from 'rooks';
 import ButtonsPanel from "./buttons";
 import BlurCanvas, { Spiner } from "./canvas";
 import Indicator from "./left-panel";
-import { checkCameraPermission, errorMedia } from "../../function";
+import { errorMedia } from "../../function";
 import "../../css/base.css";
 import Animations from "./animations";
 let task;
@@ -44,11 +44,13 @@ export default function({ peerId }) {
                     socket.emit('start', {
                         peerId: globalThis.peerId
                     });
+                    // распознаватель лиц
+                    //detectFaces(myVideo);
                 })
                 .catch((err)=> {
                     errorMedia(err);
                     setStart(false);
-                });
+                });           
         }
         // отключаемся
         else {

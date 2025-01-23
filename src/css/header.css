@@ -50,6 +50,12 @@
     to { color: #ffcccc; } 
 }
 
+/* Дроп довн юзера */
+#UserMainDropDown-dropdown {
+    padding: 0px; 
+    max-height: 70%;
+}
+
 
 @media screen and (max-width: 1280px) {
     .Logo {

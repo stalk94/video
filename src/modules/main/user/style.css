@@ -48,6 +48,46 @@
     to {border: 1px solid rgba(61, 199, 39, 0.732);}
 }
 
+/* менюшка юзера */
+.UserMain .p-menu {
+    background-color: rgba(240, 248, 255, 0);
+    min-width: 260px;
+   
+}
+.UserMain .p-menu .p-menuitem-content {
+    padding-left: 0.6rem;
+}
+.UserCartWraper {
+    padding: 1rem 0.3rem;
+    padding-right: 1.3rem;
+    color: aliceblue;
+    font-family: var(--font-family);
+    display: flex;
+    flex-direction: column;
+}
+.UserCartLogin {
+    font-weight: 600;
+    font-family: Poppins, Proxima Nova, apple, sans-serif;
+    font-size: 1rem;
+}
+.UserCartInfo {
+    display: flex;
+    flex-direction: column;
+    margin-left: 1rem;
+}
+.UserCartLike {
+    font-size: 0.85rem;
+}
+.PremiumInfoButton {
+    color: aliceblue;
+    border: 1px solid rgba(178, 178, 178, 0.148);
+    font-size: 1.4rem;
+    letter-spacing: 1px;
+    max-height: 2rem;
+}
+.p-menuitem-text {
+    margin-left: 0.5rem;
+}
 
 @media screen and (max-width: 1280px) {
     .ActionTime {
@@ -59,5 +99,25 @@
     .ActionText {
         font-size: 1.2vh;
     }
-    
+    .UserMain .p-menu {
+        background-color: rgba(240, 248, 255, 0);
+        width: 40vw;
+    }
+    .UserCartInfo {
+        margin-left: 2rem;
+    }
+    .UserCartLogin {
+        letter-spacing: 0.5px;
+        font-size: 2rem;
+    }
+    .UserCartLike {
+        font-size: 1.35rem;
+    }
+    .PremiumInfoButton {
+        max-height: 3rem;
+        font-size: 2rem;
+    }
+    .p-menuitem-text {
+        margin-left: 1rem;
+    }
 }

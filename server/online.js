@@ -1,5 +1,6 @@
 const { db } = require('./db');
 const User = require('./user');
+const { Socket } = require("socket.io");
 const { getPasswordHash, setPasswordHash } = require('./function');
 
 
@@ -40,6 +41,11 @@ const online = {
             }
         });
     },
+    /**
+     * Добавить в список online
+     * @param {string} peerId 
+     * @param {User} user 
+     */
     set(peerId, user) {
         this.online[peerId] = user;
         db.set('SESSIONS.' + user.token, {
@@ -60,6 +66,13 @@ const online = {
 
         return result;
     },
+    /**
+     * Восстановить сесию
+     * @param {string} token 
+     * @param {string} peerId 
+     * @param {Socket} socket 
+     * @returns {User}
+     */
     async findSession(token, peerId, socket) {
         const session = await db.get('SESSIONS.' + token);
 
@@ -79,6 +92,12 @@ const online = {
             }
         }
     },
+    /**
+     * Зачистить сессии юзера
+     * @param {string} login 
+     * @param {string} sidExcp 
+     * @returns 
+     */
     async deleteAllSession(login, sidExcp) {
         const all = await db.get('SESSIONS');
         
@@ -90,6 +109,11 @@ const online = {
 
         return true;
     },
+    /**
+     * Проверяет на онлайн такого же юзера и кикает
+     * @param {string} login 
+     * @param {string} curPeerId 
+     */
     chekMultiOnline(login, curPeerId) {
         Object.keys(this.online).forEach((peerId)=> {
             const curUser = this.online[peerId];

@@ -59,7 +59,7 @@ interface UserDataState {
     }                                       // уточнить модель
     googleData?: GoogleData
     curentCall: string                      // peerId текушего сеанса
-    avatar: string | 'img/non-avatar.jpg'
+    avatar?: string
     sex: 'm'|'fem'
 }
 

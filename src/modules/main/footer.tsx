@@ -1,6 +1,6 @@
 import "../../global.d.ts";
 import React from 'react';
-import { EVENT, send } from '../../lib/engine';
+import { EVENT } from '../../lib/engine';
 import { Button } from 'primereact/button';
 import globalState from "../../global.state";
 import { useHookstate } from '@hookstate/core';
@@ -8,10 +8,9 @@ import { InputText } from 'primereact/inputtext';
 import { FaRegHeart } from "react-icons/fa";
 import { IoGiftSharp } from "react-icons/io5";
 import { OverlayPanel } from 'primereact/overlaypanel';
-import { Sidebar } from 'primereact/sidebar';
 import { useDidMount, useWillUnmount } from "rooks";
 import Gift, { Likes } from "./gift";
-import { Popover, Text } from '@mantine/core';
+import { Popover } from '@mantine/core';
 import { useTranslation } from 'react-i18next';
 import { SetLikeEvent, GiftData } from "./type";
 import "../../css/footer.css";
@@ -26,7 +25,7 @@ export default function({ input }: {input: boolean}) {
     const { t, i18n } = useTranslation();
 
     const useSend =()=> {
-        if(text.length >= 2 && text.length < 100 && ovnerState?.peerId?.get() !== undefined) {
+        if(text?.length >= 2 && text?.length < 100 && ovnerState?.peerId?.get() !== undefined) {
             socket.emit('send.massage', {
                 peerId: globalThis.peerId,
                 text: text
