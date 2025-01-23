@@ -16,6 +16,7 @@ interface Events {
     'input.start': ()=> void
     anim: (data: EventAnimation)=> void
     callanswer: (data: MediaConnection)=> void
+    'deferredPrompt.disable': ()=> void
 }
 
 
@@ -40,7 +41,10 @@ export default class EventEmitter {
     }
     off<K extends keyof Events>(eventName: K, fn?: Events[K]) {
         if(fn) {
-            let index = this.events[eventName].findIndex((func) => func === fn);
+            let index = this.events[eventName].findIndex((func)=> {
+                if(func === fn) return true;
+                else if(func.toString() === fn.toString()) return true;
+            });
             if(index !== -1) this.events[eventName].splice(index, 1);
         } 
         else {

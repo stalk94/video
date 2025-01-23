@@ -12,6 +12,8 @@ declare global {
     var lang: 'GB' | 'RU' | 'CN' | 'DE';
     var mediaStream: MediaStream | undefined;
     var twoLine: MediaConnection | undefined;
+    var deferredPrompt: Event;
+    var deferredPromptCanceled: any;
 }
 
 

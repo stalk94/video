@@ -23,8 +23,8 @@ import { useTranslation, I18nextProvider } from 'react-i18next';
 import "./css/index.css";
 import "./css/hearts.css";
 import "./css/button.css";
-//import "./sw.js";
-//import "./pwa.js";
+import "./sw.js";
+
 
 globalThis.peer = new Peer({
     config: {
@@ -320,4 +320,9 @@ globalThis.socket = io(globalThis.gurl, {
 });
 window.addEventListener("beforeunload", ()=> {
     send('exit', {peerId: peerId});
+});
+window.addEventListener('beforeinstallprompt', (event)=> {
+    console.log('beforeinstallprompt захвачено.');
+    event.preventDefault();
+    globalThis.deferredPrompt = event;
 });

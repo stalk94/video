@@ -1,5 +1,6 @@
 import React from 'react';
 import globalState from "../../global.state";
+import { EVENT } from "../../lib/engine";
 import { useHookstate } from '@hookstate/core';
 import { useDidMount } from 'rooks';
 import { Button } from 'primereact/button';
@@ -67,6 +68,24 @@ const Avatar =({ setModal })=> {
 
         if(userState.avatar) return gurl + userState.avatar;
         else if(userState?.googleData?.img) return userState.googleData.img;
+    }
+    // вывалить предложение установить pwa
+    const useInstallPwa =()=> {
+        if(globalThis.deferredPrompt && !deferredPromptCanceled) {
+            deferredPrompt.prompt();
+            // Wait for the user to respond to the prompt
+            deferredPrompt.userChoice
+                .then((choiceResult)=> {
+                    if(choiceResult.outcome === 'accepted') {
+                        console.log('Приянто');
+                    } 
+                    else {
+                        deferredPromptCanceled = true;
+                        EVENT.emit('deferredPrompt.disable', undefined);
+                    }
+                    deferredPrompt = null;
+                });
+        }
     }
     
 

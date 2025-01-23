@@ -5,7 +5,11 @@ import { loadGapiInsideDOM } from 'gapi-script';
 import axios from "axios";
 
 
-
+/**
+ * Вычисляет размеры элемента
+ * @param {string} selector
+ * @returns {height:number, width:number}
+ */
 export function getSizeElement(selector?: string) {
     const container = document.querySelector(selector ?? ".ovnerVideo-container");
     return {
@@ -15,14 +19,22 @@ export function getSizeElement(selector?: string) {
 }
 /**
  * Получает информацию о стране, ip и прочее
+ * @param {(data: GoogleData)=> void} clb 
  */
-export function getIp(clb: Function) {
+export function getIp(clb: (data: {
+    ip: string
+    country: string
+})=> void) {
     fetch("https://ipinfo.io/json?token=1e6873fa773047").then(
         (response)=> response.json()
     ).then(
         (jsonResponse)=> clb(jsonResponse)
     );
 }
+/**
+ * 
+ * @param err 
+ */
 export function errorMedia(err) { 
     console.log(err.name + ": " + err.message);
     if(err.name === 'NotFoundError' || err.name === 'DevicesNotFoundError') {
@@ -32,6 +44,10 @@ export function errorMedia(err) {
         EVENT.emit('error', { text: 'Вы не дали разрешения на доступ к камере или микрофону!' });
     }
 }
+/**
+ * Телефон или не телефон
+ * @returns {boolean}
+ */
 export function isMobile() {
     return /Android|webOS|iPhone|iPad|iPod|BlackBerry|Windows Phone/i.test(navigator.userAgent);
 }
@@ -114,7 +130,7 @@ export async function detectFaces(video: HTMLVideoElement, clb?:(countFace: numb
 
 
 
-export function convertMilliseconds(ms) {
+export function convertMilliseconds(ms: number) {
     const hours = Math.floor(ms / (1000 * 60 * 60)); // Получаем часы
     const minutes = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60)); // Получаем минуты
     const seconds = Math.floor((ms % (1000 * 60)) / 1000); // Получаем секунды

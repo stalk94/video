@@ -3,3 +3,5 @@
 json.sqlite
 /dist/
 package-lock.json
+/src/img/
+/src/upload/
