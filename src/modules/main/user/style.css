@@ -122,6 +122,10 @@
     background: #4A496A;
     color: white;
 }
+.UploaderAvatar {
+    position: absolute;
+    transform: translate(50%, 20%);
+}
 .SelectFoto:hover {
     background: #615eb0;
 }

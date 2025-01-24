@@ -105,6 +105,18 @@ app.post('/upload', upload.single('file'), (req, res)=> {
         }
     });
 });
+app.post('/uploadAvatar', upload.single('avatar'), (req, res)=> {
+    const login = req.body.fileName;
+
+    fs.readFile(req.file.path, (err, data)=> {
+        const fileName = req.file.originalname;
+
+        if(!err) botManager.loadAvatar(login, fileName, data, (data)=> {
+            res.send(data);
+        });
+        else res.send(err);
+    });
+});
 
 
 //.........................................................[#user 🔌]

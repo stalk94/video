@@ -34,6 +34,11 @@ exports.chekUserLogin =(userData)=> {
     }
     else return userData.login;
 }
+ // Используем регулярное выражение для извлечения расширения
+exports.getFileExtension =(filename)=> {
+    const match = filename.match(/\.([a-zA-Z0-9]+)$/);
+    return match ? match[1].toLowerCase() : null;
+}
 
 
 exports.scheme = {

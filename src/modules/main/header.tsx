@@ -57,7 +57,7 @@ const Coins =({ money }: { money: number})=> {
 }
 const Avatar =({ setModal })=> {
     const user = useHookstate(globalState.user);
-    const [opened, setOpened] = React.useState(import.meta.env.DEV?true:false);
+    const [opened, setOpened] = React.useState(false);
     
     const useSize =()=> {
         if(window.innerWidth < 1280) return '100px';

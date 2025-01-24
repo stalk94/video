@@ -1,8 +1,11 @@
 const fs = require('fs');
+const path = require('path');
+const shell = require("shelljs");
 const FakeUser = require('./fake_user');
 const User = require('./user');
 const { online } = require('./online');
 const { db } = require('./db');
+const { getFileExtension } = require('./function');
 
 
 module.exports = {
@@ -122,6 +125,42 @@ module.exports = {
             if(online.online[bot.peerId]) {
                 online.online[bot.peerId] = bot;
             }
+        }
+    },
+    async loadAvatar(login, nameImg, dataImg, clb) {
+        const data = await db.get(`USERS.${login}`);
+        const formatFile = "." + getFileExtension(nameImg);
+        const newName = `${login}-${Date.now()}${formatFile}`;
+        data.avatar = `img/avatar/${newName}`;
+
+        if(data) {
+            const findPeerId = Object.keys(online.online).find((key)=> online.online[key].login === login);
+
+            fs.writeFile('src/'+data.avatar, dataImg, (err)=> {
+                clb(err);
+                db.set(`USERS.${login}.avatar`, data.avatar);
+                if(findPeerId !== undefined) {
+                    online.online[findPeerId].avatar = data.avatar;
+                    online.online[findPeerId]?.emit('refreshed', {avatar: data.avatar});
+                }
+                // чистка временной папки
+                shell.ls(`uploads`).forEach((name)=> {
+                    fs.unlink(`uploads/${name}`, console.log);
+                });
+                // чиста старых аватаров
+                fs.readdir(process.cwd()+`/src/img/avatar`, (err, files) => {
+                    if(err) return;
+
+                    files.forEach((name)=> {
+                        if(name.includes(`${login}-`) && name !== newName) {
+                            const filePath = path.join(process.cwd()+`/src/img/avatar/`, name);
+                            fs.unlink(filePath, (err)=> {
+                                if (err) console.error('Ошибка при удалении файла:', err);
+                            });
+                        }
+                    });
+                });
+            });
         }
     },
 

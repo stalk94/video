@@ -1,9 +1,11 @@
 import { GiftData } from "../../../global.d.ts";
+import axios from 'axios';
 import React from 'react';
 import globalState from "../../../global.state";
 import { useHookstate } from '@hookstate/core';
 import { SelectButton } from 'primereact/selectbutton';
 import { Button } from 'primereact/button';
+import { FileUpload, FileUploadHandlerEvent } from 'primereact/fileupload';
 import { OverlayPanel } from 'primereact/overlaypanel';
 import Modal from "../../../component/modal";
 import { useTranslation } from 'react-i18next';
@@ -14,7 +16,13 @@ import { TbGift } from "react-icons/tb";
 
 
 const Header =()=> {
+    const [upload, setUpload] = React.useState(false);
     const user = useHookstate(globalState.user);
+    const choseOptions = {
+        label: 'PHOTO', 
+        icon: 'pi pi-fw pi-camera',
+        className: 'SelectFoto'
+    }
 
     const useChekLogin =(userData)=> {
         if(userData.googleData) {
@@ -33,15 +41,44 @@ const Header =()=> {
         else if(userState?.googleData?.img) return userState.googleData.img;
         else return gurl + '/img/non-avatar.jpg';
     }
+    const handleSubmit =(e: FileUploadHandlerEvent)=> {
+        setUpload(true);
+        const url = gurl + 'uploadAvatar';
+        const formData = new FormData();
+        formData.append('avatar', e.files[0]);
+        formData.append('fileName', user.login.get({noproxy: true}));
+        const config = {
+            headers: {
+                'content-type': 'multipart/form-data',
+            }
+        };
+        
+        axios.post(url, formData, config).then((response)=> {
+            console.log(response.data);
+            e.options.clear();
+            setUpload(false);
+        });
+    }
 
     return(
         <div className='HeaderProfile'>
             <div className='UserCartWraper'>
                 <div style={{display:'flex', flexDirection: 'row', marginBottom:'5px'}}>
                     <div style={{position:'relative',height:useSize()[1]}}>
-                        <Button className='SelectFoto'
-                            icon="pi pi-camera"
-                            label='PHOTO'
+                        { upload &&
+                            <div className='UploaderAvatar'>
+                                <i className="pi pi-spin pi-spinner" id='Spiner'/>
+                            </div>
+                        }
+                        <FileUpload
+                            auto
+                            name="avatar"
+                            url="./uploadAvatar"
+                            accept=".png, .jpg, .jpeg"
+                            mode="basic"
+                            customUpload
+                            uploadHandler={handleSubmit}
+                            chooseOptions={choseOptions}
                         />
                         <img style={{borderRadius: '5px', border:'1px solid gray'}}
                             src={useAvatar()}
@@ -76,7 +113,7 @@ const Header =()=> {
                     </div>
                 </div>
                 <Button className='PremiumInfoButton'
-                    style={{background:'gray'}}
+                    style={{background:'#00000000'}}
                     label={user.get().status}
                 />
             </div>
@@ -171,7 +208,12 @@ const Body = {
         }
     
         return(
-            <div className='GiftWraper' style={{justifyContent:window.innerWidth<1280?"left":"center"}}>
+            <div className='GiftWraper' 
+                    style={{
+                        justifyContent:window.innerWidth<1280?"left":"center",
+                        maxWidth:window.innerWidth>1280 &&'30vw'
+                    }}
+                >
                 <OverlayPanel ref={op} style={{maxWidth:'50vw'}}>
                     <div className="GiftInfoContainer">
                         <div className='GiftLabel' 
@@ -230,7 +272,7 @@ const Body = {
 
 export default function() {
     const [modal, setModal] = React.useState();
-    const [select, setSelect] = React.useState<'base'|'gifts'|'setings'>('base');
+    const [select, setSelect] = React.useState<'base'|'gifts'|'setings'>('gifts');
 
 
     return(
@@ -240,7 +282,7 @@ export default function() {
             <SelectButton id="ProfileSelect"
                 value={select}
                 options={[
-                    { label: 'База', value: 'base' },
+                    { label: 'Базовое', value: 'base' },
                     { label: 'Подарки', value: 'gifts' },
                     { label: 'Настройки', value: 'setings' }
                 ]}
