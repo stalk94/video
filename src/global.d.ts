@@ -22,6 +22,7 @@ type GiftData = {
     name: string
     cost: number
     src: string
+    from?: string
     anim?: 'fall.petal'|'rocket'|'fall.rose'
     text?: string
 }

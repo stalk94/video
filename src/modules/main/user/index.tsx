@@ -7,17 +7,17 @@ import { Menu } from 'primereact/menu';
 import Modal from "../../../component/modal";
 import Settings from "./settings";
 import { Button } from 'primereact/button';
+import Support from "./supports";
+import Profile from "./profile";
 import { useTranslation } from 'react-i18next';
 import "./style.css";
+import { useDidMount } from 'rooks';
+
 
 
 const UserCard =()=> {
     const user = useHookstate(globalState.user);
 
-    const useSize =()=> {
-        if(window.innerWidth < 1280) return ['90px', '120px'];
-        else return ['55px', '75px']
-    }
     const useAvatar =()=> {
         const userState = user.get({ noproxy: true });
 
@@ -39,8 +39,8 @@ const UserCard =()=> {
                 <img style={{borderRadius: '5px', border:'1px solid gray'}}
                     src={useAvatar()}
                     onError={(e)=> e.target.src = gurl + '/img/non-avatar.jpg'}
-                    width={useSize()[0]}
-                    height={useSize()[1]}
+                    width='55px'
+                    height='75px'
                 />
                 <div className='UserCartInfo'>
                     <div className='UserCartLogin'>
@@ -66,7 +66,7 @@ const UserCard =()=> {
 export default function({ setModal }) {
     const { t, i18n } = useTranslation();
 
-    const useConfirm = (header, message, accept, reject) => {
+    const useConfirm = (header, message, accept, reject, footer) => {
         setModal(
             <Modal
                 visible={true}
@@ -75,9 +75,20 @@ export default function({ setModal }) {
                 header={header}
                 accept={accept}
                 reject={reject}
+                footer={footer}
             />
         );
     }
+    useDidMount(()=> {
+        useConfirm(
+            t('menu_profile'), 
+            <Profile />, 
+            ()=> EVENT.emit('inputChange', {}),
+            console.log,
+            true
+        );
+    });
+
 
     return(
         <div className='UserMain'>
@@ -92,8 +103,10 @@ export default function({ setModal }) {
                         command: ()=> {
                             useConfirm(
                                 t('menu_profile'), 
-                                <div>В разработке</div>, 
-                                ()=> EVENT.emit('inputChange', {})
+                                <Profile />, 
+                                ()=> EVENT.emit('inputChange', {}),
+                                console.log,
+                                true
                             );
                         }
                     },
@@ -125,8 +138,10 @@ export default function({ setModal }) {
                         command: ()=> {
                             useConfirm(
                                 t('menu_info'), 
-                                <div>В разработке</div>, 
-                                ()=> EVENT.emit('inputChange', {})
+                                <Support />, 
+                                ()=> EVENT.emit('inputChange', {}),
+                                console.log,
+                                true
                             );
                         }
                     },

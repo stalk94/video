@@ -58,36 +58,13 @@
 
 @media screen and (max-width: 1280px) { 
     .mantine-Popover-dropdown {
-        padding: 1.7vh;
-        max-width: 82%;
-        max-height: 40%;
-    }
-    .GiftWraper {
-        gap: 1.2rem;
-    }
-    .GiftContainer {
-        max-width: 14rem;
-        padding: 0.6rem;
-        border-radius: 10px;
-    }
-    .GiftImageContainer {
-        height: 10rem;
-    }
-    .GiftImage {
-        width: 10rem;
-        max-height: 10rem;
+        max-width: 100%;
+        max-height: 50%;
     }
     .GiftPrice {
         font-weight: 600;
-        font-size: 2rem;
     }
     .GiftLabel {
         font-weight: 200;
-        font-size: 1.8rem;
-    }
-    .GiftButtonPay {
-        height: 4rem;
-        padding: auto;
-        font-size: 1.8rem;
     }
 }

@@ -2,13 +2,13 @@ import React from 'react';
 import globalState from "../../global.state";
 import { EVENT } from "../../lib/engine";
 import { useHookstate } from '@hookstate/core';
-import { useDidMount } from 'rooks';
+import { useDidMount, useWillUnmount } from 'rooks';
 import { Button } from 'primereact/button';
 import { OverlayPanel } from 'primereact/overlaypanel';
 import { Popover } from '@mantine/core';
 import { FiUser } from "react-icons/fi";
 import { TbMessageDots } from "react-icons/tb";
-import User from "./user/user";
+import User from "./user/index";
 import Action from "./user/action";
 import { useTranslation } from 'react-i18next';
 import "../../css/header.css";
@@ -57,7 +57,7 @@ const Coins =({ money }: { money: number})=> {
 }
 const Avatar =({ setModal })=> {
     const user = useHookstate(globalState.user);
-    const [opened, setOpened] = React.useState(false);
+    const [opened, setOpened] = React.useState(true);
     
     const useSize =()=> {
         if(window.innerWidth < 1280) return '100px';
@@ -87,6 +87,12 @@ const Avatar =({ setModal })=> {
                 });
         }
     }
+    useDidMount(()=> {
+        EVENT.on('hidenModal', ()=> setModal());
+    });
+    useWillUnmount(()=> {
+        EVENT.off('hidenModal', ()=> setModal());
+    });
     
 
     return(
@@ -147,7 +153,7 @@ export default function({ useCall, peerId }: { useCall: (peerId: string)=> void,
     return(
         <header>
             { modal }
-            <OverlayPanel ref={op} style={{maxWidth:'50vw'}}>
+            <OverlayPanel ref={op}>
                 { curent !== 'beta'
                     ? <Action />
                     : <div style={{padding:'2vh'}}>

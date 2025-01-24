@@ -112,7 +112,7 @@ export default function({ input }: {input: boolean}) {
     return(
         <footer>
             <OverlayPanel 
-                breakpoints={{'960px': '75vw', '640px': '100vw'}}
+                breakpoints={{'960px': '70vw', '400px': '80vw'}}
                 ref={likeRef}
                 className='LikesOverlay'
             >
@@ -155,7 +155,7 @@ export default function({ input }: {input: boolean}) {
                 <div className='PanelFooterRight'>
                     <Button className='ButtonInputChat'
                         icon="pi pi-send"
-                        label={ t('label_btn_send') }
+                        label={ window.innerWidth < 1280 ? '' : t('label_btn_send') }
                         onClick={useSend}
                     />
                 </div>

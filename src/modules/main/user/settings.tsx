@@ -10,7 +10,7 @@ const Flag =({ code })=> (
     <img style={{
         width: window.innerWidth > 1280 ? "25px" : "65px", 
         height: window.innerWidth > 1280 ? "25px" : "65px",
-        marginLeft: '4px'
+        marginTop: '4px'
     }}
         src={`http://purecatamphetamine.github.io/country-flag-icons/3x2/${code}.svg`}
     />

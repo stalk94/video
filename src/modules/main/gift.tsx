@@ -56,10 +56,10 @@ const Gift =({ data, useClick }: { data:GiftData, useClick:(data:GiftData)=> voi
                     <TbCoins />
                 </div>
                 <img className='GiftImage'
-                    src={gurl+data.src}
+                    src={gurl + data.src}
                 />
             </div>
-            { chekText(data.name??data.label) }
+            { chekText(data.name) }
             <Button className='p-button-outlined p-button-success GiftButtonPay'
                 label='Подарить'
                 onClick={()=> useClick(data)}
@@ -89,7 +89,7 @@ export default function({ input }: {input: boolean}) {
 
     return(
         <div className='GiftWraper'>
-            {giftsConfig.map((elem, index)=>
+            { giftsConfig.map((elem, index)=>
                 <Gift key={index}
                     data={elem} 
                     useClick={usePayGift} 

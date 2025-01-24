@@ -205,6 +205,19 @@ io.on('connection', (socket)=> {
             }
         }
     });
+    // продажа подарка
+    socket.on('gift.sell', (msg)=> {
+        if(msg?.peerId) {
+            const user = online.online[msg.peerId];
+
+        }
+    });
+    // обоащение в SUPPORT
+    socket.on('send.support', (msg)=> {
+        if(msg && msg.peerId && msg.text) {
+            
+        }
+    });
 
     // -- admin --
     // создать нового бота

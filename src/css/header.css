@@ -21,9 +21,10 @@
 
 
 .Logo {
+    margin-top: auto;
     padding-left: 2%;
     color: #ffcccc;
-    font-size: 2.5rem;
+    font-size: 2.5em;
     /*animation: flik 5s ease infinite;*/
     animation-direction: alternate;
 }
@@ -59,25 +60,29 @@
 
 @media screen and (max-width: 1280px) {
     .Logo {
-        padding-left: 2%;
-        color: #ffcccc;
-        font-size: 3.4vh;
+        font-size: 2em;
     }
     .CoinsContainer {
-        margin-left: 5%;
-        max-height: 60px;
-        width: 140px;
-        padding: 8px;
-        padding-left: 8px;
-        padding-right: 8px;
-        border-radius: 10px;
-        background-color: aliceblue;
-        font-size: 26px;
+        display: flex;
+        margin-left: 0%;
+        font-size: 0.8em;
         margin-top: auto;
         margin-bottom: auto;
-        font-size: 1.8rem;
     }
     .BetaLabel {
-        font-size: 1.7vh;
+        
+    }
+}
+
+@media screen and (max-width: 420px) { 
+    .Left {
+        margin-right: 0px;
+        width: 47%;
+    }
+    .Logo {
+        font-size: 1.6em;
+    }
+    .BetaLabel {
+        font-size: 0.6em;
     }
 }

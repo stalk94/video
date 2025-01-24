@@ -15,7 +15,7 @@ export default function({useInitSex}: {useInitSex: (type: 'm'|'fem')=> void}) {
 
     return(
         <div className='SelectSexContainer'>
-            <div className='TextSelectSex'>
+            <div className='TextSelectSex' style={{paddingLeft:'2%'}}>
                 INTIMALIVE
             </div>
             <div className='SelectSex'>

@@ -23,6 +23,7 @@
     "settings_lang_label": "Язык:",
     "settings_video_label": "Видео ввод:",
     "settings_audio_label": "Аудио вывод:",
+    "profile_gift_empty": "Вы пока не получили подарков от других пользователей.",
     "modal_acept": "Принять",
     "modal_reject": "Отмена",
     "warn_label": "Не удалось!",

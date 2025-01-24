@@ -2,6 +2,7 @@ import React from 'react';
 import { ConfirmDialog } from 'primereact/confirmdialog';
 import { Button } from 'primereact/button';
 import { useTranslation } from 'react-i18next';
+import { useDidMount } from 'rooks';
 
 type PropsModal = {
     message: string
@@ -10,16 +11,24 @@ type PropsModal = {
     reject: Function
     visible: boolean
     setVisible: (value: boolean)=> void
+    footer?: React.ReactHTMLElement
 }
 
 
-export default function({visible, setVisible, message, header, accept, reject}: PropsModal) {
+export default function({visible, setVisible, message, header, accept, reject, footer}: PropsModal) {
     const { t, i18n } = useTranslation();
+
+    useDidMount(()=> {
+        if(false) setTimeout(()=> {
+            const elem = document.querySelector('.p-dialog-footer');
+           elem.remove()
+        }, 300)
+    });
 
     return(
         <React.Fragment>
             <ConfirmDialog style={{
-                maxWidth: window.innerHeight < 1280 ? '50%' : '80%', 
+                maxWidth: window.innerHeight < 1280 ? '90%' : '80%', 
                 fontSize: '1.4vh'
             }}
                 visible={visible} 
@@ -30,8 +39,9 @@ export default function({visible, setVisible, message, header, accept, reject}: 
                 reject={reject}
                 acceptLabel={ t('modal_acept') }
                 rejectClassName="rejectButtonModal"
-                acceptClassName="aceptButtonModal p-button-outlined p-button-success"
+                acceptClassName={footer ? "rejectButtonModal" : "aceptButtonModal p-button-outlined p-button-success"}
                 acceptIcon="pi pi-check"
+                footer={footer}
             />
         </React.Fragment>
     );

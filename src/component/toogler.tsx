@@ -17,7 +17,7 @@ export default function({mod, useMod}: {mod: 'auth'|'reg', useMod: (type: 'auth'
             />
             <Button className='TooglerButton'
                 style={{
-                    marginLeft: '20px',
+                    marginLeft: '0.4em',
                     opacity: mod === 'reg' ? '0.4' : 1
                 }}
                 label={ t('togler_reg') }

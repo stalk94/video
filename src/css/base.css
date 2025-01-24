@@ -150,19 +150,16 @@ footer {
 
 @media screen and (max-width: 1280px) {
     .Base {
-        display: flex;
-        flex-direction: column;
         margin-left: 0%;
         width: 100%;
-        height: 100%;
+        height: 100vh;
+        overflow: hidden;
         border: 1px solid rgba(31, 30, 30, 0.4);
         box-shadow: 0px 10px 15px rgba(2, 2, 2, 0.3);
     }
 
     header {   
-        display: flex;
-        flex-direction: row;
-        height: 10%;
+        height: 4em;
         max-height: 100px;
         min-height: 50px;
         width: 100%;
@@ -172,7 +169,7 @@ footer {
         box-shadow: 0px 3px 3px rgba(2, 2, 2, 0.304);
     }
     .Container {
-        height: 87%;
+        height: 100%;
         display: flex;
         flex-direction: column;
         position: relative;
@@ -201,9 +198,7 @@ footer {
     }
 
     footer {
-        padding: 0.3%;
         z-index: 5;
-        height: 8%; 
         width: 100%;
         display: flex;
         flex-direction: row;

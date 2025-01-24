@@ -43,12 +43,26 @@
 .p-highlight {
     animation: blik 2s linear infinite;
 }
+/* выьор подраздела в профиле */
+#ProfileSelect {
+    min-width: 35rem;
+    padding-left: 6%;
+}
+#ProfileSelect .p-highlight {
+    animation: none;
+    border: 1px solid rgba(128, 128, 128, 0.408);
+    color: gray;
+}
+#ProfileSelect .p-button {
+    min-width: 30%;
+}
 @keyframes blik {
     from {border: 1px solid rgba(60, 199, 39, 0);}
     to {border: 1px solid rgba(61, 199, 39, 0.732);}
 }
 
-/* менюшка юзера */
+
+/* менюшка выпадаюшая юзера */
 .UserMain .p-menu {
     background-color: rgba(240, 248, 255, 0);
     min-width: 260px;
@@ -88,36 +102,105 @@
 .p-menuitem-text {
     margin-left: 0.5rem;
 }
+/* Профиль */
+.HeaderProfile {
+    margin-left: 5.5%;
+    margin-right: 5.5%;
+}
+.ProfileBody {
+    margin: 3% 4%;
+    overflow-y: auto;
+    max-height: 50rem;
+}
+.SelectFoto {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%, -10%);
+    width: 80%;
+    height: 35px;
+    background: #4A496A;
+    color: white;
+}
+.SelectFoto:hover {
+    background: #615eb0;
+}
+.UserProfileLogin {
+    font-weight: 800;
+    font-size: x-large;
+    letter-spacing: 1px;
+    color: silver;
+}
+.UserProfileRow {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 0.2rem;
+    font-size: 1rem;
+}
+.ProfileIcon {
+    font-size: 1.2rem;
+    margin-right: 0.8rem;
+}
+/* контейнер информации о подарке */
+.GiftInfoContainer {
+    padding: 1.5rem;
+}
+
 
 @media screen and (max-width: 1280px) {
-    .ActionTime {
-        font-size: 1.2vh;
-    }
-    .ActionHeader {
-        font-size: 1.4vh;
-    }
-    .ActionText {
-        font-size: 1.2vh;
-    }
     .UserMain .p-menu {
         background-color: rgba(240, 248, 255, 0);
-        width: 40vw;
-    }
-    .UserCartInfo {
-        margin-left: 2rem;
-    }
-    .UserCartLogin {
-        letter-spacing: 0.5px;
-        font-size: 2rem;
-    }
-    .UserCartLike {
-        font-size: 1.35rem;
-    }
-    .PremiumInfoButton {
-        max-height: 3rem;
-        font-size: 2rem;
     }
     .p-menuitem-text {
         margin-left: 1rem;
+    }
+
+
+    #ProfileSelect {
+        min-width: 100%;
+        padding-left: 0%;
+    }
+    #ProfileSelect .p-highlight {
+        animation: none;
+        border: 1px solid rgba(128, 128, 128, 0.408);
+        color: gray;
+    }
+    #ProfileSelect .p-button {
+        min-width: 5em;
+    }
+    .UserCartWraper {
+        padding: 1rem 0.3rem;
+        padding-bottom: 1rem;
+        padding-right: 3rem;
+        color: aliceblue;
+        font-family: var(--font-family);
+        display: flex;
+        flex-direction: column;
+    }
+    .HeaderProfile {
+        margin-top: 0px;
+        padding-top: 0px;
+        margin-left: 0.2em;
+        margin-right: 0.2em;
+    }
+    .ProfileBody {
+        margin: 3% 4%;
+        overflow-y: auto;
+        max-height: 50rem;
+    }
+    .ProfileBody {
+        
+    }
+    .UserProfileRow {
+        
+    }
+    .ProfileIcon {
+       
+    }
+    .UserProfileLogin {
+        
+    }
+    .SelectFoto {
+        
     }
 }

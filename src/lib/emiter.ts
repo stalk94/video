@@ -13,10 +13,14 @@ interface Events {
     success: (data: { text: string })=> void
     exit: (data?: any)=> void
     inputChange: ()=> void
-    'input.start': ()=> void
     anim: (data: EventAnimation)=> void
     callanswer: (data: MediaConnection)=> void
+    /** отклонено предложение установить PWA */
     'deferredPrompt.disable': ()=> void
+    /** скрывает модальное окно */
+    'hidenModal': ()=> void
+    /** получен поток собеседника */
+    'input.start': ()=> void
 }
 
 

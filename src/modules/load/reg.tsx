@@ -55,21 +55,21 @@ export default function({ useReg }) {
     return(
         <React.Fragment>
             <TextInput
-                size={window.innerWidth > 1280 ? "lg" : "xl"}
+                size="lg"
                 placeholder="Login"
                 value={login}
                 onChange={(event)=> setLogin(event.currentTarget.value)}
                 rightSection={chekLogin()}
             />
-            <TextInput style={{marginTop:'20px'}}
-                size={window.innerWidth > 1280 ? "lg" : "xl"}
+            <TextInput style={{marginTop:'0.6em'}}
+                size="lg"
                 placeholder="E-mail"
                 value={email}
                 onChange={(event)=> setEmail(event.currentTarget.value)}
                 rightSection={chekEmail()}
             />
-            <PasswordInput style={{ marginTop: '20px' }}
-                size={window.innerWidth > 1280 ? "lg" : "xl"}
+            <PasswordInput style={{marginTop:'0.6em'}}
+                size="lg"
                 placeholder="Password"
                 rightSection={chekPassword()}
                 value={password}

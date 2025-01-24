@@ -137,12 +137,6 @@ export default function() {
                     this.alpha = 1;
                     this.fadeSpeed = Math.random() * 0.01 + 0.003;
 
-                    if(isMobile()) {
-                        this.speed *= 3;
-                        this.fadeSpeed *= 3;
-                        this.gravity *= 3;
-                    }
-
                     this.velocityX = Math.cos(this.angle) * this.speed;
                     this.velocityY = Math.sin(this.angle) * this.speed;
                 }
@@ -222,12 +216,6 @@ export default function() {
                     this.gravity = 0.005; // Меньшая гравитация
                     this.rotationSpeed = Math.random() * 0.05 - 0.025; // Вращение
                     this.rotation = Math.random() * Math.PI * 2;
-
-                    if(isMobile()) {
-                        this.speed *= 3;
-                        this.fadeSpeed *= 3;
-                        this.gravity *= 3;
-                    }
 
                     this.velocityX = Math.cos(this.angle) * 0.5;
                     this.velocityY = Math.sin(this.angle) * this.speed; // Увеличена скорость падения
@@ -390,12 +378,6 @@ export default function() {
                     this.decay = Math.random() * 0.0001; // Скорость исчезновения
                     this.rotation = Math.random() * Math.PI * 2; // Случайный угол
                     this.rotationSpeed = Math.random() * 0.1 - 0.05; // Скорость вращения
-
-                    if(isMobile()) {
-                        this.speed *= 3;
-                        this.decay *= 3;
-                        this.rotationSpeed *= 3;
-                    }
                 }
 
                 update() {
@@ -580,7 +562,6 @@ export default function() {
                 this.angle = Math.atan2(targetY - startY, targetX - startX);
                 this.trail = []; // След ракеты
                 this.maxTrailLength = 10;
-                if(isMobile()) this.speed *= 3;
             }
             update() {
                 this.trail.push({ x: this.x, y: this.y });
@@ -668,10 +649,6 @@ export default function() {
 
                 this.image = new Image();
                 this.image.src = textureSrc;
-                if(isMobile()) {
-                    this.speed *= 3;
-                    this.decay *= 3;
-                }
             }
             update() {
                 this.x += this.speedX; // Обновляем положение
@@ -759,10 +736,6 @@ export default function() {
                 this.angle = Math.atan2(targetY - startY, targetX - startX);
                 this.trail = []; // След ракеты
                 this.maxTrailLength = 10;
-
-                if(isMobile()) {
-                    this.speed *= 3;
-                }
             }
             update() {
                 this.trail.push({ x: this.x, y: this.y });
@@ -858,12 +831,6 @@ export default function() {
                 this.fadeSpeed = Math.random() * 0.01 + 0.003;
                 this.texture = new Image();
                 this.texture.src = texture;
-
-                if(isMobile()) {
-                    this.speed *= 3;
-                    this.fadeSpeed *= 3;
-                    this.gravity *= 3;
-                }
             }
             update() {
                 this.x += this.velocityX;
