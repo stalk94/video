@@ -162,6 +162,10 @@ export default function({ peerId }) {
     }
 
     useDidMount(()=> {
+        setTimeout(()=> {
+            const d = document.querySelector('.root');
+            d.height = window.innerHeight - 200
+        }, 1000);
         // нам найден собеседник (вызываем его)
         socket.on('call', (data) => {
             console.log('SERVER SEARCH CLIENT');

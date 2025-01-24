@@ -80,7 +80,7 @@ export default function({ setModal }) {
         );
     }
     useDidMount(()=> {
-        useConfirm(
+        if(import.meta.env.DEV) useConfirm(
             t('menu_profile'), 
             <Profile />, 
             ()=> EVENT.emit('inputChange', {}),

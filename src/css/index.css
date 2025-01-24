@@ -18,19 +18,15 @@
 
 
 body {
-    width: 100vw;
-    height: 100vh;
     margin: 0;
     padding: 0;
     font-family: 'Bahnschrift';
 }
 .root {
-  width: 100vw;
-  height: 100vh;
+  
 }
 .rootTop {
-    width: 100vw;
-    height: 100vh;
+    height: 100%;
     /*background-color: #42385A;*/
     background: linear-gradient(20deg, #7259abbb,#914a9ead);
 }

@@ -57,7 +57,7 @@ const Coins =({ money }: { money: number})=> {
 }
 const Avatar =({ setModal })=> {
     const user = useHookstate(globalState.user);
-    const [opened, setOpened] = React.useState(true);
+    const [opened, setOpened] = React.useState(import.meta.env.DEV?true:false);
     
     const useSize =()=> {
         if(window.innerWidth < 1280) return '100px';
@@ -114,7 +114,7 @@ const Avatar =({ setModal })=> {
                             ? <img style={{}}
                                 src={ useAvatar() }
                                 onError={(e)=> e.target.src = gurl + '/img/non-avatar.jpg'}
-                                width={useSize()}
+                                width='50px'
                             />
                             : <FiUser />
                     }
