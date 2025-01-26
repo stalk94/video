@@ -123,15 +123,14 @@ footer {
     flex-direction: row;
     width: 100%;
     z-index: 5;
-    border-top: 3px solid #07070747;
     box-shadow: 0px 3px 3px rgba(2, 2, 2, 0.304);
-    border-bottom: 2px solid rgba(3, 3, 3, 0.493);
-    border-top: 2px solid rgba(3, 3, 3, 0.493);
+    border-bottom: 1px solid rgba(3, 3, 3, 0.493);
+    border-top: 1px solid rgba(3, 3, 3, 0.493);
     /*background-color: #42385A;*/
     background: linear-gradient(90deg, #7259ab,#42385A);
     padding: auto;
-    padding-top: 5px;
-    padding-bottom: 5px;
+    padding-top: 4px;
+    padding-bottom: 4px;
     position: relative;
 }
 .ButtonsMobailLeft {

@@ -54,7 +54,7 @@ function Buttons({ useClickButton }: { useClickButton: (type: 'search'|'m'|'f'|'
             <Button className="button"
                 style={activate?.mf?.get() ? styleActiv : {}}
                 disabled={activate.mf.get()}
-                icon={ <IoMaleFemale style={{marginTop:'0.2rem'}} /> }
+                icon={ <IoMaleFemale /> }
                 onClick={()=> useClickButton('mf')}
             />
             <div style={{position:'relative'}}>
@@ -130,7 +130,7 @@ function ButtonsMobail({ useClickButton, start, useStart, useNext }: PropsButton
                 <Button className="button functionButton" 
                     style={activate?.mf?.get() ? styleActiv : {}}
                     disabled={activate?.mf?.get()}
-                    icon={ <IoMaleFemale style={{marginTop:'0.5rem'}} /> }
+                    icon={ <IoMaleFemale /> }
                     onClick={()=> useClickButton('mf')}
                 />
             </div>

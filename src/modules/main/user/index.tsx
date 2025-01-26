@@ -36,7 +36,7 @@ const UserCard =()=> {
     return(
         <div className='UserCartWraper'>
             <div style={{display:'flex', flexDirection: 'row'}}>
-                <img style={{borderRadius: '5px', border:'1px solid gray'}}
+                <img style={{borderRadius: '5px', border:'1px solid gray', objectFit: 'cover'}}
                     src={useAvatar()}
                     onError={(e)=> e.target.src = gurl + '/img/non-avatar.jpg'}
                     width='55px'
@@ -56,7 +56,7 @@ const UserCard =()=> {
             </div>
             <Button className='PremiumInfoButton'
                 style={{marginTop:'15px', background:'gray'}}
-                label={user.get().status}
+                label={user.get().status==='free'?'standart':user.get().status}
             />
         </div>
     );
@@ -75,6 +75,19 @@ export default function({ setModal }) {
                 header={header}
                 accept={accept}
                 reject={reject}
+                footer={footer}
+            />
+        );
+    }
+    const useConfirmCustom = (header, message, accept, style, footer) => {
+        setModal(
+            <Modal
+                visible={true}
+                setVisible={()=> setModal()}
+                message={message}
+                header={header}
+                accept={accept}
+                id={style}
                 footer={footer}
             />
         );
@@ -101,11 +114,11 @@ export default function({ setModal }) {
                         label: t('menu_profile'),
                         icon: 'pi pi-user',
                         command: ()=> {
-                            useConfirm(
+                            useConfirmCustom(
                                 t('menu_profile'), 
                                 <Profile />, 
                                 ()=> EVENT.emit('inputChange', {}),
-                                console.log,
+                                'profile',
                                 true
                             );
                         }

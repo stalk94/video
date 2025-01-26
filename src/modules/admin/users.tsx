@@ -22,6 +22,10 @@ export default function() {
         }
         else return userData.login;
     }
+    const useAvatar =(userState: UserDataState)=> {
+        if(userState.avatar) return gurl + userState.avatar;
+        else if(userState?.googleData?.img) return userState.googleData.img;
+    }
     const useEdit =(key: string, value: any, login: string)=> {
         const findIndex = products.findIndex((elem)=> elem.login === login);
 
@@ -98,6 +102,17 @@ export default function() {
                     />
                 }
             >
+                <Column field="avatar" 
+                    body={(data: UserDataState)=>
+                        <div>
+                            <img style={{border:'1px solid #97919157',borderRadius:'5px'}}
+                                src={ useAvatar(data) }
+                                onError={(e)=> e.target.src = gurl + '/img/non-avatar.jpg'}
+                                width='45px'
+                            />
+                        </div>
+                    }
+                />
                 <Column sortable field="login" header="Login"/>
                 <Column field="sex" header="Пол" sortable
                     body={(data: UserDataState)=>

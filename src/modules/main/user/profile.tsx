@@ -24,6 +24,20 @@ const Header =()=> {
         className: 'SelectFoto'
     }
 
+    const chekText =(text: string)=> {
+        if(text.length > 18) return(
+            <div className='marquee-container'>
+                <div className="marquee-text">
+                    { text }
+                </div>
+            </div>
+        );
+        else return(
+            <div>
+                { text }
+            </div>
+        );
+    }
     const useChekLogin =(userData)=> {
         if(userData.googleData) {
             return `${userData.googleData.name} ${userData.googleData.familyName}`;
@@ -62,8 +76,8 @@ const Header =()=> {
 
     return(
         <div className='HeaderProfile'>
-            <div className='UserCartWraper'>
-                <div style={{display:'flex', flexDirection: 'row', marginBottom:'5px'}}>
+            <div className='UserCartWraper' style={{paddingRight:'3px', paddingTop:'0px'}}>
+                <div style={{display:'flex', flexDirection: 'row', marginBottom:'0.6rem'}}>
                     <div style={{position:'relative',height:useSize()[1]}}>
                         { upload &&
                             <div className='UploaderAvatar'>
@@ -74,13 +88,13 @@ const Header =()=> {
                             auto
                             name="avatar"
                             url="./uploadAvatar"
-                            accept=".png, .jpg, .jpeg"
+                            accept=".png, .jpg, .jpeg .gif"
                             mode="basic"
                             customUpload
                             uploadHandler={handleSubmit}
                             chooseOptions={choseOptions}
                         />
-                        <img style={{borderRadius: '5px', border:'1px solid gray'}}
+                        <img style={{borderRadius: '5px', border:'1px solid gray', objectFit: 'cover'}}
                             src={useAvatar()}
                             onError={(e)=> e.target.src = gurl + '/img/non-avatar.jpg'}
                             width={useSize()[0]}
@@ -90,9 +104,9 @@ const Header =()=> {
                     </div>
                     <div className='UserCartInfo'>
                         <div className='UserProfileLogin'>
-                            { useChekLogin(user.get()) }
+                            { chekText(useChekLogin(user.get())) }
                         </div>
-                        <div className='UserProfileRow'>
+                        <div className='UserProfileRow' style={{marginTop:'10px'}}>
                             <FaRegHeart className="ProfileIcon" />
                             <div>
                                 { user.get().likes }
@@ -114,7 +128,7 @@ const Header =()=> {
                 </div>
                 <Button className='PremiumInfoButton'
                     style={{background:'#00000000'}}
-                    label={user.get().status}
+                    label={user.get().status==='free'?'standart':user.get().status}
                 />
             </div>
         </div>
@@ -230,7 +244,7 @@ const Body = {
                 </OverlayPanel>
                 { ( !import.meta.env.DEV ? user.gifts.get() : test)?.map((data, index)=>
                     <div key={index} className='GiftContainer'>
-                        <div className='GiftImageContainer' 
+                        <div className='GiftImageContainer' id='GiftImageProfileContainer'
                             style={{flexDirection:'column', cursor:'pointer'}}
                             onClick={(e)=> useClick(e, data)}
                         >
@@ -238,7 +252,7 @@ const Body = {
                                 <i className="pi pi-user" style={{'fontSize':'1em',color:'gray'}}/>
                                 { chekText(data.from) }
                             </div>
-                            <img className='GiftImage'
+                            <img className='GiftImage' id='GiftImageProfile'
                                 src={gurl + data.src}
                             />
                         </div>
@@ -276,7 +290,7 @@ export default function() {
 
 
     return(
-        <div style={{display:'flex', flexDirection:'column'}}>
+        <div className="ProfileContainer">
             { modal }
             <Header />
             <SelectButton id="ProfileSelect"

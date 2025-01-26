@@ -1,3 +1,10 @@
+.AdminBase {
+    background: rgb(199, 130, 214);
+    width: 100vw;
+    height: 100vh;
+    z-index: 2;
+    position: fixed;
+}
 
 .TabMenu {
     background-color: rgba(117, 117, 117, 0.5);

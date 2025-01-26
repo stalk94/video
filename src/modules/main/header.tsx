@@ -59,10 +59,6 @@ const Avatar =({ setModal })=> {
     const user = useHookstate(globalState.user);
     const [opened, setOpened] = React.useState(false);
     
-    const useSize =()=> {
-        if(window.innerWidth < 1280) return '100px';
-        else return '50px'
-    }
     const useAvatar =()=> {
         const userState = user.get({ noproxy: true });
 
@@ -111,10 +107,11 @@ const Avatar =({ setModal })=> {
                 <Button className="button userButton" id="user"
                     icon={
                         useAvatar()
-                            ? <img style={{}}
+                            ? <img style={{objectFit: 'cover'}}
                                 src={ useAvatar() }
                                 onError={(e)=> e.target.src = gurl + '/img/non-avatar.jpg'}
                                 width='50px'
+                                height='50px'
                             />
                             : <FiUser />
                     }

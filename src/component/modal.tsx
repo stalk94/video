@@ -12,10 +12,11 @@ type PropsModal = {
     visible: boolean
     setVisible: (value: boolean)=> void
     footer?: React.ReactHTMLElement
+    id?: string
 }
 
 
-export default function({visible, setVisible, message, header, accept, reject, footer}: PropsModal) {
+export default function({visible, setVisible, message, header, accept, reject, footer, id}: PropsModal) {
     const { t, i18n } = useTranslation();
 
     useDidMount(()=> {
@@ -27,7 +28,7 @@ export default function({visible, setVisible, message, header, accept, reject, f
 
     return(
         <React.Fragment>
-            <ConfirmDialog style={{
+            <ConfirmDialog id={id} style={{
                 maxWidth: window.innerHeight < 1280 ? '90%' : '80%', 
                 fontSize: '1.4vh'
             }}

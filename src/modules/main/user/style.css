@@ -1,3 +1,6 @@
+.p-confirm-dialog-message {
+    margin-left: 0px;
+}
 .ActionRow {
     padding: 10px;
     display: flex;
@@ -45,8 +48,9 @@
 }
 /* выьор подраздела в профиле */
 #ProfileSelect {
-    min-width: 35rem;
-    padding-left: 6%;
+    padding: 0.3rem;
+    padding-top: 0px;
+    width: 100%;
 }
 #ProfileSelect .p-highlight {
     animation: none;
@@ -54,12 +58,17 @@
     color: gray;
 }
 #ProfileSelect .p-button {
-    min-width: 30%;
+    width: 33%;
+}
+.ProfileContainer {
+    display: flex;
+    flex-direction: column;
 }
 @keyframes blik {
     from {border: 1px solid rgba(60, 199, 39, 0);}
     to {border: 1px solid rgba(61, 199, 39, 0.732);}
 }
+
 
 
 /* менюшка выпадаюшая юзера */
@@ -88,6 +97,7 @@
     display: flex;
     flex-direction: column;
     margin-left: 1rem;
+    font-family: "Open Sans", sans-serif;
 }
 .UserCartLike {
     font-size: 0.85rem;
@@ -96,16 +106,15 @@
     color: aliceblue;
     border: 1px solid rgba(178, 178, 178, 0.148);
     font-size: 1.4rem;
-    letter-spacing: 1px;
     max-height: 2rem;
+    font-family: "Open Sans", sans-serif;
 }
 .p-menuitem-text {
     margin-left: 0.5rem;
 }
 /* Профиль */
 .HeaderProfile {
-    margin-left: 5.5%;
-    margin-right: 5.5%;
+    padding-right: 0.2rem;
 }
 .ProfileBody {
     margin: 3% 4%;
@@ -130,9 +139,8 @@
     background: #615eb0;
 }
 .UserProfileLogin {
-    font-weight: 800;
-    font-size: x-large;
-    letter-spacing: 1px;
+    font-weight: 700;
+    font-size: 1.2rem;
     color: silver;
 }
 .UserProfileRow {
@@ -142,8 +150,9 @@
     font-size: 1rem;
 }
 .ProfileIcon {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     margin-right: 0.8rem;
+    color: silver;
 }
 /* контейнер информации о подарке */
 .GiftInfoContainer {
@@ -158,11 +167,14 @@
     .p-menuitem-text {
         margin-left: 1rem;
     }
-
+    #profile_content {
+        padding: 0.8rem;
+    }
 
     #ProfileSelect {
-        min-width: 100%;
-        padding-left: 0%;
+        display: flex;
+        flex-direction: row;
+        padding-left: 2%;
     }
     #ProfileSelect .p-highlight {
         animation: none;
@@ -170,12 +182,12 @@
         color: gray;
     }
     #ProfileSelect .p-button {
-        min-width: 5em;
+        min-width: 30.5%;
     }
     .UserCartWraper {
         padding: 1rem 0.3rem;
         padding-bottom: 1rem;
-        padding-right: 3rem;
+        padding-right: 1rem;
         color: aliceblue;
         font-family: var(--font-family);
         display: flex;
@@ -206,5 +218,13 @@
     }
     .SelectFoto {
         
+    }
+
+    #GiftImageProfileContainer {
+        height: 45px;
+        width: 65px;
+    }
+    #GiftImageProfile {
+        width: 45px;
     }
 }

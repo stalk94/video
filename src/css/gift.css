@@ -61,6 +61,13 @@
         max-width: 100%;
         max-height: 50%;
     }
+    .GiftImageContainer {
+        height: 65px;
+    }
+    .GiftImage {
+        width: 55px;
+        max-height: 55px;
+    }
     .GiftPrice {
         font-weight: 600;
     }

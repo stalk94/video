@@ -3,26 +3,11 @@ import { Dropdown } from 'primereact/dropdown';
 import { SelectButton } from 'primereact/selectbutton';
 import { useDidMount } from 'rooks';
 import { useTranslation } from 'react-i18next';
-//import { DropDown } from '../component/dropDown';
+import Flag from "../../../component/flag";
 
 
-const Flag =({ code })=> (
-    <img style={{
-        width: window.innerWidth > 1280 ? "25px" : "65px", 
-        height: window.innerWidth > 1280 ? "25px" : "65px",
-        marginTop: '4px'
-    }}
-        src={`http://purecatamphetamine.github.io/country-flag-icons/3x2/${code}.svg`}
-    />
-)
-const getIo =(type: 'video'|'audio')=> {
-    return navigator.mediaDevices.enumerateDevices().then((devices)=> {
-        const devicesFilter = devices.filter((device)=> device.kind === `${type}input`);
 
-        return devicesFilter;
-    });
-}
-const constructConfig =(deviceId: string, type: 'video'|'audio')=> {
+const constructConfig =(deviceId: string, type: 'video' | 'audio')=> {
     if(type === 'video') globalThis.creditionals.video = { deviceId: { exact: deviceId } };
     else globalThis.creditionals.audio = { deviceId: { exact: deviceId } };
 }
@@ -36,6 +21,13 @@ export default function() {
     const [inputAudios, setInputAudios] = React.useState([]);
     const { t, i18n } = useTranslation();
 
+    const getIo =(type: 'video'|'audio')=> {
+        return navigator.mediaDevices.enumerateDevices().then((devices)=> {
+            const devicesFilter = devices.filter((device)=> device.kind === `${type}input`);
+    
+            return devicesFilter;
+        });
+    }
     const useOptionsVideo =()=> {
         const newArr = [];
 
@@ -74,7 +66,7 @@ export default function() {
         constructConfig(value.code, 'audio');
         useStorage('audio', value);
     }
-    const useSelectLang =(value)=> {
+    const useSelectLang =(value: "GB" | "RU" | "CN" | "DE")=> {
         setSelectLang(value);
         i18n.changeLanguage(value);
         globalThis.lang = value;

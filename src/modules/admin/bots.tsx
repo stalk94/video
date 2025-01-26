@@ -1,6 +1,7 @@
 import { BotDataState } from "../../global.d.ts";
 import React from 'react';
 import axios from 'axios';
+import { SelectButton } from 'primereact/selectbutton';
 import { EVENT, send } from "../../lib/engine";
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
@@ -12,6 +13,7 @@ import { Dropdown } from 'primereact/dropdown';
 import { OverlayPanel } from 'primereact/overlaypanel';
 import { FileUpload } from 'primereact/fileupload';
 import { IoMdFemale, IoMdMale } from "react-icons/io";
+import Flag from "../../component/flag";
 import { useDidMount, useIntervalWhen } from 'rooks';
 
 
@@ -25,13 +27,41 @@ const Uploader =()=> {
         </div>
     );
 }
+const SelectCountry =({ select, onChange }: { select: string, onChange: (value: string)=> void })=> {
+    return(
+        <SelectButton
+            value={select}
+            options={[
+                { label: <Flag code='RU' />, value: 'RU' },
+                { label: <Flag code='BY' />, value: 'BY' },
+                { label: <Flag code='UA' />, value: 'UA' },
+                { label: <Flag code='RO' />, value: 'RO' },
+                { label: <Flag code='PL' />, value: 'PL' },
+                { label: <Flag code='US' />, value: 'US' },
+                { label: <Flag code='GB' />, value: 'GB' },
+                { label: <Flag code='CN' />, value: 'CN' },
+                { label: <Flag code='IN' />, value: 'IN' },
+                { label: <Flag code='DE' />, value: 'DE' },
+                { label: <Flag code='ES' />, value: 'ES' },
+                { label: <Flag code='EE' />, value: 'EE' },
+                { label: <Flag code='FR' />, value: 'FR' },
+                { label: <Flag code='IT' />, value: 'IT' },
+            ]}
+            onChange={(e)=> onChange(e.value)}
+        />
+    );
+}
 const NewBot =({ useUpdate }: { useUpdate: ()=> void })=> {
+    const op = React.useRef<OverlayPanel | null>(null);
+    const rop = React.useRef<OverlayPanel | null>(null);
     const [login, setLogin] = React.useState('');
     const [sex, setSex] = React.useState({name:'Ж',code:'fem'});
+    const [selectDay, setSelectDay] = React.useState<{day:number, login:string}>();
     const [country, setCountry] = React.useState('RU');
     const [state, setState] = React.useState({
         login: '',
         time: {
+            startDay: 0,
             start: 0,
             end: 23
         }
@@ -42,9 +72,9 @@ const NewBot =({ useUpdate }: { useUpdate: ()=> void })=> {
         state.login = login;
         state.sex = sex.code??'fem';
         state.info = {
-            country: country
+            country: country.toUpperCase()
         }
-
+        
         if(login.length > 3) {
             socket.emit('admin.botCreate', {
                 peerId: globalThis.peerId,
@@ -56,6 +86,11 @@ const NewBot =({ useUpdate }: { useUpdate: ()=> void })=> {
         }
         else EVENT.emit('error', {text: 'Логин менее 3х символов'});
     }
+    const getWeekDay =(date: number)=> {
+        const days = ['ВС', 'ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ'];
+
+        return days[date];
+    }
     const useState =(key:string, value:any)=> {
         setState((old)=> {
             if(key === 'login') old[key] = value;
@@ -64,49 +99,63 @@ const NewBot =({ useUpdate }: { useUpdate: ()=> void })=> {
             return old;
         });
     }
+    const handlerSelectDay =(index: number, login?: string)=> {
+        setSelectDay({day: index});
+        useState('startDay', index);
+    }
 
 
     return(
         <div style={{display: 'flex', flexDirection: 'row'}}>
+            <OverlayPanel ref={op} style={{maxWidth: '60%'}}>
+                <SelectCountry
+                    select={country}
+                    onChange={setCountry}
+                />
+            </OverlayPanel>
+            <OverlayPanel ref={rop} style={{maxWidth: '60%'}}>
+                <SelectDay
+                    select={selectDay}
+                    onChange={handlerSelectDay}
+                />
+            </OverlayPanel>
             <InputText 
                 placeholder='Логин'
                 value={login} 
                 onChange={(e)=> setLogin(e.target.value)} 
             />
             <Dropdown 
-                style={{width:'100px',marginLeft: '15px'}}
+                size={1}
+                style={{width:'90px',marginLeft: '15px'}}
                 value={sex}
                 options={[
                     {name:'Ж',code:'fem'},
-                    {name:'М',code:'fem'}
+                    {name:'М',code:'m'}
                 ]}
                 onChange={(e)=> setSex(e.value)}
                 optionLabel="name"
                 editable 
             />
             <InputText
-                size={3}
-                style={{marginLeft: '5px',marginRight: '15px'}}
+                size={2}
+                style={{marginLeft: '15px'}}
                 placeholder='RU, UA, EE ...'
                 value={country} 
                 onChange={(e)=> setCountry(e.target.value)} 
             />
-            <InputNumber showButtons
-                size={1}
-                style={{marginLeft: '5px'}}
-                value={state.time.start} 
-                onValueChange={(e)=> useState('start', e.value)} 
-                min={0} 
-                max={23} 
+            <Button className="p-button-outlined p-button-help"
+                icon="pi pi-list"
+                style={{marginLeft:'3px',marginRight:'15px',width:'45px',background:'#da6ae224'}}
+                onClick={(e)=> op.current.toggle(e)}
             />
-            <InputNumber showButtons 
-                size={1}
-                style={{marginLeft: '5px'}}
-                value={state.time.end} 
-                onValueChange={(e)=> useState('end', e.value)} 
-                min={0} 
-                max={23} 
-            />
+            <div className='PreviewSelectDay' style={{padding:'12px', paddingLeft:'26px', width:'80px'}}
+                onClick={(e)=> {
+                    setSelectDay({ day: state.time.startDay, login: state.login });
+                    rop.current.toggle(e);
+                }}
+            >
+                { getWeekDay(state.time.startDay) }
+            </div>
             <Button className='p-button-success'
                 style={{marginLeft: '25px'}}
                 icon={"pi pi-user-plus"}
@@ -212,15 +261,44 @@ const SelectDay =(
         </div>
     );
 }
+const SelectSex =(
+    { select, onChange }: 
+    { select: {sex:'fem'|'m', login:string}, onChange: (select:'fem'|'m', login:string)=> void }
+)=> {
+    const chek =(index: number)=> {
+        if(select?.sex==='fem' && index===0) return true;
+        else if(select?.sex==='m' && index===1) return true;
+    }
+    const useIndex =(index: number)=> {
+        if(index === 0) return 'fem';
+        else return 'm';
+    }
+
+    return(
+        <div className='SelectDayContainer'>
+            {['Ж', 'М'].map((name, index)=> 
+                <div className={`OptionDay ${chek(index)?'SelectDay':''}`}
+                    style={{minWidth:'50px', minHeight:'50px'}}
+                    key={index}
+                    onClick={()=> onChange(useIndex(index), select?.login)}
+                >
+                    { name }
+                </div>
+            )}
+        </div>
+    );
+}
 
 
 export default function() {
     const op = React.useRef<OverlayPanel | null>(null);
+    const refSex = React.useRef<OverlayPanel | null>(null);
     const [upload, setUpload] = React.useState(false);
     const [checked, setCheked] = React.useState(false);
     const [checkedOnline, setChekedOnline] = React.useState(false);
     const [checkedCurDay, setChekedCurDay] = React.useState(0);
     const [selectDay, setSelectDay] = React.useState<{day:number, login:string}>();
+    const [selectSex, setSelectSex] = React.useState<{sex:'fem'|'m', login:string}>();
     const [filtreDay, setFiltreDay] = React.useState<{name:string, code:string}>({name:'нет', code:-1});
     const [country, setCountry] = React.useState<string>();
     const [login, setLogin] = React.useState<string>();
@@ -281,6 +359,11 @@ export default function() {
         setSelectDay({day, login});
         op.current.hide();
     }
+    const handlerSelectSex =(sex: 'fem'|'m', login: string)=> {
+        useEdit('sex', sex, login);
+        setSelectSex({sex, login});
+        refSex.current.hide();
+    }
     const useCountryFilter =(curCountry: string)=> {
         if(country!==curCountry) setCountry(curCountry);
         else setCountry();
@@ -333,9 +416,15 @@ export default function() {
                     onChange={handlerSelectDay}
                 />
             </OverlayPanel>
+            <OverlayPanel ref={refSex} style={{maxWidth: '60%'}}>
+                <SelectSex
+                    select={selectSex}
+                    onChange={handlerSelectSex}
+                />
+            </OverlayPanel>
             <DataTable 
                 scrollable
-                scrollHeight="79vh"
+                scrollHeight="83vh"
                 value={useChekedFiltre(login)}
                 header={
                     <NewBot useUpdate={useUpdate} />
@@ -360,7 +449,10 @@ export default function() {
                 <Column field="login" header="Login" sortable/>
                 <Column field="sex" header="Пол" sortable
                     body={(data: BotDataState)=> 
-                        <div>
+                        <div style={{cursor:'pointer'}} onClick={(e)=> {
+                            setSelectSex({sex:data.sex,login:data.login});
+                            refSex.current.toggle(e);
+                        }}>
                             { data.sex === 'fem' 
                                 ? <IoMdFemale style={{color: 'red', fontSize: "25px"}}/>
                                 : <IoMdMale style={{color: 'blue', fontSize: "25px"}} />
