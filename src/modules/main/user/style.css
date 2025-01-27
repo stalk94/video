@@ -59,7 +59,11 @@
 }
 #ProfileSelect .p-button {
     width: 33%;
+    text-overflow: ellipsis;
+    white-space: nowrap; 
+    overflow: hidden;
 }
+
 .ProfileContainer {
     display: flex;
     flex-direction: column;
@@ -69,13 +73,23 @@
     to {border: 1px solid rgba(61, 199, 39, 0.732);}
 }
 
+/* настройки в профиле */
+.RowLabel {
+    
+}
+.RowText {
+    font-size: 11px;
+    color: gray;
+}
+
 
 
 /* менюшка выпадаюшая юзера */
+#UserMainDropDown-dropdown {
+    max-width: 250px;
+}
 .UserMain .p-menu {
     background-color: rgba(240, 248, 255, 0);
-    min-width: 260px;
-   
 }
 .UserMain .p-menu .p-menuitem-content {
     padding-left: 0.6rem;
@@ -117,7 +131,7 @@
     padding-right: 0.2rem;
 }
 .ProfileBody {
-    margin: 3% 4%;
+    padding: 3% 0.3rem;
     overflow-y: auto;
     max-height: 50rem;
 }
@@ -161,6 +175,9 @@
 
 
 @media screen and (max-width: 1280px) {
+    #UserMainDropDown-dropdown {
+        min-width: 190px;
+    }
     .UserMain .p-menu {
         background-color: rgba(240, 248, 255, 0);
     }

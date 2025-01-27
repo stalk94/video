@@ -35,5 +35,12 @@
     "error": "Ошибка!",
     "info_activation_premium" : "Премиум активирован на один месяц!",
     "info_activation_sex": "Выбор пола активирован.",
-    "info_activation_super": "Супер поиск был активирован на 60 min."
+    "info_activation_super": "Супер поиск был активирован на 60 min.",
+    "profile_label_base": "Базовое",
+    "profile_label_gift": "Подарки",
+    "profile_label_settings": "Настройки",
+    "profile_settings_translate": "Перевод",
+    "profile_settings_translate_text": "Делать ли авто перевод сообщений чата.",
+    "profile_settings_country": "Скрыть страну",
+    "profile_settings_country_text": "Скрытие страны добавляет вашему профилю загадочности и приватности. Другие пользователи не увидят ваш флаг."
 }

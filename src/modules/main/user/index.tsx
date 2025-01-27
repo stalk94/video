@@ -76,10 +76,11 @@ export default function({ setModal }) {
                 accept={accept}
                 reject={reject}
                 footer={footer}
+                id='modal-temp'
             />
         );
     }
-    const useConfirmCustom = (header, message, accept, style, footer) => {
+    const useConfirmCustom = (header, message, accept, id, footer) => {
         setModal(
             <Modal
                 visible={true}
@@ -87,7 +88,8 @@ export default function({ setModal }) {
                 message={message}
                 header={header}
                 accept={accept}
-                id={style}
+                reject={accept}
+                id={id}
                 footer={footer}
             />
         );
@@ -117,7 +119,7 @@ export default function({ setModal }) {
                             useConfirmCustom(
                                 t('menu_profile'), 
                                 <Profile />, 
-                                ()=> EVENT.emit('inputChange', {}),
+                                ()=> EVENT.emit('userModalView', undefined),
                                 'profile',
                                 true
                             );
@@ -130,7 +132,8 @@ export default function({ setModal }) {
                             useConfirm(
                                 t('menu_pay'), 
                                 <div>В разработке</div>, 
-                                ()=> EVENT.emit('inputChange', {})
+                                ()=> EVENT.emit('userModalView', undefined),
+                                ()=> EVENT.emit('userModalView', undefined)
                             );
                         }
                     },
@@ -141,7 +144,8 @@ export default function({ setModal }) {
                             useConfirm(
                                 t('menu_settings'), 
                                 <Settings/>, 
-                                ()=> EVENT.emit('inputChange', {})
+                                ()=> EVENT.emit('userModalView', undefined),
+                                ()=> EVENT.emit('userModalView', undefined)
                             );
                         }
                     },
@@ -152,8 +156,8 @@ export default function({ setModal }) {
                             useConfirm(
                                 t('menu_info'), 
                                 <Support />, 
-                                ()=> EVENT.emit('inputChange', {}),
-                                console.log,
+                                ()=> EVENT.emit('userModalView', undefined),
+                                ()=> EVENT.emit('userModalView', undefined),
                                 true
                             );
                         }

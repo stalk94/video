@@ -16,6 +16,14 @@
     width: 5px;
 }
 
+@font-face {
+  font-family: 'Bahnschrift';
+  src: url('/css/fonts/Bahnschrift.woff2') format('woff2'),
+       url('/css/fonts/Bahnschrift.woff') format('woff'),
+       url('/css/fonts/Bahnschrift.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
 
 body {
     margin: 0;

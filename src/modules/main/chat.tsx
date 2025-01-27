@@ -1,6 +1,7 @@
 import "../../global.d.ts";
 import React from 'react';
 import globalState from "../../global.state";
+import { useHookstate } from '@hookstate/core';
 import { Message } from "./type";
 import { useDidMount, useWillUnmount } from 'rooks';
 import { translateText } from "../../function";
@@ -30,18 +31,23 @@ const test2 = [
 export default function({ start }: { start: boolean }) { 
     const [massages, setMassages] = React.useState<Message[]>([]);
     const messagesContainerRef = React.useRef<HTMLDivElement | null>(null);
+    const settings = useHookstate(globalState.user.settings);
 
     
     const chek =(login: string)=> {
         const user = globalState.user.get();
-
         if(login !== user?.login) return true;
-    }
-    const useTranslate =(data, clb: (text)=> void)=> {
-        if(chek(data.login) && globalState.ovner.info.country.get() !== globalThis.lang) {
-            translateText(data.text, lang)
-                .then(clb)
-                .catch(()=> clb(data.text))
+    } 
+    const useTranslate =(data, clb: (text: string)=> void)=> {
+        if(settings.translate.get({noproxy: true})) {
+            const ovnerCountry = globalState.ovner.info.country.get();
+
+            if(chek(data.login) && ovnerCountry !== globalThis.lang) {
+                translateText(data.text, lang)
+                    .then(clb)
+                    .catch(()=> clb(data.text))
+            }
+            else clb(data.text);
         }
         else clb(data.text);
     }

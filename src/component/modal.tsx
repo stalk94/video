@@ -1,8 +1,8 @@
 import React from 'react';
 import { ConfirmDialog } from 'primereact/confirmdialog';
-import { Button } from 'primereact/button';
 import { useTranslation } from 'react-i18next';
-import { useDidMount } from 'rooks';
+import { useDidMount, useWillUnmount } from 'rooks';
+
 
 type PropsModal = {
     message: string
@@ -19,12 +19,21 @@ type PropsModal = {
 export default function({visible, setVisible, message, header, accept, reject, footer, id}: PropsModal) {
     const { t, i18n } = useTranslation();
 
+    const handleClickOutside =(event)=> {
+        const container = document.querySelector('#' + id);
+        
+        if(container && !container.contains(event.target)) {
+            setVisible(false);
+            if(reject) reject();
+        }
+    }
     useDidMount(()=> {
-        if(false) setTimeout(()=> {
-            const elem = document.querySelector('.p-dialog-footer');
-           elem.remove()
-        }, 300)
+        document.addEventListener('mousedown', handleClickOutside);
     });
+    useWillUnmount(()=> {
+        document.removeEventListener('mousedown', handleClickOutside);
+    });
+
 
     return(
         <React.Fragment>
@@ -33,7 +42,10 @@ export default function({visible, setVisible, message, header, accept, reject, f
                 fontSize: '1.4vh'
             }}
                 visible={visible} 
-                onHide={()=> setVisible(false)} 
+                onHide={()=> {
+                    setVisible(false);
+                    if(reject) reject();
+                }} 
                 message={message}
                 header={header} 
                 accept={accept} 

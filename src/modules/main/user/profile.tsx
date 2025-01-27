@@ -5,6 +5,7 @@ import globalState from "../../../global.state";
 import { useHookstate } from '@hookstate/core';
 import { SelectButton } from 'primereact/selectbutton';
 import { Button } from 'primereact/button';
+import { Checkbox } from 'primereact/checkbox';
 import { FileUpload, FileUploadHandlerEvent } from 'primereact/fileupload';
 import { OverlayPanel } from 'primereact/overlaypanel';
 import Modal from "../../../component/modal";
@@ -88,7 +89,7 @@ const Header =()=> {
                             auto
                             name="avatar"
                             url="./uploadAvatar"
-                            accept=".png, .jpg, .jpeg .gif"
+                            accept=".gif .png, .jpg, .jpeg"
                             mode="basic"
                             customUpload
                             uploadHandler={handleSubmit}
@@ -224,8 +225,8 @@ const Body = {
         return(
             <div className='GiftWraper' 
                     style={{
-                        justifyContent:window.innerWidth<1280?"left":"center",
-                        maxWidth:window.innerWidth>1280 &&'30vw'
+                        justifyContent: "left",
+                        maxWidth: window.innerWidth>1280 && '27vw'
                     }}
                 >
                 <OverlayPanel ref={op} style={{maxWidth:'50vw'}}>
@@ -243,7 +244,7 @@ const Body = {
                     </div>
                 </OverlayPanel>
                 { ( !import.meta.env.DEV ? user.gifts.get() : test)?.map((data, index)=>
-                    <div key={index} className='GiftContainer'>
+                    <div key={index} className='GiftContainer' style={{background:'#00000000'}}>
                         <div className='GiftImageContainer' id='GiftImageProfileContainer'
                             style={{flexDirection:'column', cursor:'pointer'}}
                             onClick={(e)=> useClick(e, data)}
@@ -256,8 +257,8 @@ const Body = {
                                 src={gurl + data.src}
                             />
                         </div>
-                        <Button className='p-button-outlined p-button-danger GiftButtonPay'
-                            style={{marginTop: '20px'}}
+                        <Button className='p-button-outlined p-button-secondary GiftButtonPay'
+                            style={{marginTop: '20px', backgroundColor:'#00000000'}}
                             label={data.cost / 2}
                             icon={<TbCoins />}
                             onClick={()=> useSell(data)}
@@ -273,18 +274,61 @@ const Body = {
         );
     },
     Settings: ()=> {
-        const user = useHookstate(globalState.user);
-    
+        const { t, i18n } = useTranslation();
+        const settings = useHookstate(globalState.user.settings);
+
+        const Row =({ value, setValue, label, text, disabled })=> {
+            return(
+                <div style={{opacity:disabled && '0.6', marginBottom:'0.5rem'}} className='IoRow'>
+                    <Checkbox style={{marginTop:'auto', marginBottom:'auto', marginRight:'1rem'}}
+                        disabled={disabled}
+                        checked={value}
+                        onChange={(e)=> setValue(e.checked)}
+                    />
+                    <div style={{display:'flex', flexDirection:'column', marginTop:'auto', marginBottom:'auto'}}>
+                        <div className="RowLabel">
+                            { label }
+                        </div>
+                        <div className="RowText">
+                            { text }
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+        const useUpdate =(key: string, value: any)=> {
+            socket.emit("settings.set", {
+                peerId: globalThis.peerId,
+                data: {
+                    [key]: value
+                }
+            });
+        }
+        
         return(
-            <>
-    
-            </>
+            <React.Fragment>
+                <Row
+                    value={settings.translate.get()}
+                    setValue={(value)=> useUpdate('translate', value)}
+                    label={ t('profile_settings_translate') }
+                    text={ t('profile_settings_translate_text') }
+                    disabled={false}
+                />
+                <Row
+                    value={settings.hideCountry.get()}
+                    setValue={(value)=> useUpdate('hideCountry', value)}
+                    label={ t('profile_settings_country') }
+                    text={ t('profile_settings_country_text') }
+                    disabled={false}
+                />
+            </React.Fragment>
         );
     }
 }
 
 
 export default function() {
+    const { t, i18n } = useTranslation();
     const [modal, setModal] = React.useState();
     const [select, setSelect] = React.useState<'base'|'gifts'|'setings'>('gifts');
 
@@ -296,9 +340,9 @@ export default function() {
             <SelectButton id="ProfileSelect"
                 value={select}
                 options={[
-                    { label: 'Базовое', value: 'base' },
-                    { label: 'Подарки', value: 'gifts' },
-                    { label: 'Настройки', value: 'setings' }
+                    { label: t('profile_label_base'), value: 'base' },
+                    { label: t('profile_label_gift'), value: 'gifts' },
+                    { label: t('profile_label_settings'), value: 'setings' }
                 ]}
                 onChange={(e)=> setSelect(e.value)}
             />

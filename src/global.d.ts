@@ -60,6 +60,10 @@ interface UserDataState {
         mf: boolean
         search: boolean
     }                                       // уточнить модель
+    settings: {
+        translate: boolean
+        hideCountry: boolean
+    }
     googleData?: GoogleData
     curentCall: string                      // peerId текушего сеанса
     avatar?: string

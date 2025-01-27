@@ -85,9 +85,11 @@ const Avatar =({ setModal })=> {
     }
     useDidMount(()=> {
         EVENT.on('hidenModal', ()=> setModal());
+        EVENT.on('userModalView', ()=> setOpened(true));
     });
     useWillUnmount(()=> {
         EVENT.off('hidenModal', ()=> setModal());
+        EVENT.off('userModalView', ()=> setOpened(true));
     });
     
 

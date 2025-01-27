@@ -103,7 +103,7 @@ export default function() {
                 <div id="labelSettings">
                     { t('settings_lang_label') }
                 </div>
-                <SelectButton 
+                <SelectButton style={{width:'100%'}}
                     value={selectLang} 
                     options={[
                         {label: <Flag code='RU'/>, value: 'RU'},
@@ -118,7 +118,7 @@ export default function() {
                 <div id="labelSettings">
                     { t('settings_video_label') }
                 </div>
-                <Dropdown 
+                <Dropdown
                     value={selectVideos} 
                     options={inputVideos} 
                     onChange={(e)=> useSelectVideo(e.value)} 

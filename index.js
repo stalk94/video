@@ -217,6 +217,20 @@ io.on('connection', (socket)=> {
             }
         }
     });
+    
+    // настройки в профиле
+    socket.on('settings.set', (msg)=> {
+        if(msg?.peerId && msg.data) {
+            const user = online.online[msg.peerId];
+
+            if(user) {
+                Object.keys(msg.data).map((key)=> {
+                    user.settings[key] = msg.data[key]
+                });
+                user.refresh();
+            }
+        }
+    });
     // продажа подарка
     socket.on('gift.sell', (msg)=> {
         if(msg?.peerId) {

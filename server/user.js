@@ -37,13 +37,15 @@ class User {
         f: false,
         mf: true,
         search: false
-    }                                       // уточнить модель
+    }    
+    settings = {
+        translate: true,                    //* в бета включена всем
+        hideCountry: false
+    }                                  
     socket = Socket.prototype
     curentCall = undefined                  // peerId текушего сеанса
     avatar = undefined
-    /**
-     * @type {'m'|'fem'}
-    */
+    /** @type {'m'|'fem'} */
     sex = undefined
 
 
@@ -56,7 +58,7 @@ class User {
         this.login = login;
         this.password = passwordHash;
     }
-    get(isPassword) {
+    get(isPasswordDelete) {
         const data = {};
         Object.keys(this).forEach((key)=> {
             if(key !== 'socket' && key !== 'gifts') {
@@ -64,7 +66,7 @@ class User {
             }
         });
 
-        if(isPassword) delete data.password;
+        if(isPasswordDelete) delete data.password;
         return data;
     }
     getRevality() {
