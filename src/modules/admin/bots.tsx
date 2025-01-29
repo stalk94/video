@@ -14,7 +14,9 @@ import { OverlayPanel } from 'primereact/overlaypanel';
 import { FileUpload } from 'primereact/fileupload';
 import { IoMdFemale, IoMdMale } from "react-icons/io";
 import Flag from "../../component/flag";
-import { useDidMount, useIntervalWhen } from 'rooks';
+import Modal from "../../component/modal";
+import VideoTrimer from "../../component/video-trimer";
+import { useDidMount, useIntervalWhen, useWillUnmount } from 'rooks';
 
 
 const Uploader =()=> {
@@ -169,14 +171,22 @@ const VideoPreview =(
     { data, useUpdate, setUpload }: 
     { data: BotDataState, useUpdate: ()=> void, setUpload: (t: boolean)=> void }
 )=> {
+    const [visible, setVisible] = React.useState(false);
     const [duration, setDuration] = React.useState<number>();
     const op = React.useRef<HTMLVideoElement | null>(null);
     const choseOptions = {
-        label: 'Выбрать', 
+        label: 'load', 
         icon: 'pi pi-fw pi-file',
         className: 'p-button-outlined p-button-success FileLoader'
     }
 
+    const useChangeVideoEditor =(newPath: string)=> {
+        socket.emit('admin.readVideoBot', {
+            botLogin: data.login,
+            src: newPath
+        });
+        setVisible(false);
+    }
     const handleSubmit =(e, botName: string)=> {
         //event.preventDefault();
         setUpload(true);
@@ -200,10 +210,10 @@ const VideoPreview =(
     React.useEffect(()=> {
         setDuration();
     }, [data]);
-    
+
 
     return(
-        <div style={{position:'relative'}}
+        <div style={{position:'relative',display:'flex'}}
             onMouseOver={(e)=> {
                 //op.current.style.width = '200px';
                 //op?.current?.play();
@@ -217,30 +227,54 @@ const VideoPreview =(
                     op.current.playbackRate = 3;
                 }
             }}
-        >
-            <FileUpload
-                auto
-                name="file"
-                url="./upload"
-                accept='video/*'
-                mode="basic"
-                customUpload
-                uploadHandler={(e)=> handleSubmit(e, data.login)}
-                chooseOptions={choseOptions}
+        > 
+            <Modal
+                visible={visible}
+                setVisible={()=> setVisible(false)}
+                message={
+                    <VideoTrimer
+                        path={`upload/${data.login}/${data.videos[0]}`}
+                        onComplete={useChangeVideoEditor}
+                    />
+                }
+                header={'Редактор'}
+                accept={console.log}
+                reject={console.log}
+                id={'video-editor'}
+                footer={true}
             />
             { duration &&
                 <div className='TimerPreview'>
                     { Math.ceil(duration) } sec
                 </div>
             }
-            {data.videos[0]
-                ? <video ref={op}
+            { data.videos[0] &&
+                <video ref={op} style={{maxHeight: '85px'}}
                     src={`upload/${data.login}/${data.videos[0]}`}
                     width='150px'
                     onLoadedMetadata={(e)=> setDuration(e.target.duration)}
-                  />
-                : <div>no video</div>
+                />
             }
+            <div className='PanelVideo'>
+                { data.videos[0] &&
+                    <Button className='p-button-outlined p-button-success ButtonTrimerVideo'
+                        icon={"pi pi-pencil"}
+                        style={{color:'silver'}}
+                        onClick={()=> setVisible(true)}
+                    />
+                }
+                <FileUpload 
+                    className="UploadFileContainer"
+                    auto
+                    name="file"
+                    url="./upload"
+                    accept='video/*'
+                    mode="basic"
+                    customUpload
+                    uploadHandler={(e)=> handleSubmit(e, data.login)}
+                    chooseOptions={choseOptions}
+                />
+            </div>
         </div>
     );
 }
@@ -401,10 +435,12 @@ export default function() {
     }
     useDidMount(()=> {
         useUpdate();
+        socket.on('update.bots', useUpdate);
         document.addEventListener("keydown", (ev)=> {
             if(ev.key === 'Escape') setFiltreDay({name:'нет', code:-1});
         });
     });
+    useWillUnmount(()=> socket.off('update.bots', useUpdate));
     
 
     return(
@@ -423,7 +459,9 @@ export default function() {
                 />
             </OverlayPanel>
             <DataTable 
+                lazy
                 scrollable
+                virtualScrollerOptions={{ itemSize: 8 }}
                 scrollHeight="83vh"
                 value={useChekedFiltre(login)}
                 header={
@@ -492,7 +530,7 @@ export default function() {
                                 {checkedCurDay===2 && <div style={{color:'#73e77d'}}>Вход ◉</div>}
                             </div>
                             <Dropdown 
-                                style={{width:'100px', height:'35px',marginTop:'15px'}}
+                                style={{width:'90px', height:'35px',marginTop:'15px'}}
                                 value={filtreDay}
                                 options={(()=> {
                                     const days = ['нет', 'ВС', 'ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ'];

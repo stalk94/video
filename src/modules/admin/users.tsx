@@ -1,19 +1,22 @@
 import { UserDataState } from "../../global.d.ts";
 import React from 'react';
 import { EVENT, send } from "../../lib/engine";
+import { Checkbox } from 'primereact/checkbox';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
 import { InputNumber } from 'primereact/inputnumber';
 import { IoMdFemale, IoMdMale } from "react-icons/io";
-import { useDidMount, useIntervalWhen } from 'rooks';
+import { WiMoonAltNew } from "react-icons/wi";
+import { useDidMount } from 'rooks';
 
 
 
 export default function() {
     const [login, setLogin] = React.useState<string>();
     const [country, setCountry] = React.useState<string>();
+    const [checkedOnline, setChekedOnline] = React.useState(false);
     const [products, setProducts] = React.useState<UserDataState[] | []>([]);
 
     const chek =(userData: UserDataState)=> {
@@ -80,6 +83,9 @@ export default function() {
         if(country && country.length) {
             result = result.filter((elem)=> elem?.info?.country===country);
         }
+        if(checkedOnline) {
+            result = result.filter((elem)=> elem.isOnline===true);
+        }
 
         return result;
     }
@@ -91,7 +97,9 @@ export default function() {
     return(
         <div className='AdminBase'>
             <DataTable 
+                lazy
                 scrollable
+                virtualScrollerOptions={{ itemSize: 10 }}
                 scrollHeight="78vh"
                 value={useFiltre(login)}
                 header={
@@ -103,9 +111,16 @@ export default function() {
                 }
             >
                 <Column field="avatar" 
+                    header={
+                        <Checkbox
+                            onChange={(e)=> setChekedOnline(e.checked)}
+                            checked={checkedOnline}
+                        />
+                    }
                     body={(data: UserDataState)=>
                         <div>
-                            <img style={{border:'1px solid #97919157',borderRadius:'5px'}}
+                            { data.isOnline && <WiMoonAltNew className="OnlineIcon" style={{color:'green',position:'absolute'}}/> }
+                            <img style={{border:'1px solid #97919157',borderRadius:'5px',maxHeight:'85px'}}
                                 src={ useAvatar(data) }
                                 onError={(e)=> e.target.src = gurl + '/img/non-avatar.jpg'}
                                 width='45px'

@@ -44,11 +44,19 @@
     margin-top: 20%;
     color: white;
 }
+.OnlineIcon {
+    animation: onFlick 1s linear infinite;
+}
 
 @keyframes flick {
     from {color: white;}
     to {color:gray;}
 }
+@keyframes onFlick {
+    from {color: greenyellow;}
+    to {color: green;}
+}
+
 .UploaderText {
     color: white;
     font-size: 20px;
@@ -105,19 +113,26 @@
     color: red;
     border: 1px solid red;
 }
+.PanelVideo {
+    width: 20%;
+
+    display: flex;
+    flex-direction: column;
+}
 .TimerPreview {
     color: #c5e1a5;
     position: absolute;
     top: 3px;
     left: 3px;
 }
+.ButtonTrimerVideo {
+    width: 65px;
+    min-width: 100%;
+    min-height: 50%;
+    margin-bottom: 0.2rem;
+}
 .FileLoader {
-    position: absolute;
-    top: 0%;
-    z-index: 4;
-    width: 150px;
     height: 100%;
-    opacity: 0;
 }
 .FileLoader:hover {
     animation-name: flickFileLoader;
@@ -126,4 +141,11 @@
 @keyframes flickFileLoader {
     from {color: orange; opacity: 1;}
     to {color: orange; opacity: 0;}
+}
+
+.UploadFileContainer .p-button-outlined.p-button-success.FileLoader {
+    padding-left: 20px;
+}
+.UploadFileContainer .p-button-label {
+    display: none;
 }

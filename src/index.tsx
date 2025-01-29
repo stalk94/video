@@ -285,7 +285,7 @@ function App() {
                 <I18nextProvider i18n={i18n}>
                     <Helmet>
                         <html lang={i18n.language.toLowerCase()==='gb' ? 'en' : i18n.language.toLowerCase()} />
-                        <title>{t('title')}</title>
+                        <title>{ t('title') }</title>
                         <meta name="description" content={t('description')} />
                     </Helmet>
                 </I18nextProvider>

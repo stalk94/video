@@ -1,0 +1,89 @@
+/* обрезка видео */
+.VideoTrimer {
+    display: flex;
+    flex-direction: column;
+}
+.VideoPreviewTrim {
+    margin: auto;
+    width: 60%;
+    max-height: 80%;
+}
+
+.VideoPreviewToolsPanel {
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    margin-top: 2%;
+    width: 60%;
+}
+.ToolsPanelBase {
+    margin: auto;
+    margin-bottom: 5%;
+}
+
+.ButtonPlay {
+    color: white;
+    min-height: 50px;
+    min-width: 50px;
+    background: #1e1e1e;
+    border: 1px solid #82b5ed7c;
+    margin-right: 1.5rem;
+}
+.ButtonTrim {
+    color: gold;
+    border: 1px solid rgba(255, 217, 0, 0.474);
+    margin-right: 0.5rem;
+}
+.ButtonPlay.p-disabled {
+    color: gray;
+    border: 1px solid gray;
+}
+
+.p-slider-handle-start {
+    transform: scale(1);
+    border: 2px solid rgb(24, 249, 24);
+    background: rgb(7, 105, 7);
+}
+.p-slider-range {
+   
+}
+.p-slider-handle-end {
+    transform: scale(1);
+    border: 2px solid rgb(244, 50, 33);
+    background: rgb(103, 5, 5);
+}
+.p-slider-handle-active {
+    animation: activ 2s linear infinite;
+}
+@keyframes activ {
+    from {transform: scale(1.5);}
+    to {transform: scale(1);}
+}
+
+.p-inputnumber-button {
+    background-color: #5198e41b;
+    color: white;
+    border: 1px solid #82b5ed7c;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+.p-inputnumber-button:hover {
+    color: orange;
+    border: 1px solid rgba(245, 196, 105, 0.816);
+    background-color: #9395971b;
+}
+
+.SuccesSaveButton {
+    margin: auto;
+    margin-top: 5%;
+}
+.UploaderEditor {
+    position: fixed;
+    padding-top: 8%;
+    left: 0;
+    top: 0;
+    z-index: 3;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.45);
+}

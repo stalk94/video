@@ -6,7 +6,7 @@
     opacity: 1;
     top: 45%;
     width: 30%;
-    height: 52.5%;
+    height: 55%;
     overflow: hidden;
 }
 .Chat::-webkit-scrollbar {
@@ -15,7 +15,6 @@
 .ChatContainer {
     display: flex;
     flex: 1 1 auto;
-    height: 100px;
     flex-direction: column-reverse;
     overflow-y: auto;
 }

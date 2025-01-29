@@ -13,12 +13,18 @@ const actions = require('./server/action');
 const { scheme } = require('./server/function');
 const { online, autorize, registration, googleOuth } = require('./server/online');
 const botManager = require('./server/bot-manager');
+const { trimVideo } = require('./services/video-trimer');
 const APP = require('./server/app');
 
 
 globalThis.APP = APP;
 const app = express();
 app.use(cors({origin:"http://localhost:3001"}));
+if(false) app.use((req, res, next)=> {
+    res.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
+    res.setHeader('Cross-Origin-Embedder-Policy', 'require-corp');
+    next();
+});
 app.use(express.urlencoded({limit: '100mb'}));
 app.use(express.json({limit: '1mb'}));
 const upload = multer({ 
@@ -90,6 +96,30 @@ app.post("/getAllUsers", async (req, res)=> {
 });
 app.post("/getAllEvents", async (req, res)=> {
     res.send(await db.get('ACTIONS.GLOBAL'));
+});
+app.post('/trimVideo', (req, res)=> {
+    if(req.body?.path && req.body?.startTime && req.body?.duration) {
+        trimVideo(req.body.path, req.body.startTime, req.body.duration, `src/temp/${Date.now()}-tmp.mp4`)
+            .then((val)=> {
+                res.send({src: val});
+            })
+    }
+});
+app.post('/clearTemp', (req, res)=> {
+    fs.readdir('src/temp', (err, files)=> {
+        if(err) {
+            console.error('Ошибка при чтении папки:', err);
+            return;
+        }
+      
+        files.forEach((file)=> {
+            const filePath = path.join('src/temp', file);
+            fs.unlink(filePath, (err)=> {
+                if(err) console.error('Ошибка при удалении файла:', err);
+            });
+        });
+        res.send({sucess: 'TEMP очищена!'});
+    });
 });
 app.post('/upload', upload.single('file'), (req, res)=> {
     const botName = req.body.fileName;
@@ -248,33 +278,49 @@ io.on('connection', (socket)=> {
     // -- admin --
     // создать нового бота
     socket.on('admin.botCreate', (msg)=> {
-        if(msg && msg.peerId && msg.data) {
-            botManager.create(msg.peerId, msg.data);
+        if(msg && msg.peerId && msg.data && socket?.userInfo?.peerId) {
+            botManager.create(socket.userInfo.peerId, msg.data);
         }
     });
     // изменить свойства бота
     socket.on('admin.botRead', (msg)=> {
-        if(msg && msg.peerId && msg.data) {
-            botManager.edit(msg.peerId, msg.data);
+        if(msg && msg.peerId && msg.data && socket?.userInfo?.peerId) {
+            botManager.edit(socket.userInfo.peerId, msg.data);
         }
     });
     // удалить бота
     socket.on('admin.botDelete', (msg)=> {
-        if(msg && msg.peerId && msg.data) {
-            botManager.delete(msg.peerId, msg.data);
+        if(msg && msg.peerId && msg.data && socket?.userInfo?.peerId) {
+            botManager.delete(socket.userInfo.peerId, msg.data);
         }
     });
     // изменить свойства юзера
     socket.on('admin.userRead', (msg)=> {
-        if(msg && msg.peerId && msg.data) {
-            botManager.editUser(msg.peerId, msg.data);
+        if(msg && msg.peerId && msg.data && socket?.userInfo?.peerId) {
+            botManager.editUser(socket.userInfo.peerId, msg.data);
         }
     });
     // добавить событие
     socket.on('admin.eventAdd', (msg)=> {
-        if(msg && msg.peerId && msg.data) {
-            const user = online.online[msg.peerId];
+        if(msg && msg.data && socket?.userInfo?.peerId) {
+            const user = online.online[socket.userInfo.peerId];
             actions.create(user, msg.data);
+        }
+    });
+    // 
+    socket.on('admin.readVideoBot', (msg)=> {
+        if(msg.src && msg.botLogin && socket?.userInfo?.peerId) {
+            const user = online.online[socket.userInfo.peerId];
+
+            if(user && user.permision > 0) {
+                fs.readFile('src/' + msg.src, (err, data)=> {
+                    if(!err) {
+                        botManager.loadVideo(msg.botLogin, `src/upload/${msg.botLogin}/${Date.now()}.mp4`, data, (data)=> {
+                            socket.emit('update.bots');
+                        });
+                    }
+                });
+            }
         }
     });
 

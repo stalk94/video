@@ -61,7 +61,16 @@ module.exports = {
         return await db.get('FAKE');
     },
     async getAllUsers() {
-        return await db.get('USERS');
+        const users = await db.get('USERS');
+        Object.keys(online.online).map((peerId)=> {
+            const entity = online.online[peerId];
+
+            if(!entity._bot && users[entity.login]) {
+                users[entity.login].isOnline = true;
+            }
+        });
+
+        return users;
     },
 
     async create(peerId, data) {
