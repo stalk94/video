@@ -1,33 +1,7 @@
 .p-confirm-dialog-message {
     margin-left: 0px;
 }
-.ActionRow {
-    padding: 10px;
-    display: flex;
-    flex-direction: column;
-    border-bottom: 1px dotted rgba(123, 123, 123, 0.556);
-}
 
-.ActionTitle {
-    display: flex;
-    flex-direction: row;
-    background-color: rgba(113, 113, 113, 0.222);
-    padding: 3px;
-}
-.ActionTime {
-    font-size: 13px;
-    margin-top: auto;
-    margin-bottom: auto;
-}
-.ActionHeader {
-    margin-left: 15px;
-    font-weight: 500;
-    color: orange;
-}
-.ActionText {
-    margin-top: 3px;
-    margin-left: 15px;
-}
 .IoRow {
     display: flex;
     flex-direction: row;
@@ -67,6 +41,7 @@
 .ProfileContainer {
     display: flex;
     flex-direction: column;
+    overflow-y: hidden;
 }
 @keyframes blik {
     from {border: 1px solid rgba(60, 199, 39, 0);}
@@ -134,6 +109,7 @@
     padding: 3% 0.3rem;
     overflow-y: auto;
     max-height: 50rem;
+    width: 35rem;
 }
 .SelectFoto {
     position: absolute;
@@ -175,7 +151,7 @@
 
 
 @media screen and (max-width: 1280px) {
-    #UserMainDropDown-dropdown {
+    #UserMainDropDown-dropdown {  
         min-width: 190px;
     }
     .UserMain .p-menu {
@@ -216,13 +192,12 @@
         margin-left: 0.2em;
         margin-right: 0.2em;
     }
-    .ProfileBody {
-        margin: 3% 4%;
-        overflow-y: auto;
-        max-height: 50rem;
+    .ProfileContainer {
+        overflow-x: hidden;
     }
     .ProfileBody {
-        
+        margin: 3% 4%;
+        width: 100%;
     }
     .UserProfileRow {
         

@@ -58,7 +58,7 @@ export default function({ start }: { start: boolean }) {
         socket.on('call.bot', ()=> setMassages(placehold));
         socket.on('endCall', ()=> setMassages([]));
         socket.on('endCall.bot', ()=> setMassages([]));
-
+        
         socket.on('massage', (data)=> {
             useTranslate(data, (text)=> {
                 setMassages((old)=> {
@@ -67,6 +67,7 @@ export default function({ start }: { start: boolean }) {
                 });
             });
 
+            globalState.chatCopy = massages;
             if(false) setMassages((old)=> {
                 return [data, ...old];
             });
@@ -88,6 +89,7 @@ export default function({ start }: { start: boolean }) {
                 });
             });
 
+            globalState.chatCopy = massages;
             if(false) setMassages((old)=> {
                 return [data, ...old];
             });

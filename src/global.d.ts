@@ -1,3 +1,4 @@
+import { Message } from "./modules/main/type";
 import { Socket } from "socket.io-client";
 import { Peer, MediaConnection } from "peerjs";
 
@@ -33,6 +34,17 @@ type GoogleData = {
     img: string
     email: string
 }
+type IpData = {
+    ip: string
+    loc: string         //"54.1121,13.0405"
+    city: string
+    country: string
+    hostname: string 
+    region: string
+    postal: string
+    org: string
+    timezone: string
+}
 
 interface UserDataState {
     login: string
@@ -51,9 +63,7 @@ interface UserDataState {
     galery: []                              // файлы пользователя
     story: { [key: string]: number }        // история просмотра
     gifts?: GiftData[]                      // подаренные подарки
-    info: {
-        country: string
-    }
+    info: IpData
     activate: {
         m: boolean
         f: boolean
@@ -93,10 +103,13 @@ interface BotDataState {
     galery: []                              // файлы пользователя
     story: { [key: string]: number }        // история просмотра
     gifts?: GiftData[]                      // подаренные подарки
-    info: {
-        country: string
-    }
+    info: IpData
     curentCall?: string                      // peerId текушего сеанса
     avatar: string | 'img/non-avatar.jpg'
     sex: 'm'|'fem'
+}
+
+interface AdminPanesUserState {
+    ipData?: IpData
+    chat?: Message[]
 }

@@ -67,6 +67,7 @@ module.exports = {
 
             if(!entity._bot && users[entity.login]) {
                 users[entity.login].isOnline = true;
+                users[entity.login].peerId = peerId;
             }
         });
 

@@ -7,6 +7,7 @@ import 'primeicons/primeicons.css';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { MantineProvider } from '@mantine/core';
 import React from 'react';
+import { BrowserRouter, Routes, Route, Navigate} from "react-router-dom";
 import { errorMedia, getIp, translateText } from "./function";
 import { io, Socket } from "socket.io-client";
 import { EVENT, send } from "./lib/engine";
@@ -14,8 +15,10 @@ import globalState from "./global.state";
 import { createRoot } from 'react-dom/client';
 import { useHookstate } from '@hookstate/core';
 import { Peer, MediaConnection } from "peerjs";
+import { SuccessPage, CancelPage } from "./modules/pays/strapi";
 import { useDidMount, useIntervalWhen } from "rooks";
 import { Toast } from 'primereact/toast';
+import Modal from "./component/modal";
 import Base from "./modules/main/index";
 import Loader from "./modules/load";
 import Admin from "./modules/admin/index";
@@ -35,17 +38,13 @@ globalThis.peer = new Peer({
     },
 });
 globalThis.creditionals = { audio: true, video: true };
-const icon = {
-    sucess: "✔️",
-    error: "🛑",
-    warn: "💡"
-}
 
 
 function App() {
     const state = useHookstate(globalState);
     const toast = React.useRef<Toast | null>(null);
     const [peerID, setPeerId] = React.useState<string>();
+    const [isClearSystem, setClearSystem] = React.useState(false);
     const [view, setView] = React.useState<'base'|'load'|'admin'>('base');
     const { t, i18n } = useTranslation();
     
@@ -88,6 +87,12 @@ function App() {
         else useDefaultLang();
     }
     const showToast =(type:'error'|'success'|'warn', title:string, text:string)=> {
+        const icon = {
+            sucess: "✔️",
+            error: "🛑",
+            warn: "💡"
+        }
+
         toast.current.clear();
         toast.current.show({
             severity: type, 
@@ -105,12 +110,14 @@ function App() {
         else console.error('socket not connect');
     }
     // прием входящего
-    const callanswer =()=> {
+    const callanswer =(call: MediaConnection)=> {
         console.log('📞 CALL ANSWER!!!');
         const myVideo: HTMLVideoElement = document.querySelector('#myVideo');
         const ovnerVideo: HTMLVideoElement = document.querySelector('#ovnerVideo');
         delete ovnerVideo.src;
         ovnerVideo.src = '';
+        globalThis.peercall = call;
+    
 
         navigator.mediaDevices.getUserMedia(globalThis.creditionals)
             .then((mediaStream)=> {
@@ -124,20 +131,41 @@ function App() {
                 setTimeout(()=> {
                     //входящий стрим помещаем в объект видео для отображения
                     ovnerVideo.srcObject = peercall.remoteStream;
-                    EVENT.emit('input.start', {});
+                    EVENT.emit('input.start', undefined);
+                    globalThis?.twoLine?.dataConnection?.send({curCall: peercall?.peer});
                 }, 1000);
 
             })
             .catch(errorMedia);
     }
     const answerTwoLine =(call: MediaConnection)=> {
-        globalThis.twoLine = call;
-        globalThis.twoLine.answer(globalThis.mediaStream);
-        
-        globalThis.twoLine.on('close', ()=> {
-            globalThis.twoLine?.close();
-            delete globalThis.twoLine;
-        });
+        // только для админов пока
+        if(call.metadata?.isAdmin && globalThis.mediaStream) {
+            globalThis.twoLine = call;
+            globalThis.twoLine.answer(globalThis.mediaStream);
+            globalThis.twoLine?.dataConnection?.send({curCall: (peercall?.peer ?? false)});
+            
+            globalThis.twoLine.on('close', ()=> {
+                globalThis.twoLine?.dataConnection?.close();
+                globalThis.twoLine?.close();
+                delete globalThis.twoLine;
+            });
+        }
+        // соединений активных нет
+        else if(call.metadata?.isAdmin) {
+            navigator.mediaDevices.getUserMedia(globalThis.creditionals)
+                .then((mediaStream)=> {
+                    globalThis.twoLine = call;
+                    globalThis.twoLine.answer(mediaStream);
+                    globalThis.twoLine?.dataConnection?.send({curCall: false});
+                    
+                    globalThis.twoLine.on('close', ()=> {
+                        globalThis.twoLine?.dataConnection?.close();
+                        globalThis.twoLine?.close();
+                        delete globalThis.twoLine;
+                    });
+                })
+        }
     }
     // проверим сессию
     const chekSessionToken =(socket: Socket, peerId: string)=> {
@@ -186,23 +214,13 @@ function App() {
             setView('base');
             window.localStorage.setItem('TOKEN', data.token);
             state.user.set(data.user);
-
-            // кнопка админки
-            window.addEventListener("keydown", (e)=> {
-                const permision = state?.user?.permision?.get();
-                
-                if(permision && permision > 0 && e.key==='*') {
-                    setView((old)=> {
-                        if(old !== 'admin') return 'admin';
-                        else return 'base';
-                    });
-                }
-            });
+            setClearSystem(false);
         });
         // сессия не совпадает
         socket.on('autorize.filed', (data)=> {
             setView('load');
             localStorage.removeItem('TOKEN');
+            setClearSystem(false);
         });
         // обновился стейт юзера
         socket.on('refreshed', (data)=> {
@@ -236,7 +254,12 @@ function App() {
                     .catch(()=> showToast('warn', t('warn_label'), data.text));
             }
         });
-        // сервер разьединил
+        // сервер разьединил [исключил из онлайн списка]
+        socket.on('system.clear', ()=> {
+            console.log('Сервер исключил из online list');
+            setClearSystem(true);
+        });
+        // сервер разьединил [система безопасности]
         socket.on('kikc', (data)=> {
             console.log('KICK SERVER');
             setView('load');
@@ -251,16 +274,36 @@ function App() {
 		});
         // нам звонок
         peer.on('call', (call)=> {
-            if(globalThis.peercall) {
+            if(view === 'base' && globalThis.peercall) {
                 console.log('Вторая линия!');
                 answerTwoLine(call);
             }
-            else {
+            else if(view === 'base' && !call.metadata?.isAdmin) {
                 EVENT.emit('callanswer', call);
-                globalThis.peercall = call;
-                callanswer();
+                callanswer(call);
+            }
+            else if(view === 'base' && call.metadata?.isAdmin) {
+                console.log('admin connect');
+                answerTwoLine(call);
             }
         });
+        // соединение с дата каналом установлено
+        peer.on('connection', (conn)=> {
+            conn.on('data', (data) => {
+                console.log("datachanel: ", data);
+                if(globalThis.twoLine) globalThis.twoLine.dataConnection = conn;
+
+                if(data && data?.comand==='get') {
+                    getIp((ipData)=> {
+                        conn.send({
+                            ipData: ipData, 
+                            chat: globalThis.chatCopy ?? []
+                        });
+                    })
+                }
+            });
+        });
+
         // проверка на сворачивание вкладки
         document.addEventListener('visibilitychange', ()=> {
             if(document.visibilityState === 'hidden') {
@@ -269,6 +312,17 @@ function App() {
             } 
             else if(document.visibilityState === 'visible') {
                 console.log('Вкладка активна');
+            }
+        });
+        // кнопка админки
+        window.addEventListener("keydown", (e)=> {
+            const permision = state?.user?.permision?.get();
+            
+            if(permision && permision > 0 && e.key==='*') {
+                setView((old)=> {
+                    if(old !== 'admin') return 'admin';
+                    else return 'base';
+                });
             }
         });
 
@@ -292,15 +346,30 @@ function App() {
             </HelmetProvider>
             <MantineProvider theme={{}}>
                 <div className="rootTop">
-                    <Toast style={{
-                            width: '35%',
-                            fontSize: window.innerWidth > 1300 ? '13px' : '11px'
-                        }} 
-                        ref={toast} 
+                <Toast className='Toast' ref={toast} />
+                { isClearSystem &&
+                    <Modal 
+                        header={ t('clear_system_label') }
+                        visible={true}
+                        setVisible={console.log}
+                        message={ t('clear_system_text') }
+                        accept={()=> chekSessionToken(socket, globalThis.peerId)}
                     />
-                    { view==='admin' && <Admin />}
-                    { view==='base' && <Base peerId={peerID} /> }
-                    { view==='load' && <Loader useAuth={useAuth} /> }
+                }
+                <BrowserRouter>
+                    <Routes>   
+                        <Route path="/" element={
+                            <React.Fragment>
+                                { view==='admin' && <Admin />}
+                                { view==='base' && <Base peerId={peerID} /> }
+                                { view==='load' && <Loader useAuth={useAuth} /> }
+                            </React.Fragment>
+                        }/>
+                        <Route path="/paysucess" element={ <SuccessPage /> }/>
+                        <Route path="/payfailed" element={ <CancelPage /> }/>
+                        <Route path="*" element={<Navigate to='/' replace/>} />
+                    </Routes>
+                </BrowserRouter>
                 </div>
                 <div id="heart-container"></div>
             </MantineProvider>

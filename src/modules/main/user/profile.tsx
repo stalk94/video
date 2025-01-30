@@ -1,11 +1,12 @@
 import { GiftData } from "../../../global.d.ts";
 import axios from 'axios';
 import React from 'react';
-import globalState from "../../../global.state";
+import globalState, { actions } from "../../../global.state";
 import { useHookstate } from '@hookstate/core';
 import { SelectButton } from 'primereact/selectbutton';
 import { Button } from 'primereact/button';
 import { Checkbox } from 'primereact/checkbox';
+import { ScrollPanel } from 'primereact/scrollpanel';
 import { FileUpload, FileUploadHandlerEvent } from 'primereact/fileupload';
 import { OverlayPanel } from 'primereact/overlaypanel';
 import Modal from "../../../component/modal";
@@ -137,11 +138,51 @@ const Header =()=> {
 }
 const Body = {
     Base: ()=> {
-        const user = useHookstate(globalState.user);
+        const state = useHookstate(actions);
     
+        const useTimeFormat =(timeshtamp: number)=> {
+            const time = new Date(timeshtamp);
+            const dmy = `${time.getDay()}.${time.getMonth()}.${time.getFullYear()} `;
+            const hm = `${time.getHours()}:${time.getMinutes()}`;
+    
+            return(
+                <div style={{ display: 'flex', flexDirection: 'row' }}>
+                    <var>
+                        { dmy }
+                    </var>
+                    <var style={{color:'gray', marginLeft:'5px'}}>
+                        ({ hm })
+                    </var>
+                </div>
+            );
+        }
+        const useColor =(elem)=> {
+            if(elem.author === 'SYSTEM') return 'white';
+            else return '#ffcccc';
+        }
+        const useFiltre =(actions)=> {
+            return actions.filter((elem)=> elem.author === 'SYSTEM');
+        }
+
         return(
-            <div>
-               
+            <div style={{maxHeight:'25em', overflowY:'auto'}}>
+                { useFiltre(state.get({noproxy:true})).map((elem, index)=> 
+                    <div className='ActionRow' key={index}>
+                        <div className='ActionTitle'>
+                            <var className='ActionTime'>
+                                { useTimeFormat(elem.timeshtamp) }
+                            </var>
+                            <div className='ActionHeader'>
+                                { elem.header }
+                            </div>
+                        </div>
+                        <ScrollPanel className='ActionText' 
+                            style={{height:'10vh', color: useColor(elem)}}
+                        >
+                            { elem.text }
+                        </ScrollPanel>
+                    </div>
+                )}
             </div>
         );
     },
@@ -151,6 +192,22 @@ const Body = {
         const [curent, setCurent] = React.useState<GiftData>();
         const user = useHookstate(globalState.user);
         const test = [{
+            id: 0,
+            name: "Тестовый подарок",
+            cost: 10,
+            src: "img/rose.png",
+            anim: 'rocket',
+            from: 'White Black',
+            text: "1.Вы пока не получили подарков от других пользователей."
+        },{
+            id: 1,
+            name: "Тестовый подарок2",
+            cost: 10,
+            src: "img/bokals.png",
+            anim: 'rocket',
+            from: 'White Black',
+            text: "2.Вы пока не получили подарков от других пользователей."
+        },{
             id: 0,
             name: "Тестовый подарок",
             cost: 10,
@@ -223,12 +280,7 @@ const Body = {
         }
     
         return(
-            <div className='GiftWraper' 
-                    style={{
-                        justifyContent: "left",
-                        maxWidth: window.innerWidth>1280 && '27vw'
-                    }}
-                >
+            <div className='GiftWraper'>
                 <OverlayPanel ref={op} style={{maxWidth:'50vw'}}>
                     <div className="GiftInfoContainer">
                         <div className='GiftLabel' 

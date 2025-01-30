@@ -38,18 +38,7 @@
     backgroundColor: #2b253a7a;
 }
 
-#ls {
-    cursor: pointer;
-    margin-left: auto;
-    border: 1px solid rgba(0, 0, 0, 0.5);
-    background-color: #2b253a;
-    color: rgb(176, 176, 176);
-    border-radius: 50%;
-}
-#ls:hover {
-    background-color: rgba(240, 248, 255, 0.1);
-    border-color: rgba(240, 248, 255, 0.2);
-}
+
 .userButton {
     cursor: pointer;
     margin-left: 0.2em;

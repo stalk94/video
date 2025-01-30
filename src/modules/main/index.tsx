@@ -77,6 +77,14 @@ export default function({ peerId }) {
                 globalThis.mediaStream = mediaStream;   //*
                 //звоним, указав peerId-партнера и передав свой mediaStream		  
                 globalThis.peercall = peer.call(peerId, mediaStream);
+                const conn = peer.connect(peerId);
+
+                conn.on('open', ()=> {
+                    
+                });
+                conn.on('data', (data)=> {
+                    
+                });
 
                 peercall.on('stream', (stream)=> {
                     //нам ответили, получим стрим
@@ -161,11 +169,12 @@ export default function({ peerId }) {
         });
     }
 
-    useDidMount(()=> {
+    React.useEffect(()=> {
         setTimeout(()=> {
             const d = document.querySelector('.root');
             d.height = window.innerHeight - 200
         }, 1000);
+
         // нам найден собеседник (вызываем его)
         socket.on('call', (data) => {
             console.log('SERVER SEARCH CLIENT');
@@ -199,7 +208,6 @@ export default function({ peerId }) {
             console.log('END CALL BOT');
             useEndCall();
         });
-
         // все события юзера
         socket.on('all.actions', (data)=> {
             actions.set(data.reverse());
@@ -219,7 +227,52 @@ export default function({ peerId }) {
             setInput(true);
         });
         
-    });
+        return ()=> {
+            socket.off('call', (data) => {
+                console.log('SERVER SEARCH CLIENT');
+                useClearTask();
+                useCall(data.peerId);
+                globalState.ovner.set(data.userData);
+            });
+            socket.off('call.bot', (data)=> {
+                if(data.userData) useCallBot(data.userData);
+            });
+            socket.off('ovner.refresh', (data)=> {
+                console.log('OVNER REFRESH');
+                
+                globalState.ovner.set((old)=> {
+                    Object.keys(data).forEach((key)=> {
+                        old[key] = data[key];
+                    });
+    
+                    return old;
+                });
+            });
+            socket.off('endCall', (data)=> {
+                console.log('END CALL');
+                useEndCall();
+            });
+            socket.off('endCall.bot', (data)=> {
+                console.log('END CALL BOT');
+                useEndCall();
+            });
+            socket.off('all.actions', (data)=> {
+                actions.set(data.reverse());
+            });
+            socket.off('add.action', (data)=> {
+                actions.set((old)=> {
+                    old.unshift(data);
+                    return old;
+                });
+            });
+            EVENT.off('input.start', ()=> {
+                console.log('VIDEO INPUT SUCESS');
+                useClearTask();
+                setStart(true);
+                setInput(true);
+            });
+        }
+    }, []);
     useIntervalWhen(()=> {
         if(!input && !globalThis.peercall) {
             console.log('REFIND!!!');

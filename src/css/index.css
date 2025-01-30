@@ -38,6 +38,10 @@ body {
     /*background-color: #42385A;*/
     background: linear-gradient(20deg, #7259abbb,#914a9ead);
 }
+.Toast {
+    width: 35%;
+    font-size: 13px;
+}
 
 
 @media only screen and (min-width: 1280px) {

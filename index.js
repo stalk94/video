@@ -14,17 +14,13 @@ const { scheme } = require('./server/function');
 const { online, autorize, registration, googleOuth } = require('./server/online');
 const botManager = require('./server/bot-manager');
 const { trimVideo } = require('./services/video-trimer');
-const APP = require('./server/app');
+globalThis.APP = require('./server/app');
+globalThis.app = express();
+require('./api');
 
 
-globalThis.APP = APP;
-const app = express();
+
 app.use(cors({origin:"http://localhost:3001"}));
-if(false) app.use((req, res, next)=> {
-    res.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
-    res.setHeader('Cross-Origin-Embedder-Policy', 'require-corp');
-    next();
-});
 app.use(express.urlencoded({limit: '100mb'}));
 app.use(express.json({limit: '1mb'}));
 const upload = multer({ 
@@ -32,7 +28,6 @@ const upload = multer({
     limits : { fileSize : 50 * 1024 * 1024 }
 });
 const server = http.createServer(app);
-
 const io = new Server(server, {
     cors: {
         origin: "http://localhost:3001",
@@ -40,12 +35,7 @@ const io = new Server(server, {
         credentials: true
     }
 });
-process.on('uncaughtException', (err)=> {
-    fs.appendFileSync("dead.log", JSON.stringify({
-        massage: err.message,
-        stack: err.stack
-    })+"\n", {encoding:"utf-8"});
-});
+
 
 
 //.........................................................[#express]

@@ -9,20 +9,20 @@ import { Popover } from '@mantine/core';
 import { FiUser } from "react-icons/fi";
 import { TbMessageDots } from "react-icons/tb";
 import User from "./user/index";
-import Action from "./user/action";
+import News from "./user/news";
 import { useTranslation } from 'react-i18next';
 import "../../css/header.css";
 
 
 
 const Test =({ useCall, peerId })=> {
-    const ref = React.useRef(null);
-    const [val, setVal] = React.useState();
+    const ref = React.useRef<OverlayPanel>(null);
+    const [val, setVal] = React.useState('');
 
     useDidMount(()=> {
         document.addEventListener('keydown', (event)=> {
             if(event.key == '/') {
-                ref.current.toggle(document.querySelector('.Left'));
+                ref.current?.toggle(document.querySelector('.Left'));
             }
         });
     });
@@ -97,12 +97,7 @@ const Avatar =({ setModal })=> {
         <Popover
             opened={opened}
             onChange={setOpened}
-            position="bottom-end"
-            offset={{ mainAxis: 15, crossAxis: -70 }}
-            withArrow
-            arrowPosition="side"
-            arrowOffset={80}
-            arrowSize={12}
+            position="bottom-start"
             id="UserMainDropDown"
         >
             <Popover.Target>
@@ -126,6 +121,29 @@ const Avatar =({ setModal })=> {
         </Popover>
     );
 }
+const LsButton =()=> {
+    const [opened, setOpened] = React.useState(false);
+    
+    return(
+        <Popover
+            opened={opened}
+            onChange={setOpened}
+            position="bottom-start"
+            id="NewsDropDown"
+        >
+            <Popover.Target>
+                <Button className="button userButton" id="ls"
+                    style={{marginLeft: 'auto'}}
+                    icon={ <TbMessageDots /> }
+                    onClick={()=> setOpened(true)}
+                />
+            </Popover.Target>
+            <Popover.Dropdown>
+                <News />
+            </Popover.Dropdown>
+        </Popover>
+    );
+}
 
 
 export default function({ useCall, peerId }: { useCall: (peerId: string)=> void, peerId: string }) { 
@@ -139,26 +157,15 @@ export default function({ useCall, peerId }: { useCall: (peerId: string)=> void,
         setCurent('beta');
         op.current.toggle(e);
     }
-    const useClickUser =(e: React.MouseEvent<HTMLElement, MouseEvent>)=> {
-        setCurent('user');
-        op.current.toggle(e);
-    }
-    const useClickLs =(e: React.MouseEvent<HTMLElement, MouseEvent>)=> {
-        setCurent('ls');
-        op.current.toggle(e);
-    }
 
 
     return(
         <header>
             { modal }
             <OverlayPanel ref={op}>
-                { curent !== 'beta'
-                    ? <Action />
-                    : <div style={{padding:'2vh'}}>
-                        { t('beta_logo_info') }
-                     </div>
-                }
+                <div style={{padding:'2vh'}}>
+                    { t('beta_logo_info') }
+                </div>
             </OverlayPanel>
             <Test 
                 peerId={peerId}
@@ -177,13 +184,8 @@ export default function({ useCall, peerId }: { useCall: (peerId: string)=> void,
                 <Coins 
                     money={userState.money.get()} 
                 />
-                <Button className="button" id="ls"
-                    icon={ <TbMessageDots /> }
-                    onClick={useClickLs}
-                />
-                <Avatar
-                    setModal={setModal}
-                />
+                <LsButton />
+                <Avatar setModal={setModal} />
             </section>
         </header>
     );

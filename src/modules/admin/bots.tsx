@@ -625,7 +625,7 @@ export default function() {
                                 onClick={()=> useClickButton(data.login)}
                             />
                             <Button className='p-button-outlined p-button-danger'
-                                style={{height:'4vw', marginLeft:'20px'}}
+                                style={{height:'4vw', marginLeft:'15px'}}
                                 icon={"pi pi-trash"}
                                 onClick={()=> useDelete(data.login)}
                             />

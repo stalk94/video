@@ -37,6 +37,7 @@ const online = {
             // 14 секунд и оффлайн
             if((user.timeshtamp+14000) < time) {
                 console.log('USER cleared by the system: ', user.login);
+                user.emit('system.clear', {});
                 APP.exit(user.peerId);
             }
         });

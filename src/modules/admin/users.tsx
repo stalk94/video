@@ -1,6 +1,7 @@
 import { UserDataState } from "../../global.d.ts";
 import React from 'react';
 import { EVENT, send } from "../../lib/engine";
+import ModerateUser from "./video-moderate";
 import { Checkbox } from 'primereact/checkbox';
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
@@ -17,6 +18,7 @@ export default function() {
     const [login, setLogin] = React.useState<string>();
     const [country, setCountry] = React.useState<string>();
     const [checkedOnline, setChekedOnline] = React.useState(false);
+    const [viewModeratePanel, setViewModeratePanel] = React.useState();
     const [products, setProducts] = React.useState<UserDataState[] | []>([]);
 
     const chek =(userData: UserDataState)=> {
@@ -24,6 +26,9 @@ export default function() {
             return `${userData.googleData.name} ${userData.googleData.familyName}`;
         }
         else return userData.login;
+    }
+    const findUserFromPeerId =(peerId: string)=> {
+        return products.find((user)=> user.peerId === peerId);
     }
     const useAvatar =(userState: UserDataState)=> {
         if(userState.avatar) return gurl + userState.avatar;
@@ -96,6 +101,13 @@ export default function() {
 
     return(
         <div className='AdminBase'>
+            { viewModeratePanel &&
+                <ModerateUser 
+                    userData={viewModeratePanel}
+                    onExit={()=> setViewModeratePanel()}
+                    useFindUserFromPeerId={findUserFromPeerId}
+                />
+            }
             <DataTable 
                 lazy
                 scrollable
@@ -168,11 +180,19 @@ export default function() {
                 />
                 <Column 
                     body={(data: UserDataState)=> 
-                        <Button className='p-button-outlined p-button-success'
-                            style={{height:'4vw'}}
-                            icon={"pi pi-pencil"}
-                            onClick={()=> useClickButton(data.login)}
-                        />
+                        <React.Fragment>
+                            <Button className='p-button-outlined p-button-success'
+                                style={{height:'4vw'}}
+                                icon={"pi pi-pencil"}
+                                onClick={()=> useClickButton(data.login)}
+                            />
+                            <Button className='p-button-outlined p-button-succes'
+                                style={{height:'4vw', marginLeft:'15px'}}
+                                icon={"pi pi-search"}
+                                disabled={globalThis.peerId === data.peerId}
+                                onClick={()=> setViewModeratePanel(data)}
+                            />
+                        </React.Fragment>
                     }
                 />
             </DataTable>

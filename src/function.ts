@@ -129,7 +129,23 @@ export async function detectFaces(video: HTMLVideoElement, clb?:(countFace: numb
 }
 
 
+export function convertTime(timestamp: number, format?:'TD'|'T'|'D') {
+    const date = new Date(timestamp);
 
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+    const seconds = date.getSeconds();
+    const day = date.getDate();
+    const month = date.getMonth() + 1;
+    const year = date.getFullYear(); 
+
+    const formattedTime = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    const formattedDate = `${String(day).padStart(2, '0')}-${String(month).padStart(2, '0')}-${year}`;
+
+    if(!format || format==='TD') return {time:formattedTime, date:formattedDate};
+    else if(format==='T') return formattedTime;
+    else return formattedDate;
+}
 export function convertMilliseconds(ms: number) {
     const hours = Math.floor(ms / (1000 * 60 * 60)); // Получаем часы
     const minutes = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60)); // Получаем минуты
