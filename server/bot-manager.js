@@ -110,7 +110,7 @@ module.exports = {
 
         if(user && user.permision > 0 && hasBot) {
             await db.delete(`FAKE.${data.login}`);
-            fs.rmdir(`src/upload/${data.login}`, console.log);
+            fs.rmdirSync(`src/upload/${data.login}`, { recursive: true, force: true });
 
             if(online.online[hasBot.peerId]) {
                 delete online.online[hasBot.peerId];

@@ -604,7 +604,7 @@ export default function() {
                             size={2}
                             value={data.timerNext} 
                             onValueChange={(e)=> useEdit('timerNext', e.value, data.login)} 
-                            min={15} 
+                            min={5} 
                             max={300} 
                         />
                     }

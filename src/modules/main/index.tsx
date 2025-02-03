@@ -23,6 +23,28 @@ export default function({ peerId }) {
     const [start, setStart] = React.useState(false);        // нажата мной кнопка старт
 
 
+    const useSwitchMediaStream =()=> {
+        const myVideo: HTMLVideoElement = document.querySelector('#myVideo');
+
+        navigator.mediaDevices.getUserMedia(globalThis.creditionals)
+            .then((newStream)=> {
+                const videoTrack = newStream.getVideoTracks()[0];
+                const audioTrack = newStream.getAudioTracks()[0];
+                myVideo.srcObject = newStream;
+
+                if(globalThis.peercall) {
+                    const senders = globalThis.peercall.peerConnection.getSenders();
+                    const videoSender = senders.find(sender => sender.track?.kind === 'video');
+                    const audioSender = senders.find(sender => sender.track?.kind === 'audio');
+                    if(videoSender) videoSender.replaceTrack(videoTrack);
+                    if (audioSender) audioSender.replaceTrack(audioTrack);
+
+                    globalThis.mediaStream = newStream;
+                }
+            })
+            .catch(errorMedia);
+        
+    }
     const useClearTask =()=> {
         if(task) {
             clearTimeout(task);
@@ -74,23 +96,12 @@ export default function({ peerId }) {
     
         navigator.mediaDevices.getUserMedia(globalThis.creditionals)
             .then((mediaStream)=> {	
-                globalThis.mediaStream = mediaStream;   //*
-                //звоним, указав peerId-партнера и передав свой mediaStream		  
-                globalThis.peercall = peer.call(peerId, mediaStream);
+                globalThis.mediaStream = mediaStream;
                 const conn = peer.connect(peerId);
+                globalThis.peercall = peer.call(peerId, mediaStream);       //звоним, указав peerId-партнера и передав свой mediaStream		
 
-                conn.on('open', ()=> {
-                    
-                });
-                conn.on('data', (data)=> {
-                    
-                });
-
-                peercall.on('stream', (stream)=> {
-                    //нам ответили, получим стрим
-                    setTimeout(()=> {
-                        ovnerVideo.srcObject = peercall.remoteStream;
-                    }, 1000);	
+                globalThis.peercall.on('stream', (stream)=> {
+                    ovnerVideo.srcObject = stream;	
                 });
                 //  peercall.on('close', onCallClose);
                 if(!myVideo.srcObject) {
@@ -226,6 +237,7 @@ export default function({ peerId }) {
             setStart(true);
             setInput(true);
         });
+        EVENT.on('switchMediaStream', useSwitchMediaStream);
         
         return ()=> {
             socket.off('call', (data) => {
@@ -271,6 +283,7 @@ export default function({ peerId }) {
                 setStart(true);
                 setInput(true);
             });
+            EVENT.off('switchMediaStream', useSwitchMediaStream);
         }
     }, []);
     useIntervalWhen(()=> {

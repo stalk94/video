@@ -28,7 +28,7 @@ export default function({visible, setVisible, message, header, accept, reject, f
         }
     }
     useDidMount(()=> {
-        document.addEventListener('mousedown', handleClickOutside);
+        if(id!==false) document.addEventListener('mousedown', handleClickOutside);
     });
     useWillUnmount(()=> {
         document.removeEventListener('mousedown', handleClickOutside);

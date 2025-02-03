@@ -1,4 +1,5 @@
 import React from 'react';
+import { EVENT } from '../../../lib/engine';
 import { Dropdown } from 'primereact/dropdown';
 import { SelectButton } from 'primereact/selectbutton';
 import { useDidMount } from 'rooks';
@@ -60,11 +61,13 @@ export default function() {
         setSelectVideos(value);
         constructConfig(value.code, 'video');
         useStorage('video', value);
+        EVENT.emit('switchMediaStream', null);
     }
     const useSelectAudio =(value)=> {
         setSelectAudios(value);
         constructConfig(value.code, 'audio');
         useStorage('audio', value);
+        EVENT.emit('switchMediaStream', null);
     }
     const useSelectLang =(value: "GB" | "RU" | "CN" | "DE")=> {
         setSelectLang(value);

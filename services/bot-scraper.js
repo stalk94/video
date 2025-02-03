@@ -87,4 +87,4 @@ async function postOnTikTok(videoPath) {
 }
 
 
-//postOnTikTok('https://www.tikwm.com//video/media/play/7463915087078853890.mp4')
+postOnTikTok('https://www.tikwm.com//video/media/play/7463915087078853890.mp4')

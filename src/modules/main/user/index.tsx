@@ -141,11 +141,16 @@ export default function({ setModal }) {
                         label: t('menu_settings'),
                         icon: 'pi pi-cog',
                         command: ()=> {
-                            useConfirm(
-                                t('menu_settings'), 
-                                <Settings/>, 
-                                ()=> EVENT.emit('userModalView', undefined),
-                                ()=> EVENT.emit('userModalView', undefined)
+                            setModal(
+                                <Modal
+                                    visible={true}
+                                    setVisible={()=> setModal()}
+                                    message={<Settings/>}
+                                    header={t('menu_settings')}
+                                    accept={()=> EVENT.emit('userModalView', undefined)}
+                                    reject={()=> EVENT.emit('userModalView', undefined)}
+                                    id={false}
+                                />
                             );
                         }
                     },
