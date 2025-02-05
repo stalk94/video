@@ -3,6 +3,8 @@ import { Card } from 'primereact/card';
 import { Button } from 'primereact/button';
 import { EVENT, send } from "../../lib/engine";
 import { useNavigate } from "react-router-dom";
+import success from "../../img/pay_success.png";
+import cancel from "../../img/pay_cancel.png";
 let task;
 
 
@@ -29,9 +31,9 @@ export const SuccessPage =()=> {
             <Card title="Платеж в обработке"
                 style={{ width: '25em', margin: 'auto' }} 
                 header={
-                    <div>
-
-                    </div>
+                    <img src={success}
+                        style={{padding:'1rem', borderRadius:'15px'}}
+                    />
                 }
                 footer={
                     <Button 
@@ -76,9 +78,9 @@ export const CancelPage =()=> {
             <Card title="Платеж был отменен!"
                 style={{ width: '25em', margin: 'auto' }} 
                 header={
-                    <div>
-
-                    </div>
+                    <img src={cancel}
+                        style={{padding:'1rem', borderRadius:'15px'}}
+                    />
                 }
                 footer={
                     <Button 

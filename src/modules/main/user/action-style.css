@@ -1,33 +1,37 @@
+/* это новости */
 .NewsContainer {
     width: 16rem;
     height: 10rem;
     display: flex;
 }
 
+/* События */
 .ActionRow {
-    padding: 10px;
     display: flex;
     flex-direction: column;
-    border-bottom: 1px dotted rgba(123, 123, 123, 0.556);
+    border: 1px solid rgba(178, 178, 178, 0.1);
+    margin-bottom: 3px;
 }
 
 .ActionTitle {
+    font-size: 12px;
     display: flex;
     flex-direction: row;
-    background-color: rgba(113, 113, 113, 0.222);
+    background-color: rgba(113, 113, 113, 0.13);
     padding: 3px;
 }
 .ActionTime {
-    font-size: 13px;
+    margin-left: 1px;
     margin-top: auto;
     margin-bottom: auto;
 }
 .ActionHeader {
+    font-size: 16px;
     margin-left: 15px;
     font-weight: 500;
-    color: orange;
+    color: gold;
 }
 .ActionText {
     margin-top: 3px;
-    margin-left: 15px;
+    padding: 0.5em;
 }

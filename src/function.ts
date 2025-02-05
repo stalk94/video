@@ -31,19 +31,25 @@ export function getIp(clb: (data: {
         (jsonResponse)=> clb(jsonResponse)
     );
 }
-/**
- * 
- * @param err 
- */
-export function errorMedia(err) { 
+export function errorMedia(err: Error) { 
     console.log(err.name + ": " + err.message);
     if(err.name === 'NotFoundError' || err.name === 'DevicesNotFoundError') {
-        EVENT.emit('error', { text: 'Не подключена веб камера!' });
+        EVENT.emit('error', { text: 'Не подключено устройство ввода (выбранная камера или микрофон)! Вам необходимо дать доступ к камере/микрофону!' });
     }
     else if(err.name === 'NotAllowedError') {
         EVENT.emit('error', { text: 'Вы не дали разрешения на доступ к камере или микрофону!' });
     }
+    else if(err.name === 'NotReadableError'){
+        EVENT.emit('error', { text: 'Устройство ввода не активно, либо занято другим процессом (выбранная камера или микрофон), или работает не верно!' });
+    }
+    else if(err.name === 'SecurityError'){
+        EVENT.emit('error', { text: 'Доступ к камере или микрофону запрещен из-за политик безопасности браузера.' });
+    }
+    else if(err.name === 'AbortError'){
+        EVENT.emit('error', { text: 'Запрос к устройству был прерван' });
+    }
 }
+
 /**
  * Телефон или не телефон
  * @returns {boolean}

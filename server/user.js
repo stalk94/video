@@ -133,6 +133,11 @@ class User {
         if(this?.timeSuperFind <= 0) {
             delete this.timeSuperFind;
             this.activate.search = false;
+
+            APP.createIndividualAction(this.login, {
+                header: '📅Expired',
+                text: 'Super search time expired.'
+            });
         }
         else if(this.timeSuperFind !== undefined) this.timeSuperFind -= 2000;
         this.emit('refreshed', this.get(true));
@@ -159,12 +164,12 @@ class User {
             });
             this.emit('info', {
                 title: `Удачно`,
-                text: 'Супер поиск был активирован на 60 min.',
+                text: 'Супер поиск был активирован на 60 minutes.',
                 type: 'info_activation_super'
             });
             APP.createIndividualAction(this.login, {
-                header: 'Активация',
-                text: 'Супер поиск был активирован на 60 min.'
+                header: '🔍Activation',
+                text: 'Super search has been activated on 60 minutes.'
             });
         }
         else if(this.money < 10) {
@@ -200,10 +205,6 @@ class User {
                 text: 'Выбор пола активирован.',
                 type: 'info_activation_sex'
             });
-            APP.createIndividualAction(this.login, {
-                header: 'Активация',
-                text: 'Выбор пола активирован.'
-            });
         }
         else {
             this.emit('warn', {
@@ -229,6 +230,10 @@ class User {
                 text: 'Премиум активирован на один месяц!',
                 type: 'info_activation_premium'
             });
+            APP.createIndividualAction(this.login, {
+                header: '💎Premium activation',
+                text: 'Premium status activated for a month.'
+            });
         }
 
         this.money += value;
@@ -240,6 +245,10 @@ class User {
         this.emit('info', {
             title: 'Счет пополнен',
             text: `Счет пополнен на ${value} COINS. Спасибо за покупку.`
+        });
+        APP.createIndividualAction(this.login, {
+            header: '💲++',
+            text: `Balance replenished by ${value} COINS.`
         });
     }
     // отправка по сокету

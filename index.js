@@ -232,8 +232,8 @@ io.on('connection', (socket)=> {
             const user = online.online[msg.peerId];
 
             if(user) {
-                actions.chek(user);
                 user.refresh();
+                if(msg.actionsGetAll) actions.chek(user);
             }
         }
     });

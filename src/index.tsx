@@ -215,6 +215,11 @@ function App() {
             window.localStorage.setItem('TOKEN', data.token);
             state.user.set(data.user);
             setClearSystem(false);
+
+            socket.emit('chek', {
+                peerId: globalThis.peerId, 
+                actionsGetAll: true
+            });
         });
         // сессия не совпадает
         socket.on('autorize.filed', (data)=> {
@@ -272,7 +277,7 @@ function App() {
             setPeerId(peerID);
             chekSessionToken(socket, peerID);
 		});
-        // нам звонок
+        //! нам звонок
         peer.on('call', (call)=> {
             if(view === 'base' && globalThis.peercall) {
                 console.log('Вторая линия!');

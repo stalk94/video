@@ -28,9 +28,10 @@ const online = {
                     delete user._statusTimeActivate;
                     user.status = 'free';
                     user.dump();
+
                     APP.createIndividualAction(user.login, {
-                        header: 'Премиум истек',
-                        text: 'Статус премиум истек.'
+                        header: '📅Premium expired',
+                        text: 'Premium status has expired.'
                     });
                 }
             }

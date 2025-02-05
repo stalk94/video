@@ -7,7 +7,6 @@ import { useTranslation } from 'react-i18next';
 import Flag from "../../../component/flag";
 
 
-
 const constructConfig =(deviceId: string, type: 'video' | 'audio')=> {
     if(type === 'video') globalThis.creditionals.video = { deviceId: { exact: deviceId } };
     else globalThis.creditionals.audio = { deviceId: { exact: deviceId } };
@@ -58,16 +57,36 @@ export default function() {
         });
     }
     const useSelectVideo =(value)=> {
-        setSelectVideos(value);
+        const dump = structuredClone(globalThis.creditionals);
         constructConfig(value.code, 'video');
-        useStorage('video', value);
-        EVENT.emit('switchMediaStream', null);
+
+        EVENT.emit('switchMediaStream', {
+            reason: ()=> {
+                console.log('OK');
+                setSelectVideos(value);
+                useStorage('video', value);
+            },
+            reject: ()=> {
+                console.log('not OK');
+                globalThis.creditionals = dump;
+            }
+        });
     }
     const useSelectAudio =(value)=> {
-        setSelectAudios(value);
+        const dump = structuredClone(globalThis.creditionals);
         constructConfig(value.code, 'audio');
-        useStorage('audio', value);
-        EVENT.emit('switchMediaStream', null);
+
+        EVENT.emit('switchMediaStream', {
+            reason: ()=> {
+                console.log('OK');
+                setSelectAudios(value);
+                useStorage('audio', value);
+            },
+            reject: ()=> {
+                console.log('not OK');
+                globalThis.creditionals = dump;
+            }
+        });
     }
     const useSelectLang =(value: "GB" | "RU" | "CN" | "DE")=> {
         setSelectLang(value);

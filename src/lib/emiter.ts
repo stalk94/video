@@ -21,6 +21,7 @@ interface Events {
     'hidenModal': ()=> void
     /** получен поток собеседника */
     'input.start': ()=> void
+    'switchMediaStream': (data: {reason: ()=> void, reject: ()=> void})=> void
 }
 
 

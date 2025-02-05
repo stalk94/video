@@ -324,6 +324,7 @@ const SelectSex =(
 }
 
 
+// lazy scrollable virtualScrollerOptions={{ itemSize: 8 }}
 export default function() {
     const op = React.useRef<OverlayPanel | null>(null);
     const refSex = React.useRef<OverlayPanel | null>(null);
@@ -459,9 +460,6 @@ export default function() {
                 />
             </OverlayPanel>
             <DataTable 
-                lazy
-                scrollable
-                virtualScrollerOptions={{ itemSize: 8 }}
                 scrollHeight="83vh"
                 value={useChekedFiltre(login)}
                 header={

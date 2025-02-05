@@ -2,6 +2,7 @@ import { GiftData } from "../../../global.d.ts";
 import axios from 'axios';
 import React from 'react';
 import globalState, { actions } from "../../../global.state";
+import { convertTime, translateText } from "../../../function";
 import { useHookstate } from '@hookstate/core';
 import { SelectButton } from 'primereact/selectbutton';
 import { Button } from 'primereact/button';
@@ -141,28 +142,27 @@ const Body = {
         const state = useHookstate(actions);
     
         const useTimeFormat =(timeshtamp: number)=> {
-            const time = new Date(timeshtamp);
-            const dmy = `${time.getDay()}.${time.getMonth()}.${time.getFullYear()} `;
-            const hm = `${time.getHours()}:${time.getMinutes()}`;
-    
+            const time = convertTime(timeshtamp, 'TD');
+
             return(
                 <div style={{ display: 'flex', flexDirection: 'row' }}>
                     <var>
-                        { dmy }
+                        { time.date }
                     </var>
                     <var style={{color:'gray', marginLeft:'5px'}}>
-                        ({ hm })
+                        ({ time.time })
                     </var>
                 </div>
             );
         }
         const useColor =(elem)=> {
-            if(elem.author === 'SYSTEM') return 'white';
+            if(elem.author === 'SYSTEM') return 'silver';
             else return '#ffcccc';
         }
         const useFiltre =(actions)=> {
             return actions.filter((elem)=> elem.author === 'SYSTEM');
         }
+       
 
         return(
             <div style={{maxHeight:'25em', overflowY:'auto'}}>
@@ -172,15 +172,15 @@ const Body = {
                             <var className='ActionTime'>
                                 { useTimeFormat(elem.timeshtamp) }
                             </var>
-                            <div className='ActionHeader'>
+                            <var className='ActionHeader'>
                                 { elem.header }
-                            </div>
+                            </var>
                         </div>
-                        <ScrollPanel className='ActionText' 
-                            style={{height:'10vh', color: useColor(elem)}}
+                        <div className='ActionText' 
+                            style={{maxHeight:'5%', color: useColor(elem)}}
                         >
                             { elem.text }
-                        </ScrollPanel>
+                        </div>
                     </div>
                 )}
             </div>
@@ -382,7 +382,7 @@ const Body = {
 export default function() {
     const { t, i18n } = useTranslation();
     const [modal, setModal] = React.useState();
-    const [select, setSelect] = React.useState<'base'|'gifts'|'setings'>('gifts');
+    const [select, setSelect] = React.useState<'base'|'gifts'|'setings'>('base');
 
 
     return(

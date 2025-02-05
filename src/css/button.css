@@ -89,6 +89,8 @@
     font-size: 2rem;
     min-height: 57px;
     min-width: 57px;
+    padding-top: 3px;
+    padding-right: 2px;
 }
 #like:hover {
     color: red;
@@ -98,6 +100,7 @@
     min-height: 57px;
     min-width: 57px;
     margin-left: 0.4em;
+    padding-right: 2px;
 }
 .p-button:disabled {
     opacity: 0.45;
@@ -139,7 +142,7 @@
     .giftButton {
         margin-left: 0.05em;
     }
-    .Timer {
-        
+    #like {
+        padding-right: 0px;
     }
 }

@@ -23,11 +23,19 @@ export default function({ peerId }) {
     const [start, setStart] = React.useState(false);        // нажата мной кнопка старт
 
 
-    const useSwitchMediaStream =()=> {
+    const useClearTask =()=> {
+        if(task) {
+            clearTimeout(task);
+            task = undefined;
+        }
+    }
+    // смена настроек ввода
+    const handlerSwitchMediaStream =(cfg: {reason: ()=> void, reject: ()=> void})=> {
         const myVideo: HTMLVideoElement = document.querySelector('#myVideo');
 
         navigator.mediaDevices.getUserMedia(globalThis.creditionals)
             .then((newStream)=> {
+                if(cfg && cfg.reason) cfg.reason();
                 const videoTrack = newStream.getVideoTracks()[0];
                 const audioTrack = newStream.getAudioTracks()[0];
                 myVideo.srcObject = newStream;
@@ -37,19 +45,16 @@ export default function({ peerId }) {
                     const videoSender = senders.find(sender => sender.track?.kind === 'video');
                     const audioSender = senders.find(sender => sender.track?.kind === 'audio');
                     if(videoSender) videoSender.replaceTrack(videoTrack);
-                    if (audioSender) audioSender.replaceTrack(audioTrack);
+                    if(audioSender) audioSender.replaceTrack(audioTrack);
 
                     globalThis.mediaStream = newStream;
                 }
             })
-            .catch(errorMedia);
+            .catch((res)=> {
+                errorMedia(res);
+                if(cfg && cfg.reject) cfg.reject();
+            });
         
-    }
-    const useClearTask =()=> {
-        if(task) {
-            clearTimeout(task);
-            task = undefined;
-        }
     }
     // мы запускаем поиск
     const useSetStart =(type: boolean)=> {
@@ -87,7 +92,7 @@ export default function({ peerId }) {
             });
         }
     }
-    // вызов мы совершаем
+    //? вызов мы совершаем
     const useCall =(peerId: string)=> {
         const myVideo: HTMLVideoElement = document.querySelector('#myVideo');
         const ovnerVideo: HTMLVideoElement = document.querySelector('#ovnerVideo');
@@ -149,7 +154,7 @@ export default function({ peerId }) {
             myVideo.volume = 0;
         }
     }
-    // завершить вызов
+    //? завершить вызов
     const useEndCall =()=> {
         const myVideo: HTMLVideoElement = document.querySelector('#myVideo');
         const ovnerVideo: HTMLVideoElement = document.querySelector('#ovnerVideo');
@@ -172,6 +177,7 @@ export default function({ peerId }) {
         ovnerVideo.srcObject = null;
         globalState.ovner.set({});
     }
+    //? next 
     const useNext =()=> {
         //useEndCall();
         
@@ -179,7 +185,7 @@ export default function({ peerId }) {
             peerId: globalThis.peerId
         });
     }
-
+    
     React.useEffect(()=> {
         setTimeout(()=> {
             const d = document.querySelector('.root');
@@ -237,7 +243,7 @@ export default function({ peerId }) {
             setStart(true);
             setInput(true);
         });
-        EVENT.on('switchMediaStream', useSwitchMediaStream);
+        EVENT.on('switchMediaStream', handlerSwitchMediaStream);
         
         return ()=> {
             socket.off('call', (data) => {
@@ -283,7 +289,7 @@ export default function({ peerId }) {
                 setStart(true);
                 setInput(true);
             });
-            EVENT.off('switchMediaStream', useSwitchMediaStream);
+            EVENT.off('switchMediaStream', handlerSwitchMediaStream);
         }
     }, []);
     useIntervalWhen(()=> {
