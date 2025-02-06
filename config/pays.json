@@ -1,0 +1,66 @@
+{
+    "50_coins": {
+        "coins": 50,
+        "cost": 1000,
+        "amount": "usd",
+        "badge": ["new", "hot"],
+        
+        "stripe": {
+            "currency": "usd",
+            "product_data": { 
+                "name": "100 COINS" ,
+                "description": "test 100 coins",
+                "images": ["https://cdn-icons-png.flaticon.com/512/408/408472.png"]
+            },
+            "unit_amount": 1000
+        }
+    },
+    "100_coins": {
+        "coins": 100,
+        "cost": 2000,
+        "amount": "usd",
+        "badge": ["new", "hot", "premium"],
+        
+        "stripe": {
+            "currency": "usd",
+            "product_data": { 
+                "name": "200 COINS" ,
+                "description": "test 200 coins",
+                "images": ["https://cdn-icons-png.flaticon.com/512/408/408472.png"]
+            },
+            "unit_amount": 2000
+        }
+    },
+    "200_coins": {
+        "coins": 200,
+        "cost": 4000,
+        "amount": "usd",
+        "badge": ["new", "premium"],
+        
+        "stripe": {
+            "currency": "usd",
+            "product_data": { 
+                "name": "200 COINS" ,
+                "description": "test 200 coins",
+                "images": ["https://cdn-icons-png.flaticon.com/512/408/408472.png"]
+            },
+            "unit_amount": 4000
+        }
+    },
+    "300_coins": {
+        "coins": 300,
+        "cost": 6000,
+        "amount": "usd",
+        "badge": ["new", "premium"],
+        
+        "stripe": {
+            "currency": "usd",
+            "product_data": { 
+                "name": "200 COINS" ,
+                "description": "test 200 coins",
+                "images": ["https://cdn-icons-png.flaticon.com/512/408/408472.png"]
+            },
+            "unit_amount": 6000
+        }
+    }
+}

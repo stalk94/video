@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactGA from 'react-ga4';
 import { EVENT, send } from '../../../lib/engine';
 import globalState from "../../../global.state";
 import { googleOut } from "../../../function";
@@ -9,6 +10,7 @@ import Settings from "./settings";
 import { Button } from 'primereact/button';
 import Support from "./supports";
 import Profile from "./profile";
+import { PayComponent } from "../../pays/stripe";
 import { useTranslation } from 'react-i18next';
 import "./style.css";
 import { useDidMount } from 'rooks';
@@ -129,12 +131,19 @@ export default function({ setModal }) {
                         label: t('menu_pay'),
                         icon: 'pi pi-wallet',
                         command: ()=> {
-                            useConfirm(
+                            useConfirmCustom(
                                 t('menu_pay'), 
-                                <div>В разработке</div>, 
+                                <PayComponent />, 
                                 ()=> EVENT.emit('userModalView', undefined),
-                                ()=> EVENT.emit('userModalView', undefined)
+                                'profile',
+                                true
                             );
+
+                            ReactGA.event({
+                                label: 'Пополнение',
+                                category: 'Юзер-Меню',
+                                action: 'Клик по кнопке'
+                            });
                         }
                     },
                     {

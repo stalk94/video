@@ -1,5 +1,6 @@
 import "../../global.d.ts";
 import React from 'react';
+import ReactGA from 'react-ga4';
 import { EVENT } from '../../lib/engine';
 import { Button } from 'primereact/button';
 import globalState from "../../global.state";
@@ -31,6 +32,12 @@ export default function({ input }: {input: boolean}) {
                 text: text
             });
             setText('');
+
+            ReactGA.event({
+                label: 'Сообшение',
+                category: 'Связь',
+                action: 'Клик по кнопке'
+            });
         }
     }
     const useGift =(anim: string)=> {
@@ -70,6 +77,11 @@ export default function({ input }: {input: boolean}) {
         heart.addEventListener('animationend', ()=> {
             heart.remove();
         });
+        ReactGA.event({
+            label: 'Лайк',
+            category: 'Связь',
+            action: 'Клик по кнопке'
+        });
     }
     const useClickLike =(e: React.MouseEvent<HTMLElement, MouseEvent>, type: 'heart'|'fire'|'lips'|'rose')=> {
         useLike(type);
@@ -78,6 +90,14 @@ export default function({ input }: {input: boolean}) {
             peerIdLike: ovnerState.peerId.get(),
             type: type
         });
+
+        if(type === 'rose' && globalState?.user.money.get() > 0) {
+            ReactGA.event({
+                label: 'Супер лайк',
+                category: 'Покупки',
+                action: 'Супер лайк'
+            });
+        }
     }
     const useClickGift =(e: React.MouseEvent<HTMLElement, MouseEvent>)=> {
         //if(window.innerWidth < 1280) setVisible(true);

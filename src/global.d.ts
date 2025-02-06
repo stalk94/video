@@ -15,6 +15,7 @@ declare global {
     var twoLine: MediaConnection | undefined;
     var deferredPrompt: Event;
     var deferredPromptCanceled: any;
+    var strapi_key: string;
 }
 
 
@@ -45,6 +46,17 @@ type IpData = {
     org: string
     timezone: string
 }
+type StripeProductCatalogItem = {
+    currency: "usd" | string
+    product_data: { 
+        name: string
+        description: string
+        images: string[]
+    }
+    unit_amount: number
+}
+
+
 
 interface UserDataState {
     login: string
@@ -112,4 +124,11 @@ interface BotDataState {
 interface AdminPanesUserState {
     ipData?: IpData
     chat?: Message[]
+}
+interface ProductCatalog {
+    coins: number
+    cost: number
+    amount: "usd" | string
+    badge?: ("new" | "hot" | "premium")[]
+    stripe: StripeProductCatalogItem
 }

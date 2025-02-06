@@ -141,6 +141,7 @@ export default function() {
                     { t('settings_video_label') }
                 </div>
                 <Dropdown
+                    showOnFocus={true}
                     value={selectVideos} 
                     options={inputVideos} 
                     onChange={(e)=> useSelectVideo(e.value)} 
@@ -153,6 +154,7 @@ export default function() {
                     { t('settings_audio_label') }
                 </div>
                 <Dropdown 
+                    showOnFocus={true}
                     value={selectAudios} 
                     options={inputAudios} 
                     onChange={(e)=> useSelectAudio(e.value)} 

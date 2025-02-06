@@ -1,0 +1,138 @@
+/* Страница способов оплаты */
+.PayContainer {
+    padding: 0%;
+    padding-top: 2%;
+    padding-left: 5%;
+    padding-right: 5%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    max-width: 100%;
+    width: 40vw;
+}
+.PayMethodWraper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+}
+/* Элемент каталога товаров */
+.ProductCard {
+    flex: 1 1 calc(30% - 15px);
+    box-sizing: border-box;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    width: 24%;
+    max-height: 15em;
+    border: 2px solid rgba(178, 178, 178, 0.148);
+    border-radius: 8px;
+    background: rgba(137, 136, 136, 0.3);
+    padding: 3px;
+}
+
+.ProductCard:hover {
+    background: rgba(78, 78, 78, 0.3);
+}
+.Badge {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    padding: 3px;
+}
+/* панелька с отметками hot, new */
+.ProductBadge {
+    margin-left: auto;
+    margin-right: 3px;
+}
+/* панелька если премиум статус идет комплектом */
+.ProductBadgePremium {
+    margin-top: 1px;
+    text-align: center;
+    margin-left: 5px;
+    background: rgb(243, 191, 78);
+    border-radius: 15px;
+    color: black;
+    min-width: 50%;
+    animation: blikPremium 2s infinite;
+}
+.ProductImage {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 7em;
+    width: 100%;
+    max-height: 7em;
+}
+/* сколько коинов получится */
+.ProductCoins {
+    margin-left: auto;
+    margin-right: auto;
+}
+.ProductCost {
+    text-align: center;
+    width: 35%;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 34px;
+    background: #91d8f0;
+    font-weight: 100;
+    color: black;
+    margin-bottom: 10px;
+}
+
+/* методы оплаты */
+.PaysMethodsContainer {
+    margin-top: 25px;
+}
+#curent {
+    border: 1px solid rgba(255, 166, 0, 0.849);
+    background: rgba(48, 31, 3, 0.282);
+    opacity: 0.7;
+}
+#img_button {
+    height: 40px;
+}
+#stripe {
+    width: 100%;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+@keyframes blikPremium {
+    from {color: #91d8f0}
+    50% {color: black}
+    to {color: black}
+}
+
+
+@media only screen and (max-width: 1280px) {
+    .PayContainer {
+        padding: 0%;
+        padding-top: 0%;
+        padding-left: 3%;
+        padding-right: 3%;
+        max-width: 100%;
+        width: 100%;
+    }
+    .ProductCard {
+        flex: 1 1 calc(40% - 20px); /* Каждый элемент занимает 50% ширины, минус gap */
+        box-sizing: border-box; /* Учитываем padding и border в размерах */
+    }
+
+    .ProductBadgePremium {
+        position: absolute;
+        margin-top: 1px;
+        text-align: center;
+        margin-left: 5px;
+        background: rgb(243, 191, 78);
+        border-radius: 15px;
+        color: black;
+        width: 80%;
+        transform: translate(-40%, 280%) rotate(-90deg);
+        opacity: 0.5;
+    }
+    .ProductCost {
+        width: 90%;
+        margin-bottom: 7px;
+    }
+}

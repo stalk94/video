@@ -16,13 +16,12 @@ const botManager = require('./server/bot-manager');
 const { trimVideo } = require('./services/video-trimer');
 globalThis.APP = require('./server/app');
 globalThis.app = express();
-require('./api');
-
 
 
 app.use(cors({origin:"http://localhost:3001"}));
 app.use(express.urlencoded({limit: '100mb'}));
 app.use(express.json({limit: '1mb'}));
+require('./api');
 const upload = multer({ 
     dest: 'uploads/',
     limits : { fileSize : 50 * 1024 * 1024 }

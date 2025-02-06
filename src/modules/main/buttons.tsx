@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactGA from 'react-ga4';
 import globalState from "../../global.state";
 import { useHookstate } from '@hookstate/core';
 import { Button } from 'primereact/button';
@@ -208,6 +209,12 @@ export default function({start, useStart, useNext}: PropsButtonsPanel) {
                     ()=> socket.emit('activate', {peerId: globalThis.peerId, type: type}),
                     ()=> console.log('cancel')
                 );
+
+                ReactGA.event({
+                    label: 'Супер поиск',
+                    category: 'Покупки',
+                    action: 'Супер поиск'
+                });
             }
             else {
                 useConfirm(t('label_modal'), 

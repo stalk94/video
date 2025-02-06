@@ -1,5 +1,6 @@
 import "../../global.d.ts";
 import React from 'react';
+import ReactGA from 'react-ga4';
 import globalState from "../../global.state";
 import { useHookstate } from '@hookstate/core';
 import { Button } from 'primereact/button';
@@ -83,6 +84,12 @@ export default function({ input }: {input: boolean}) {
                 peerId: globalThis.peerId,
                 peerIdOvner: ovnerState.peerId.get(),
                 data: data
+            });
+
+            ReactGA.event({
+                label: 'Подарок',
+                category: 'Покупки',
+                action: 'Куплен подарок'
             });
         }
     }

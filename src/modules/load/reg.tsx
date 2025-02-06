@@ -4,6 +4,7 @@ import { getIp } from "../../function";
 import { PasswordInput, TextInput } from '@mantine/core';
 import { Button } from 'primereact/button';
 import { useDidMount } from 'rooks';
+import ReactGA from "react-ga4";
 import { useTranslation } from 'react-i18next';
 
 
@@ -29,6 +30,12 @@ export default function({ useReg }) {
                 ipData: ipData
             });
             else EVENT.emit('error', {text: 'password min 6 simbol!'});
+
+            ReactGA.event({
+                label: 'Регистрация',
+                category: 'Основное',
+                action: 'Клик по кнопке'
+            });
         }
         else EVENT.emit('error', {text: 'login min 6 simbol'});
     }

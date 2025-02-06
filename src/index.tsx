@@ -7,6 +7,7 @@ import 'primeicons/primeicons.css';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { MantineProvider } from '@mantine/core';
 import React from 'react';
+import ReactGA from 'react-ga4';
 import { BrowserRouter, Routes, Route, Navigate} from "react-router-dom";
 import { errorMedia, getIp, translateText } from "./function";
 import { io, Socket } from "socket.io-client";
@@ -15,7 +16,7 @@ import globalState from "./global.state";
 import { createRoot } from 'react-dom/client';
 import { useHookstate } from '@hookstate/core';
 import { Peer, MediaConnection } from "peerjs";
-import { SuccessPage, CancelPage } from "./modules/pays/strapi";
+import { SuccessPage, CancelPage } from "./modules/pays/stripe";
 import { useDidMount, useIntervalWhen } from "rooks";
 import { Toast } from 'primereact/toast';
 import Modal from "./component/modal";
@@ -101,13 +102,18 @@ function App() {
             life: 3000
         });
     }
-    const useAuth =(login: string, password: string)=> {
-        if(socket) socket.emit('auth', {
-            login: login,
-            password: password,
-            peerId: globalThis.peerId
-        });
-        else console.error('socket not connect');
+    const chekSessionToken =(socket: Socket, peerId: string)=> {
+        const token = window.localStorage.getItem('TOKEN');
+        
+        if(token) {
+            // пробуем вытащить сессию
+            socket.emit('session', {
+                token: token,
+                peerId: peerId
+            });
+        }
+        // токена нет в хранилище
+        else setView('load');
     }
     // прием входящего
     const callanswer =(call: MediaConnection)=> {
@@ -153,7 +159,7 @@ function App() {
         }
         // соединений активных нет
         else if(call.metadata?.isAdmin) {
-            navigator.mediaDevices.getUserMedia(globalThis.creditionals)
+            if(false) navigator.mediaDevices.getUserMedia(globalThis.creditionals)
                 .then((mediaStream)=> {
                     globalThis.twoLine = call;
                     globalThis.twoLine.answer(mediaStream);
@@ -167,20 +173,7 @@ function App() {
                 })
         }
     }
-    // проверим сессию
-    const chekSessionToken =(socket: Socket, peerId: string)=> {
-        const token = window.localStorage.getItem('TOKEN');
-        
-        if(token) {
-            // пробуем вытащить сессию
-            socket.emit('session', {
-                token: token,
-                peerId: peerId
-            });
-        }
-        // токена нет в хранилище
-        else setView('load');
-    }
+    
     useDidMount(()=> {
         EVENT.on('error', (data)=> {
             translateText(data.text, globalThis.lang)
@@ -188,6 +181,12 @@ function App() {
                     showToast('error', t('error'), text)
                 )
                 .catch(()=> showToast('error', t('error'), data.text));
+                
+            ReactGA.event({
+                label: 'Ошибка',
+                category: 'События',
+                action: 'Error massage toast'
+            });
         });
         EVENT.on('success', (data)=> {
             translateText(data.text, globalThis.lang)
@@ -200,6 +199,12 @@ function App() {
             setView('load');
             localStorage.removeItem('TOKEN');
             state.set({});
+
+            ReactGA.event({
+                label: 'Выход',
+                category: 'Основное',
+                action: 'Клик по кнопке'
+            });
         });
         // настройки изменены
         EVENT.on('inputChange', ()=> {
@@ -220,6 +225,7 @@ function App() {
                 peerId: globalThis.peerId, 
                 actionsGetAll: true
             });
+            ReactGA.set({ userId: data.user.login });
         });
         // сессия не совпадает
         socket.on('autorize.filed', (data)=> {
@@ -283,13 +289,19 @@ function App() {
                 console.log('Вторая линия!');
                 answerTwoLine(call);
             }
-            else if(view === 'base' && !call.metadata?.isAdmin) {
-                EVENT.emit('callanswer', call);
-                callanswer(call);
-            }
             else if(view === 'base' && call.metadata?.isAdmin) {
                 console.log('admin connect');
                 answerTwoLine(call);
+            }
+            else if(view === 'base') {
+                EVENT.emit('callanswer', call);
+                callanswer(call);
+
+                ReactGA.event({
+                    label: 'Входящий звонок',
+                    category: 'Связь',
+                    action: 'Чат'
+                });
             }
         });
         // соединение с дата каналом установлено
@@ -367,7 +379,7 @@ function App() {
                             <React.Fragment>
                                 { view==='admin' && <Admin />}
                                 { view==='base' && <Base peerId={peerID} /> }
-                                { view==='load' && <Loader useAuth={useAuth} /> }
+                                { view==='load' && <Loader /> }
                             </React.Fragment>
                         }/>
                         <Route path="/paysucess" element={ <SuccessPage /> }/>

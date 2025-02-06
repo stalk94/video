@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactGA from "react-ga4";
 import { EVENT, send } from "../../lib/engine";
 import SelectSex from "./select-sex";
 import Toogler from "../../component/toogler";
@@ -10,7 +11,7 @@ import "../../css/loader.css";
 
 
 
-export default function({ useAuth }: {useAuth: (login: string, password: string)=> void}) {
+export default function() {
     const [sex, setSex] = React.useState('m');
     const [alarms, setAlarm] = React.useState(false);
     const [mod, setMod] = React.useState<'auth'|'reg'|'init'|'alarm'>('init');
@@ -22,6 +23,20 @@ export default function({ useAuth }: {useAuth: (login: string, password: string)
     const useSetAlarm =()=> {
         setAlarm(true);
         setMod('auth');
+    }
+    const useAuth =(login: string, password: string)=> {
+        if (socket) socket.emit('auth', {
+            login: login,
+            password: password,
+            peerId: globalThis.peerId
+        });
+        else console.error('socket not connect');
+
+        ReactGA.event({
+            label: 'Авторизация',
+            category: 'Основное',
+            action: 'Клик по кнопке'
+        });
     }
     const useReg =(data: any)=> {
         send('reg', {...data, sex: sex}, 'POST').then((res) => {
