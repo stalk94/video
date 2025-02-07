@@ -32,9 +32,8 @@ export default function({ useReg }) {
             else EVENT.emit('error', {text: 'password min 6 simbol!'});
 
             ReactGA.event({
-                label: 'Регистрация',
-                category: 'Основное',
-                action: 'Клик по кнопке'
+                action: 'Регистрация',
+                category: 'Основное'
             });
         }
         else EVENT.emit('error', {text: 'login min 6 simbol'});

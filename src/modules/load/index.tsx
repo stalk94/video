@@ -33,9 +33,8 @@ export default function() {
         else console.error('socket not connect');
 
         ReactGA.event({
-            label: 'Авторизация',
-            category: 'Основное',
-            action: 'Клик по кнопке'
+            action: 'Авторизация',
+            category: 'Основное'
         });
     }
     const useReg =(data: any)=> {

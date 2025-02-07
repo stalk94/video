@@ -72,7 +72,6 @@ export const CancelPage =()=> {
     React.useEffect(()=> {
         task = setInterval(()=> {
             ReactGA.event({
-                label: 'Платеж отмена',
                 category: 'Платежи',
                 action: 'Платеж отмена',
             });

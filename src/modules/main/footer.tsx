@@ -36,7 +36,7 @@ export default function({ input }: {input: boolean}) {
             ReactGA.event({
                 label: 'Сообшение',
                 category: 'Связь',
-                action: 'Клик по кнопке'
+                action: 'Сообшение'
             });
         }
     }
@@ -76,11 +76,6 @@ export default function({ input }: {input: boolean}) {
         // Удаляем сердечко после завершения анимации
         heart.addEventListener('animationend', ()=> {
             heart.remove();
-        });
-        ReactGA.event({
-            label: 'Лайк',
-            category: 'Связь',
-            action: 'Клик по кнопке'
         });
     }
     const useClickLike =(e: React.MouseEvent<HTMLElement, MouseEvent>, type: 'heart'|'fire'|'lips'|'rose')=> {

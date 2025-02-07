@@ -21,6 +21,8 @@ globalThis.app = express();
 app.use(cors({origin:"http://localhost:3001"}));
 app.use(express.urlencoded({limit: '100mb'}));
 app.use(express.json({limit: '1mb'}));
+app.use('/', express.static(path.join(__dirname, '/src')));
+app.use('/', express.static(path.join(__dirname, '/dist')));
 require('./api');
 const upload = multer({ 
     dest: 'uploads/',
@@ -38,6 +40,9 @@ const io = new Server(server, {
 
 
 //.........................................................[#express]
+app.get('*', (req, res) => {
+    res.sendFile(__dirname+'/dist/index.html');
+});
 app.get("/", (req, res)=> {
     res.sendFile(__dirname+'/dist/index.html');
 });
@@ -322,8 +327,7 @@ io.on('connection', (socket)=> {
 });
 
 
-app.use('/', express.static(path.join(__dirname, '/src')));
-app.use('/', express.static(path.join(__dirname, '/dist')));
+
 app.use(favicon(path.join(__dirname, 'src/img/fav', 'favicon.ico')));
 server.listen(3000, ()=> {
     APP._init();

@@ -201,9 +201,8 @@ function App() {
             state.set({});
 
             ReactGA.event({
-                label: 'Выход',
-                category: 'Основное',
-                action: 'Клик по кнопке'
+                action: 'Выход',
+                category: 'Основное'
             });
         });
         // настройки изменены
@@ -297,11 +296,7 @@ function App() {
                 EVENT.emit('callanswer', call);
                 callanswer(call);
 
-                ReactGA.event({
-                    label: 'Входящий звонок',
-                    category: 'Связь',
-                    action: 'Чат'
-                });
+                ReactGA.event('CALL_ANSWER');
             }
         });
         // соединение с дата каналом установлено

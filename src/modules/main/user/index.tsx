@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactGA from 'react-ga4';
 import { EVENT, send } from '../../../lib/engine';
 import globalState from "../../../global.state";
 import { googleOut } from "../../../function";
@@ -138,12 +137,6 @@ export default function({ setModal }) {
                                 'profile',
                                 true
                             );
-
-                            ReactGA.event({
-                                label: 'Пополнение',
-                                category: 'Юзер-Меню',
-                                action: 'Клик по кнопке'
-                            });
                         }
                     },
                     {
