@@ -22,7 +22,7 @@ const components = [
 
 
 export default function() {
-    const [activeIndex, setActiveIndex] = React.useState(2);
+    const [activeIndex, setActiveIndex] = React.useState(0);
     
 
     return(

@@ -170,7 +170,7 @@ class User {
             APP.createIndividualAction(this.login, {
                 header: '🔍Activation',
                 text: 'Super search has been activated on 60 minutes.'
-            });
+            }, 'superfind');
         }
         else if(this.money < 10) {
             this.emit('warn', {
@@ -233,7 +233,7 @@ class User {
             APP.createIndividualAction(this.login, {
                 header: '💎Premium activation',
                 text: 'Premium status activated for a month.'
-            });
+            }, 'pay_premium');
         }
 
         this.money += value;
@@ -249,7 +249,7 @@ class User {
         APP.createIndividualAction(this.login, {
             header: '💲++',
             text: `Balance replenished by ${value} COINS.`
-        });
+        }, 'add_money');
     }
     // отправка по сокету
     emit(eventName, data) {

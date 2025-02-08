@@ -1,3 +1,5 @@
 {
+    "exec": "ts-node index.js",
+    "ext": "js, ts",
     "ignore": ["src/*", "db/*", "dist/*", "*.json.sqlite", "*.log"]
 }

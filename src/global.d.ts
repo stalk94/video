@@ -1,6 +1,7 @@
 import { Message } from "./modules/main/type";
 import { Socket } from "socket.io-client";
 import { Peer, MediaConnection } from "peerjs";
+import stripe from "stripe";
 
 
 declare global {
@@ -131,4 +132,22 @@ interface ProductCatalog {
     amount: "usd" | string
     badge?: ("new" | "hot" | "premium")[]
     stripe: StripeProductCatalogItem
+}
+
+//? интерфейс будет менятся
+interface Purchase {
+    login: string
+    idProduct: string
+    timeshtamp: number
+    paymantService: 'stripe'
+    status: 'no_payment_required' | 'paid' | 'unpaid'
+    detail: {
+        id: string
+        amount_total: number
+        payment_status: 'no_payment_required' | 'paid' | 'unpaid'
+        total_details: any
+        livemode: boolean
+        customer_details: any
+        currency: string
+    }
 }

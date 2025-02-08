@@ -272,8 +272,8 @@ const APP = {
             }
         }
     },
-    createIndividualAction(login, data) {
-        actions.cteateIndividual(login, data);
+    createIndividualAction(login, data, type) {
+        actions.cteateIndividual(login, data, type);
     },
     /**
      * Юзер вышел

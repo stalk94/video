@@ -1,13 +1,509 @@
+import { Purchase } from "../../global.d.ts";
 import React from 'react';
-import { Card } from 'primereact/card';
+import { convertTime } from "../../function";
+import { send } from "../../lib/engine";
+import { TabMenu } from 'primereact/tabmenu';
+import { ProgressBar } from 'primereact/progressbar';
+import { IoEarthOutline } from "react-icons/io5";
+import { MdOutlineDevicesOther } from "react-icons/md";
+import { FaSitemap } from "react-icons/fa6";
+import { Histogram } from "../../component/charts";
+import { UsersBaseStatistic, EventsStatistic, TraffikStatic, UniqueUsers, PayOrPurchaseStatistic } from './type';
+import { FaSignOutAlt, FaSignInAlt, FaUserPlus, FaCreditCard, FaSearch, FaCheckCircle, FaTimesCircle, FaCommentAlt, FaThumbsUp, FaGift } from 'react-icons/fa';
+import { FaMoneyBillTrendUp } from "react-icons/fa6";
+import { GiPayMoney } from "react-icons/gi";
+import "./style.base.css";
+
+
+const TimeNavigation =({ onChange })=> {
+    const [activeIndex, setActiveIndex] = React.useState(0);
+
+    const items = [
+        {label: 'Сегодня', icon: 'pi pi-fw pi-calendar', value: 1},
+        {label: 'Неделя', icon: 'pi pi-fw pi-calendar', value: 7},
+        {label: 'Месяц', icon: 'pi pi-fw pi-calendar', value: 30},
+        {label: 'Все', icon: 'pi pi-fw pi-calendar', value: 360 * 2}
+    ];
+    const useChange =(index: number)=> {
+        setActiveIndex(index);
+        onChange(items[index].value);
+    }
+
+    return(
+        <TabMenu
+            model={items}
+            activeIndex={activeIndex} 
+            onTabChange={(e)=> useChange(e.index)}
+        />
+    );
+}
+const Loader =()=> (
+    <div className='LoaderSpiner'>
+        <i className="pi pi-spin pi-spinner" 
+            style={{'fontSize': '5em', color:'silver'}}
+        />
+    </div>
+);
+const Navigator =({ value, items, onChange })=> {
+    return(
+        <div className='Navigator'>
+            { items.map((elem, index)=> 
+                <div 
+                    className='NavigatorButton' 
+                    id={value.value == elem.value ? 'active' : ''}
+                    key={index} 
+                    onClick={()=> onChange(elem)}
+                >
+                    { elem.label }
+                </div>
+            )}
+        </div>
+    );
+}
+const Base =({ data }: { data: UsersBaseStatistic })=> {
+    const [curent, setCurent] = React.useState({label: 'co', value: 'country'});
+
+    // list: name: value
+    const render =(total: number, list)=> {
+        const chek =(str: string)=> {
+            return str.includes('[') && str.includes(']');
+        }
+
+        return(
+            <React.Fragment>
+                { Object.keys(list).map((label, index)=> 
+                    <div key={index} className='rowStat' style={{opacity: chek(label) ? 0.35 : 1}}>
+                        <var>
+                            { label } {' :'}
+                        </var>
+                        <span style={{marginLeft:'1em', color: '#d2fa99'}}>
+                            { list[label] }
+                        </span>
+                        <ProgressBar 
+                            value={(list[label] / total) * 100}
+                            showValue={false}
+                        />
+                    </div>
+                )}
+            </React.Fragment>
+        );
+    }
+    const dataFormater =(elem: UniqueUsers)=> {
+        const day = `${elem.date[6]}${elem.date[7]}`;
+        const mounth = `${elem.date[4]}${elem.date[5]}`;
+        const year = `${elem.date[0]}${elem.date[1]}${elem.date[2]}${elem.date[3]}`;
+
+        return `${day}-${mounth}-${year}`;
+    }
+    const filterOnCity =(data: UniqueUsers[])=> {
+        
+    }
+    const filterOnRefer =(data: UniqueUsers[])=> {
+        let total = 0;
+        const result = {['[not refer]']: 0}
+ 
+        data.map((elem)=> {
+            if(elem.refer  && elem.refer!=='' && !result[elem.refer]) {
+                result[elem.refer.replace(/^https?:\/\//, '').replace(/\/$/, '')] = elem.uniqueUsers; 
+            }
+            else if(elem.refer  && elem.refer!=='' && result[elem.refer]) {
+                result[elem.refer.replace(/^https?:\/\//, '').replace(/\/$/, '')] += elem.uniqueUsers;
+            }
+            else result['[not refer]'] += elem.uniqueUsers;
+
+            total += elem.uniqueUsers;
+        });
+
+        return {
+            total,
+            result,
+        };
+    }
+    const filterOnDevices =(data: UniqueUsers[])=> {
+        let total = 0;
+        const result = {};
+
+        data.map((elem)=> {
+            if(result[elem.device]) {
+                result[elem.device] += elem.uniqueUsers;
+            }
+            else result[elem.device] = elem.uniqueUsers;
+            total += elem.uniqueUsers;
+        })
+
+        return {
+            total,
+            result,
+        };
+    }
+    const filterOnCountry =(data: UniqueUsers[])=> {
+        let total = 0;
+        const result = {}
+
+        data.forEach((el)=> {
+            if(result[el.country]) result[el.country] += el.uniqueUsers;
+            else result[el.country] = el.uniqueUsers;
+
+            total += el.uniqueUsers;
+        });
+
+        return {
+            total,
+            result
+        }
+    }
+    const processingDetail =(data: UsersBaseStatistic, curent)=> {
+        const details = data.detail.filter((elem)=> {
+            if(elem.country !== "(not set)" && elem.country !== "(none)") {
+                if(elem.city === "(not set)" || elem.city !== "(none)") elem.city = '[not data]';
+                elem.date = dataFormater(elem);
+
+                return elem;
+            }
+            else {
+                elem.country = '[not data]';
+                if(elem.city === "(not set)" || elem.city !== "(none)") elem.city = '[not data]';
+                elem.date = dataFormater(elem);
+
+                return elem;
+            }
+        });
+        // total / страна, число
+        const coyntries = filterOnCountry(details);
+        const refers = filterOnRefer(details);
+        const devices = filterOnDevices(details);
+
+        if(curent.value === 'country') return render(coyntries.total, coyntries.result);
+        else if(curent.value === 'refer') return render(refers.total, refers.result);
+        else if(curent.value === 'devices') return render(devices.total, devices.result);
+    }
+    
+
+    return(
+        <div className='BaseArea'>
+            <div className='WrapperCellStat'>
+                <div className='CellStat'>
+                    <div className='statValue'>
+                        { data.activeUsers }
+                    </div>
+                    <div className='statLabel'>
+                        Обшие посешения
+                    </div>
+                </div>
+                <div className='CellStat'>
+                    <div className='statValue' style={{color:'#d2fa99'}}>
+                        { data.newUsers }
+                    </div>
+                    <div className='statLabel'>
+                        Новые посешения
+                    </div>
+                </div>
+            </div>
+            <Navigator 
+                value={curent}
+                items={[
+                    { label: <IoEarthOutline style={{margin:'auto'}} />, value: 'country' },
+                    { label: <MdOutlineDevicesOther style={{margin:'auto'}} />, value: 'devices' },
+                    { label: <FaSitemap style={{margin:'auto'}} />, value: 'refer' },
+                ]}
+                onChange={setCurent}
+            />
+            <div className='WrapperDiagram'>
+                { processingDetail(data, curent) }
+            </div>
+        </div>
+    );
+}
+const Events =({ data }: { data: EventsStatistic })=> {
+    const [curent, setCurent] = React.useState({label: 'co', value: 'country'});
+    const actionsWithColors = [
+        { 
+            action: "Выход", 
+            color: "red", 
+            fadedColor: "rgba(255, 0, 0, 0.85)",
+            icon: <FaSignOutAlt /> 
+        },
+        { 
+            action: "Авторизация", 
+            color: "blue", 
+            fadedColor: "rgba(0, 0, 255, 0.85)",
+            icon: <FaSignInAlt /> 
+        },
+        { 
+            action: "Регистрация", 
+            color: "green", 
+            fadedColor: "rgba(0, 128, 0, 0.85)",
+            icon: <FaUserPlus /> 
+        },
+        { 
+            action: "Переход к оплате", 
+            color: "orange", 
+            fadedColor: "rgba(255, 165, 0, 0.85)",
+            icon: <FaCreditCard /> 
+        },
+        { 
+            action: "Супер поиск", 
+            color: "purple", 
+            fadedColor: "rgba(128, 0, 128, 0.85)",
+            icon: <FaSearch /> 
+        },
+        { 
+            action: "Платеж успешен", 
+            color: "lime", 
+            fadedColor: "rgba(0, 255, 0, 0.85)",
+            icon: <FaCheckCircle /> 
+        },
+        { 
+            action: "Платеж отмена", 
+            color: "gray", 
+            fadedColor: "rgba(128, 128, 128, 0.85)",
+            icon: <FaTimesCircle /> 
+        },
+        { 
+            action: "Сообщение", 
+            color: "yellow", 
+            fadedColor: "rgba(255, 255, 0, 0.85)",
+            icon: <FaCommentAlt /> 
+        },
+        { 
+            action: "Супер лайк", 
+            color: "pink", 
+            fadedColor: "rgba(255, 192, 203, 0.85)",
+            icon: <FaThumbsUp /> 
+        },
+        { 
+            action: "Куплен подарок", 
+            color: "gold", 
+            fadedColor: "rgba(255, 215, 0, 0.85)",
+            icon: <FaGift /> 
+        }
+    ];
+    
+    const formatDiagram =(data: EventsStatistic)=> {
+        let total = 0;
+        const res = {};
+
+        data.details.forEach((el)=> {
+            if(res[el.name]) res[el.name] += el.count;
+            else res[el.name] = el.count;
+
+            total += el.count;
+        });
+        const arrData = Object.keys(res).map((label, index)=> {
+            const find = actionsWithColors.find(el=> el.action === label);
+            
+            return({
+                label,
+                color: find.color,
+                value: +res[label],
+                icon: find.icon
+            });
+        });
+
+        return(
+            <Histogram
+                data={arrData}
+                maxValue={total}
+            />
+        );
+    }
+    const dataFormater =(elem)=> {
+        const day = `${elem.date[6]}${elem.date[7]}`;
+        const mounth = `${elem.date[4]}${elem.date[5]}`;
+        const year = `${elem.date[0]}${elem.date[1]}${elem.date[2]}${elem.date[3]}`;
+
+        return `${day}-${mounth}-${year}`;
+    }
+    const processing =(data: EventsStatistic)=> {
+        const res = [];
+
+        structuredClone(data).details.forEach((el)=> {
+            el.date = dataFormater(el);
+            res.push(el);
+        });
+
+        return res;
+    }
+    
+
+    return(
+        <div className='BaseArea'>
+            <div className='WrapperEventList'>
+                { data && processing(data).map((elem, index)=> 
+                    <div key={index} className='rowStat' style={{borderBottom:'1px dotted gray'}}>
+                        <var>
+                            { elem.name }:
+                        </var>
+                        <span style={{marginLeft:'1em', color: '#d2fa99', fontSize:'12px'}}>
+                            <span style={{marginRight:'10px', color:'silver'}}>
+                                [{ elem.date }]
+                            </span> 
+                            { elem.time }
+                        </span>
+                    </div>
+                )}
+            </div>
+            <Navigator 
+                value={curent}
+                items={[
+                    { label: <IoEarthOutline style={{margin:'auto'}} />, value: 'country' },
+                    { label: <MdOutlineDevicesOther style={{margin:'auto'}} />, value: 'devices' },
+                ]}
+                onChange={setCurent}
+            />
+            <div className='WrapperCellEvent'>
+                { data && formatDiagram(data) }
+            </div>
+        </div>
+    );
+}
+const PayOrPurchase =({ data }: { data: PayOrPurchaseStatistic })=> {
+    const [curent, setCurent] = React.useState({value: 'purchase'});
+
+    const dataFormater =(elem)=> {
+        const day = `${elem.date[6]}${elem.date[7]}`;
+        const mounth = `${elem.date[4]}${elem.date[5]}`;
+        const year = `${elem.date[0]}${elem.date[1]}${elem.date[2]}${elem.date[3]}`;
+
+        return `${day}-${mounth}-${year}`;
+    }
+    const processingPay =(data: PayOrPurchaseStatistic)=> {
+        let total = 0;
+        let result = {};
+
+        data.details.events.forEach((el)=> {
+            if(el.name === 'Супер лайк') {
+                if(!result[el.name]) result[el.name] = 1;
+                else result[el.name] += 1;
+
+                total += 1;
+            }
+            else if(el.name === 'Супер поиск') {
+                if(!result[el.name]) result[el.name] = 10;
+                else result[el.name] += 10;
+
+                total += 10;
+            }
+            else if(el.name === 'Куплен подарок') {
+                if(!result[el.name]) result[el.name] = 10;
+                else result[el.name] += 10;
+
+                total += 10;
+            }
+        });
+    }
+    const processingPurchase =(data: PayOrPurchaseStatistic)=> {
+        let paidCount = 0;
+        let unPaidCount = 0;
+
+        const resultPurchase = data.details.purchase.map((purchase)=> {
+            if(purchase.status === 'paid') paidCount += 1;
+            else if(purchase.status === 'unpaid') unPaidCount += 1;
+
+            return purchase;
+        });
+
+        return resultPurchase;
+    }
+    const render =(curent)=> {
+        if(curent.value === 'purchase') return processingPurchase(data).map((elem, index)=> (
+            <div key={index} className='rowStat' style={{borderBottom:'1px dotted gray'}}>
+                <var>
+                    { elem.login }:
+                </var>
+                <span style={{marginRight:'10px', color:'silver'}}>
+                    { convertTime(elem.timeshtamp, 'TD') }
+                </span> 
+                <span style={{marginLeft:'1em', color: '#d2fa99', fontSize:'12px'}}>
+                    { elem.detail.amount_total }
+                </span>
+            </div>
+        ));
+    }
+    
+
+    return(
+        <div className='BaseArea'>
+            <div className='WrapperCellEvent'>
+                
+            </div>
+            <Navigator 
+                value={curent}
+                items={[
+                    { label: <FaMoneyBillTrendUp style={{margin:'auto'}} />, value: 'purchase' },
+                    { label: <GiPayMoney style={{margin:'auto'}} />, value: 'pays' }
+                ]}
+                onChange={setCurent}
+            />
+            <div className='WrapperEventList'>
+                { data && render(curent) }
+            </div>
+        </div>
+    );
+}
 
 
 export default function() {
+    const [events, setEvents] = React.useState<EventsStatistic[]>();
+    const [users, setUsers] = React.useState<UsersBaseStatistic>();
+    const [sources, setSources] = React.useState<TraffikStatic>();
+    const [pays, setPays] = React.useState<any>();
+
+    const useChangeRangeDay =(range:number, type:'users'|'events'|'regs'|'source'|'pays')=> {
+        if(type === 'users') setUsers();
+        else if(type === 'events') setEvents();
+        else if(type === 'pays') setPays();
+
+        send('analytic', {
+            startDate: range,
+            type: type
+        }, 'POST').then((result)=> {
+            console.log(result);
+
+            if(type === 'users') setUsers({startDate: range, ...result});
+            else if(type === 'events') setEvents({startDate: range, details: result});
+            else if(type === 'source') setSources({startDate: range, ...result});
+            else if(type === 'pays') setPays({startDate: range, details: result});
+        });
+    }
+    React.useEffect(()=> {
+        if(!import.meta.env.DEV) {
+            useChangeRangeDay(1, 'users');
+            useChangeRangeDay(1, 'events');
+            useChangeRangeDay(1, 'pays');
+        }
+    }, []);
 
 
     return(
-        <div className='AdminBase'>
-            
+        <div className='AdminBase Analitic'>
+            <section className='PanelAnalytic'>
+                <TimeNavigation onChange={(range)=> useChangeRangeDay(range, 'users')} />
+                <div className='AreaWraper'>
+                    { !users  
+                        ? <Loader /> 
+                        : <Base data={users}/>
+                    }
+                </div>
+            </section>
+            <section className='PanelAnalytic'>
+                <TimeNavigation onChange={(range)=> useChangeRangeDay(range, 'events')} />
+                <div className='AreaWraper'>
+                    { !events  
+                        ? <Loader /> 
+                        : <Events data={events}/>
+                    }
+                </div>
+            </section>
+            <section className='PanelAnalytic' style={{height:'35%'}}>
+                <TimeNavigation onChange={(range)=> useChangeRangeDay(range, 'pays')} />
+                <div className='AreaWraper'>
+                    { !pays  
+                        ? <Loader /> 
+                        : <PayOrPurchase data={pays}/>
+                    }
+                </div>
+            </section>
         </div>
     );
 }

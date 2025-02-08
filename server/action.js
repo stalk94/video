@@ -32,11 +32,13 @@ const Actions = {
      * 🔌 user event: 'add.action'
      * @param {string} userLogin 
      * @param {{text:string, header:string}} data 
+     * @param {'add_money'|'pay_premium'|'superfind'} type
      */
-    cteateIndividual(userLogin, data) {
+    cteateIndividual(userLogin, data, type) {
         const action = {
             timeshtamp: Date.now(),
             author: 'SYSTEM',
+            type,
             ...data
         }
 

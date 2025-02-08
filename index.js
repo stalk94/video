@@ -11,6 +11,8 @@ const path = require("path");
 const { db } = require('./server/db');
 const actions = require('./server/action');
 const { scheme } = require('./server/function');
+const { getPays } = require('./services/inside-analytic');
+const { getAnalyticsEvents, getTrafficSources, getUniqueUsers, getTotalNewUsers, getTotalActiveUsers } = require('./services/analytic');
 const { online, autorize, registration, googleOuth } = require('./server/online');
 const botManager = require('./server/bot-manager');
 const { trimVideo } = require('./services/video-trimer');
@@ -45,9 +47,6 @@ app.get('*', (req, res) => {
 });
 app.get("/", (req, res)=> {
     res.sendFile(__dirname+'/dist/index.html');
-});
-app.post("/init", (req, res)=> {
-    console.log(req.body)
 });
 app.post("/reg", (req, res)=> {
     if(scheme.data.login.test(req.body.login) && scheme.data.password.test(req.body.password)) {
@@ -140,6 +139,42 @@ app.post('/uploadAvatar', upload.single('avatar'), (req, res)=> {
         });
         else res.send(err);
     });
+});
+app.post("/analytic", async(req, res)=> {
+    let { startDate, type, options } = req.body;
+    let result;
+
+    if(!startDate || startDate === 1) startDate = 'today';
+    else startDate = `${startDate}daysAgo`;
+
+    // статистика
+    switch(type) {
+        case 'events':
+            result = await getAnalyticsEvents(startDate);
+        break;
+        case 'users':
+            const newUsers = await getTotalNewUsers(startDate);
+            const activeUsers = await getTotalActiveUsers(startDate);
+            const uniq = await getUniqueUsers(startDate);
+
+            result = {
+                newUsers,
+                activeUsers,
+                detail: uniq
+            }
+        break;
+        case 'pays':
+            result = {
+                purchase: await getPays(startDate),
+                events: await getAnalyticsEvents(startDate)
+            }
+        break;
+        case 'source':
+            result = await getTrafficSources(startDate, options);
+        break;
+    } 
+        
+    res.send(result);
 });
 
 

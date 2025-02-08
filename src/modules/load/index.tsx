@@ -35,6 +35,8 @@ export default function() {
         ReactGA.event({
             action: 'Авторизация',
             category: 'Основное'
+        }, {
+            user_login: login
         });
     }
     const useReg =(data: any)=> {
