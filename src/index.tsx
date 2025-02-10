@@ -215,7 +215,8 @@ function App() {
         });
         // авторизация успещно
         socket.on('autorize.sucess', (data)=> {
-            setView('admin');
+            setView('base');
+            if(import.meta.env.DEV) setView('admin');
             window.localStorage.setItem('TOKEN', data.token);
             state.user.set(data.user);
             setClearSystem(false);

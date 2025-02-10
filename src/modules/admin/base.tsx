@@ -1,8 +1,8 @@
-import { Purchase } from "../../global.d.ts";
 import React from 'react';
 import { convertTime } from "../../function";
 import { send } from "../../lib/engine";
 import { TabMenu } from 'primereact/tabmenu';
+import Flag from "../../component/flag";
 import { ProgressBar } from 'primereact/progressbar';
 import { IoEarthOutline } from "react-icons/io5";
 import { MdOutlineDevicesOther } from "react-icons/md";
@@ -72,10 +72,11 @@ const Base =({ data }: { data: UsersBaseStatistic })=> {
         return(
             <React.Fragment>
                 { Object.keys(list).map((label, index)=> 
-                    <div key={index} className='rowStat' style={{opacity: chek(label) ? 0.35 : 1}}>
-                        <var>
+                    <div key={index} className='rowStat' style={{opacity: chek(label) ? 0.25 : 1}}>
+                        { curent.value === 'country' && <Flag code={label} size={{width:16,height:16}} /> }
+                        <span style={{marginLeft: '5px', color: 'white'}}>
                             { label } {' :'}
-                        </var>
+                        </span>
                         <span style={{marginLeft:'1em', color: '#d2fa99'}}>
                             { list[label] }
                         </span>
@@ -100,7 +101,7 @@ const Base =({ data }: { data: UsersBaseStatistic })=> {
     }
     const filterOnRefer =(data: UniqueUsers[])=> {
         let total = 0;
-        const result = {['[not refer]']: 0}
+        const result = {['[ not refer ]']: 0}
  
         data.map((elem)=> {
             if(elem.refer  && elem.refer!=='' && !result[elem.refer]) {
@@ -109,7 +110,7 @@ const Base =({ data }: { data: UsersBaseStatistic })=> {
             else if(elem.refer  && elem.refer!=='' && result[elem.refer]) {
                 result[elem.refer.replace(/^https?:\/\//, '').replace(/\/$/, '')] += elem.uniqueUsers;
             }
-            else result['[not refer]'] += elem.uniqueUsers;
+            else result['[ not refer ]'] += elem.uniqueUsers;
 
             total += elem.uniqueUsers;
         });
@@ -155,14 +156,14 @@ const Base =({ data }: { data: UsersBaseStatistic })=> {
     const processingDetail =(data: UsersBaseStatistic, curent)=> {
         const details = data.detail.filter((elem)=> {
             if(elem.country !== "(not set)" && elem.country !== "(none)") {
-                if(elem.city === "(not set)" || elem.city !== "(none)") elem.city = '[not data]';
+                if(elem.city === "(not set)" || elem.city !== "(none)") elem.city = '[ not data ]';
                 elem.date = dataFormater(elem);
 
                 return elem;
             }
             else {
-                elem.country = '[not data]';
-                if(elem.city === "(not set)" || elem.city !== "(none)") elem.city = '[not data]';
+                elem.country = '[ not data ]';
+                if(elem.city === "(not set)" || elem.city !== "(none)") elem.city = '[ not data ]';
                 elem.date = dataFormater(elem);
 
                 return elem;
@@ -314,6 +315,24 @@ const Events =({ data }: { data: EventsStatistic })=> {
 
         return `${day}-${mounth}-${year}`;
     }
+    // сортирует эвенты по времени, убыванию
+    const sortableDate =(res)=> {
+        const parseDateTime =(str)=> {
+            str = str.replace(/\s+/g, ""); // Убираем пробелы
+            const match = str.match(/\[(\d{2})-(\d{2})-(\d{4})\](\d{2}):(\d{2})/);
+            if (!match) return null;
+            const [, day, month, year, hours, minutes] = match.map(Number);
+            return new Date(year, month - 1, day, hours, minutes);
+        }
+
+        const arrDates = res.map((r)=> {
+            r.timeFormat = parseDateTime(`[${r.date}]${r.time}`);
+            return r;
+        });
+        
+        return arrDates.sort((a, b)=> b.timeFormat - a.timeFormat);
+        
+    }
     const processing =(data: EventsStatistic)=> {
         const res = [];
 
@@ -321,8 +340,8 @@ const Events =({ data }: { data: EventsStatistic })=> {
             el.date = dataFormater(el);
             res.push(el);
         });
-
-        return res;
+        
+        return sortableDate(res);
     }
     
 
@@ -334,8 +353,8 @@ const Events =({ data }: { data: EventsStatistic })=> {
                         <var>
                             { elem.name }:
                         </var>
-                        <span style={{marginLeft:'1em', color: '#d2fa99', fontSize:'12px'}}>
-                            <span style={{marginRight:'10px', color:'silver'}}>
+                        <span style={{marginLeft:'1em', color:'silver', fontSize:'12px'}}>
+                            <span style={{marginRight:'7px'}}>
                                 [{ elem.date }]
                             </span> 
                             { elem.time }
@@ -369,27 +388,44 @@ const PayOrPurchase =({ data }: { data: PayOrPurchaseStatistic })=> {
     }
     const processingPay =(data: PayOrPurchaseStatistic)=> {
         let total = 0;
-        let result = {};
+        let result = [];
 
         data.details.events.forEach((el)=> {
             if(el.name === 'Супер лайк') {
-                if(!result[el.name]) result[el.name] = 1;
-                else result[el.name] += 1;
+                result.push({
+                    cost: 1,
+                    name: el.name,
+                    time: el.time,
+                    date: dataFormater(el)
+                });
 
                 total += 1;
             }
             else if(el.name === 'Супер поиск') {
-                if(!result[el.name]) result[el.name] = 10;
-                else result[el.name] += 10;
+                result.push({
+                    cost: 10,
+                    name: el.name,
+                    time: el.time,
+                    date: dataFormater(el)
+                });
 
                 total += 10;
             }
             else if(el.name === 'Куплен подарок') {
-                if(!result[el.name]) result[el.name] = 10;
-                else result[el.name] += 10;
+                result.push({
+                    cost: 10,
+                    name: el.name,
+                    time: el.time,
+                    date: dataFormater(el)
+                });
 
                 total += 10;
             }
+        });
+
+        return({
+            total,
+            result
         });
     }
     const processingPurchase =(data: PayOrPurchaseStatistic)=> {
@@ -402,23 +438,79 @@ const PayOrPurchase =({ data }: { data: PayOrPurchaseStatistic })=> {
 
             return purchase;
         });
-
-        return resultPurchase;
+        // ! test
+        resultPurchase.push(
+            {
+                login: 'test',
+                timeshtamp: Date.now(),
+                paymantService: 'stripe',
+                status: 'paid',
+                detail: {
+                    id: 'test',
+                    amount_total: 10,
+                    livemode: true,
+                }
+            },
+            {
+                login: 'test',
+                timeshtamp: Date.now(),
+                paymantService: 'stripe',
+                status: 'unpaid',
+                detail: {
+                    id: 'test',
+                    amount_total: 10,
+                    livemode: true,
+                }
+            }
+        );
+        
+        return {
+            paid: paidCount,
+            unPaid: unPaidCount,
+            result: resultPurchase
+        }
     }
     const render =(curent)=> {
-        if(curent.value === 'purchase') return processingPurchase(data).map((elem, index)=> (
-            <div key={index} className='rowStat' style={{borderBottom:'1px dotted gray'}}>
-                <var>
-                    { elem.login }:
-                </var>
-                <span style={{marginRight:'10px', color:'silver'}}>
-                    { convertTime(elem.timeshtamp, 'TD') }
-                </span> 
-                <span style={{marginLeft:'1em', color: '#d2fa99', fontSize:'12px'}}>
-                    { elem.detail.amount_total }
-                </span>
-            </div>
-        ));
+        if(curent.value === 'purchase') {
+            const purchase = processingPurchase(data);
+
+            return purchase.result.map((elem, index)=> (
+                <div key={index} className='rowStat' style={{borderBottom:'1px dotted gray'}}>
+                    <var>
+                        { elem.login }:
+                    </var>
+                    <span style={{marginLeft: '1em', color:'silver', fontSize: '12px'}}>
+                        <span style={{ marginRight: '7px' }}>
+                            [{ convertTime(elem.timeshtamp, 'TD').date }]
+                        </span>
+                        { convertTime(elem.timeshtamp, 'TD').time }
+                    </span> 
+                    <span style={{marginLeft:'2em', color: '#d2fa99', fontSize:'12px'}}>
+                        +{ " " +elem.detail.amount_total + " "}  💲
+                    </span>
+                </div>
+            ));
+        }
+        else if(curent.value === 'pays') {
+            const pays = processingPay(data);
+            
+            return pays.result.map((elem, index)=> (
+                <div key={index} className='rowStat' style={{borderBottom:'1px dotted gray'}}>
+                    <var>
+                        { elem.name }:
+                    </var>
+                    <span style={{ marginLeft: '1em', color: 'silver', fontSize: '12px' }}>
+                        <span style={{ marginRight: '7px' }}>
+                            [{ elem.date }]
+                        </span>
+                        { elem.time }
+                    </span>
+                    <span style={{ marginLeft: '30px', color: 'orange',fontSize: '12px' }}>
+                        -{ " " + elem.cost + " " } 💎
+                    </span>
+                </div>
+            ));
+        }
     }
     
 

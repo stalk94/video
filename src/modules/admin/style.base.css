@@ -112,6 +112,9 @@
     overflow-y: auto; /* Скролл при нехватке места */
     padding: 12px 2%;
 }
+.WrapperDiagram .p-progressbar {
+    background: rgba(59, 59, 59, 0.45);
+}
 .WrapperEventList {
     width: 40%;
     display: flex;
