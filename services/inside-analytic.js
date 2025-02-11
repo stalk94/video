@@ -66,7 +66,7 @@ async function getPays(range) {
     else if(typeof range === 'number') startDate = now - (86400000 * range);
 
     const pays = await db.get('PAYS');
-    const result = Object.values(pays ?? {}).filter((entry)=> entry.timeshtamp >= startDate);
+    const result = Object.values(pays).filter((entry)=> entry.timeshtamp >= startDate);
 
     return result;
 }

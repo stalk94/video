@@ -13,23 +13,24 @@ process.on('uncaughtException', (err)=> {
         stack: err.stack
     })+"\n", {encoding:"utf-8"});
 });
-if(false) app.use((req, res, next)=> {
-    res.setHeader('Cross-Origin-Opener-Policy', 'same-origin');
-    res.setHeader('Cross-Origin-Embedder-Policy', 'require-corp');
-    next();
-});
+const chekUrl =(url)=> {
+    if(url === 'localhost:3000') return 'http://localhost:3000';
+    else return `https://${url}`;
+}
 
 
 //-------------------------------------------------------------- [stripe]
 app.get('/getStripeCatalog', (req, res)=> {
     res.send(payManager.prices);
 });
+// ! что то не работает webhook (не полный сертификат ssl)
 app.post('/webhook', express.raw({type: 'application/json'}), (req, res)=> {
     const sig = req.headers['stripe-signature'];
   
     try {
         const event = stripe.webhooks.constructEvent(req.body, sig, process.env.STRIPE_SECRET_WH);
-
+        console.log('WEBHOOK: ', event);
+        
         switch(event.type) {
             case 'payment_intent.succeeded':            //? Успешный платеж
                     const paymentIntent = event.data.object;
@@ -55,6 +56,7 @@ app.post('/webhook', express.raw({type: 'application/json'}), (req, res)=> {
 app.post("/create-checkout-session", async(req, res)=> {
     const baseUrl = req.get('Host');
     const { id, login } = req.body;                 // id товара, login
+    
 
     if(payManager.prices[id] && login) {
         const session = await stripe.checkout.sessions.create({
@@ -65,8 +67,8 @@ app.post("/create-checkout-session", async(req, res)=> {
             }],
             mode: "payment",
             metadata: { userLogin: login },
-            success_url: `${baseUrl}/paysucess`,
-            cancel_url: `${baseUrl}/payfailed`,
+            success_url: `${chekUrl(baseUrl)}/paysucess`,
+            cancel_url: `${chekUrl(baseUrl)}/payfailed`,
         });
 
         await payManager.createNewStripeSession(login, id, session);

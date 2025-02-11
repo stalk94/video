@@ -26,7 +26,7 @@ module.exports = {
 
             // проверка на рабочее время
             if(time.getDay() === fake.time.startDay) {
-                if(time.getHours() >= fake.time.start) {
+                if(time.getHours() >= fake.time.start && time.getHours() < fake.time.end) {
                     if(!online.online[fake.peerId]) {
                         console.log('BOT ADD ONLINE');
                         const user = new FakeUser(fake.login);

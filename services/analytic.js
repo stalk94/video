@@ -162,6 +162,7 @@ async function getTrafficSources(startDate, type) {
  * @param {'today'|'30daysAgo'|'7daysAgo'} startDate 
  * @returns {Promise<Array<{
  *       date: string
+ *       time: string
  *       uniqueUsers: number
  *       city: string
  *       country: string
@@ -183,13 +184,15 @@ async function getUniqueUsers(startDate = '30daysAgo') {
             { name: 'country' },
             { name: 'pageReferrer'},
             { name: 'deviceCategory' },
-            { name: 'mobileDeviceModel' }
+            { name: 'mobileDeviceModel' },
+            { name: 'dateHourMinute' }
         ],
     });
 
     // Выводим результат
     const result = response.rows?.map(row => ({
         date: row.dimensionValues[0].value, // Дата
+        time: row.dimensionValues[6].value,
         uniqueUsers: +row.metricValues[0].value, // Уникальные пользователи
         city: row.dimensionValues[1].value,
         country: row.dimensionValues[2].value,

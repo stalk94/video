@@ -9,6 +9,10 @@ export type UniqueUsers = {
     device: 'desktop' | 'mobile' | 'tablet' | string
     deviceModel: "(not set)" | "(none)" | string
 }
+export type DopViewContext = {
+    context: 'city' | 'info'
+    value: any
+}
 type events = 'Выход' | 'Авторизация' | 'Регистрация' | 'Переход к оплате' | 'Супер поиск'|
     'Платеж успешен' | 'Платеж отмена' | 'Сообшение' | 'Супер лайк' | 'Куплен подарок'
 ;

@@ -6,6 +6,7 @@ import Flag from "../../component/flag";
 import { ProgressBar } from 'primereact/progressbar';
 import { IoEarthOutline } from "react-icons/io5";
 import { MdOutlineDevicesOther } from "react-icons/md";
+import { DopViewContext } from "./type";
 import { FaSitemap } from "react-icons/fa6";
 import { Histogram } from "../../component/charts";
 import { UsersBaseStatistic, EventsStatistic, TraffikStatic, UniqueUsers, PayOrPurchaseStatistic } from './type';
@@ -60,19 +61,31 @@ const Navigator =({ value, items, onChange })=> {
         </div>
     );
 }
-const Base =({ data }: { data: UsersBaseStatistic })=> {
-    const [curent, setCurent] = React.useState({label: 'co', value: 'country'});
+const BaseStatistic =({ data }: { data: UsersBaseStatistic })=> {
+    const [dopViewContext, setDopViewContext] = React.useState<DopViewContext>();
+    const [curent, setCurent] = React.useState({value: 'country'});
 
     // list: name: value
     const render =(total: number, list)=> {
         const chek =(str: string)=> {
             return str.includes('[') && str.includes(']');
         }
+        const useSetContext =(label: string)=> {
+            let ctx;
+            if(curent.value === 'country') ctx = 'city';
+            else if(curent.value === 'device') ctx = 'info';
+            else if(curent.value === 'refer') ctx = 'info';
+
+            setDopViewContext({value: label, context: ctx});
+        }
 
         return(
             <React.Fragment>
                 { Object.keys(list).map((label, index)=> 
-                    <div key={index} className='rowStat' style={{opacity: chek(label) ? 0.25 : 1}}>
+                    <div key={index} className='rowStat' 
+                        style={{opacity: chek(label) ? 0.25 : 1}}
+                        onClick={()=> !chek(label) && useSetContext(label)}
+                    >
                         { curent.value === 'country' && <Flag code={label} size={{width:16,height:16}} /> }
                         <span style={{marginLeft: '5px', color: 'white'}}>
                             { label } {' :'}
@@ -96,8 +109,100 @@ const Base =({ data }: { data: UsersBaseStatistic })=> {
 
         return `${day}-${mounth}-${year}`;
     }
-    const filterOnCity =(data: UniqueUsers[])=> {
+    const renderCity =(data: UniqueUsers[])=> {
+        const chek =(str: string)=> {
+            const one = str.includes('[') && str.includes(']');
+            const two = str.includes('(') && str.includes(')');
+
+            return one || two;
+        }
+
+        const citysRes = {};
+        const filters = data.filter((elem)=> elem.country === dopViewContext.value);
+        filters.forEach((elem)=> {
+            if(citysRes[elem.city]) citysRes[elem.city] += 1;
+            else citysRes[elem.city] = 1;
+        });
+
+        return(
+            <React.Fragment>
+                { Object.keys(citysRes).map((label, index)=>
+                    <div key={index} className='rowStat'
+                        style={{ opacity: chek(label) ? 0.25 : 1 }}
+                        onClick={()=> setDopViewContext()}
+                    >
+                        <span style={{ marginLeft: '5px', color: 'white' }}>
+                            { label } {' :'}
+                        </span>
+                        <span style={{ marginLeft: '1em', color: '#d2fa99' }}>
+                            { citysRes[label] }
+                        </span>
+                        <ProgressBar 
+                            value={(citysRes[label] / filters.length) * 100}
+                            showValue={false}
+                        />
+                    </div>
+                )}
+            </React.Fragment>
+        );
+    }
+    const renderInfo = (data: UniqueUsers[]) => {
+        const chek = (str: string) => {
+            const one = str.includes('[') && str.includes(']');
+            const two = str.includes('(') && str.includes(')');
+            const three = str.length === 0;
+
+            return one || two || three;
+        }
+        const sortableDate =(res)=> {
+            const parseDateTime =(str)=> {
+                str = str.replace(/\s+/g, ""); // Убираем пробелы
+                const match = str.match(/\[(\d{2})-(\d{2})-(\d{4})\](\d{2}):(\d{2})/);
+                if (!match) return null;
+                const [, day, month, year, hours, minutes] = match.map(Number);
+                return new Date(year, month - 1, day, hours, minutes);
+            }
+    
+            const arrDates = res.map((r)=> {
+                r.timef = `${r.time[8]}${r.time[9]}:${r.time[10]}${r.time[11]}`;
+                r.datef = dataFormater(r);
+                r.timeFormat = parseDateTime(`[${r.datef}]${r.timef}`);
+                return r;
+            });
+            
+            return arrDates.sort((a, b)=> b.timeFormat - a.timeFormat); 
+        }
+
+        const filters = data.filter((elem)=> elem[curent.value].replace(/^https?:\/\//, '').replace(/\/$/, '') === dopViewContext.value);
+        const curentResultrender = sortableDate(filters).map((elem)=> ({
+            name: curent.value === 'device' ? elem.deviceModel : elem.refer,
+            date: elem.datef,
+            time: elem.timef,
+            country: elem.country,
+            city: elem.city
+        }));
         
+
+        return (
+            <React.Fragment>
+                { curentResultrender.map((elem, index) =>
+                    <div key={index} className='rowStat' 
+                        style={{borderBottom:'1px dotted gray', opacity: chek(elem.name) ? 0.25 : 1}}
+                        onClick={()=> setDopViewContext()}
+                    >
+                        <span style={{fontSize:'12px'}}>
+                            { chek(elem.name) ? '[not data]' : elem.name }:
+                        </span>
+                        <span style={{marginLeft:'1em', color:'silver', fontSize:'12px'}}>
+                            <span style={{marginRight:'7px'}}>
+                                [{ elem.date }]
+                            </span> 
+                            { elem.time }
+                        </span>
+                    </div>
+                )}
+            </React.Fragment>
+        );
     }
     const filterOnRefer =(data: UniqueUsers[])=> {
         let total = 0;
@@ -153,8 +258,14 @@ const Base =({ data }: { data: UsersBaseStatistic })=> {
             result
         }
     }
-    const processingDetail =(data: UsersBaseStatistic, curent)=> {
-        const details = data.detail.filter((elem)=> {
+    const dopProcessing =()=> {
+        const ctx = dopViewContext.context;
+        
+        if(ctx === 'city') return renderCity(data.detail);
+        else if(ctx === 'info') return renderInfo(data.detail);
+    }
+    const processing =(data: UsersBaseStatistic, curent: {value: 'country'|'refer'|'device'})=> {
+        const details = structuredClone(data).detail.filter((elem)=> {
             if(elem.country !== "(not set)" && elem.country !== "(none)") {
                 if(elem.city === "(not set)" || elem.city !== "(none)") elem.city = '[ not data ]';
                 elem.date = dataFormater(elem);
@@ -169,14 +280,14 @@ const Base =({ data }: { data: UsersBaseStatistic })=> {
                 return elem;
             }
         });
-        // total / страна, число
+        
         const coyntries = filterOnCountry(details);
         const refers = filterOnRefer(details);
         const devices = filterOnDevices(details);
 
         if(curent.value === 'country') return render(coyntries.total, coyntries.result);
         else if(curent.value === 'refer') return render(refers.total, refers.result);
-        else if(curent.value === 'devices') return render(devices.total, devices.result);
+        else if(curent.value === 'device') return render(devices.total, devices.result);
     }
     
 
@@ -204,13 +315,14 @@ const Base =({ data }: { data: UsersBaseStatistic })=> {
                 value={curent}
                 items={[
                     { label: <IoEarthOutline style={{margin:'auto'}} />, value: 'country' },
-                    { label: <MdOutlineDevicesOther style={{margin:'auto'}} />, value: 'devices' },
+                    { label: <MdOutlineDevicesOther style={{margin:'auto'}} />, value: 'device' },
                     { label: <FaSitemap style={{margin:'auto'}} />, value: 'refer' },
                 ]}
-                onChange={setCurent}
+                onChange={(val)=> {setDopViewContext(); setCurent(val)}}
             />
             <div className='WrapperDiagram'>
-                { processingDetail(data, curent) }
+                { dopViewContext && dopProcessing() }
+                { !dopViewContext && processing(data, curent) }
             </div>
         </div>
     );
@@ -386,6 +498,7 @@ const PayOrPurchase =({ data }: { data: PayOrPurchaseStatistic })=> {
 
         return `${day}-${mounth}-${year}`;
     }
+    // внутренние покупки
     const processingPay =(data: PayOrPurchaseStatistic)=> {
         let total = 0;
         let result = [];
@@ -428,6 +541,7 @@ const PayOrPurchase =({ data }: { data: PayOrPurchaseStatistic })=> {
             result
         });
     }
+    // пополнения
     const processingPurchase =(data: PayOrPurchaseStatistic)=> {
         let paidCount = 0;
         let unPaidCount = 0;
@@ -438,31 +552,6 @@ const PayOrPurchase =({ data }: { data: PayOrPurchaseStatistic })=> {
 
             return purchase;
         });
-        // ! test
-        resultPurchase.push(
-            {
-                login: 'test',
-                timeshtamp: Date.now(),
-                paymantService: 'stripe',
-                status: 'paid',
-                detail: {
-                    id: 'test',
-                    amount_total: 10,
-                    livemode: true,
-                }
-            },
-            {
-                login: 'test',
-                timeshtamp: Date.now(),
-                paymantService: 'stripe',
-                status: 'unpaid',
-                detail: {
-                    id: 'test',
-                    amount_total: 10,
-                    livemode: true,
-                }
-            }
-        );
         
         return {
             paid: paidCount,
@@ -470,13 +559,25 @@ const PayOrPurchase =({ data }: { data: PayOrPurchaseStatistic })=> {
             result: resultPurchase
         }
     }
-    const render =(curent)=> {
+    const render =(curent: {value: 'purchase'|'pays'})=> {
+        const useColor =(status: 'paid'|'unpaid'|'no_payment_required')=> {
+            if(status==='paid') return '#d2fa99';
+            else if(status==='unpaid') return '#ea887b';
+            else return '#ea887b';
+        }
+
         if(curent.value === 'purchase') {
             const purchase = processingPurchase(data);
 
             return purchase.result.map((elem, index)=> (
-                <div key={index} className='rowStat' style={{borderBottom:'1px dotted gray'}}>
-                    <var>
+                <div key={index} className='rowStat' 
+                    style={{borderBottom:'1px dotted gray', color: useColor(elem.status)}}
+                >
+                    <span>
+                        { elem.status === 'paid' && '✔️' }
+                        { elem.status === 'unpaid' && '⏱' }
+                    </span>
+                    <var style={{marginLeft: '2px'}}>
                         { elem.login }:
                     </var>
                     <span style={{marginLeft: '1em', color:'silver', fontSize: '12px'}}>
@@ -485,8 +586,8 @@ const PayOrPurchase =({ data }: { data: PayOrPurchaseStatistic })=> {
                         </span>
                         { convertTime(elem.timeshtamp, 'TD').time }
                     </span> 
-                    <span style={{marginLeft:'2em', color: '#d2fa99', fontSize:'12px'}}>
-                        +{ " " +elem.detail.amount_total + " "}  💲
+                    <span style={{marginLeft:'2em', fontSize:'12px'}}>
+                        +{ " " +(elem.detail.amount_total / 100) + " "}  💲
                     </span>
                 </div>
             ));
@@ -516,8 +617,31 @@ const PayOrPurchase =({ data }: { data: PayOrPurchaseStatistic })=> {
 
     return(
         <div className='BaseArea'>
-            <div className='WrapperCellEvent'>
-                
+            <div className='WrapperCellEvent' style={{height:'100%', width:'50%', flexDirection: 'row'}}>
+                <div className='CellStat'>
+                    <div className='statValue' style={{ color: '#d2fa99' }}>
+                        {processingPurchase(data).paid}
+                    </div>
+                    <div className='statLabel' style={{ color: '#d2fa99' }}>
+                        Завершенных
+                    </div>
+                </div>
+                <div className='CellStat'>
+                    <div className='statValue' style={{ color: '#ea887b' }}>
+                        {processingPurchase(data).unPaid}
+                    </div>
+                    <div className='statLabel' style={{ color: '#ea887b' }}>
+                        Не оплаченых
+                    </div>
+                </div>
+                <div className='CellStat'>
+                    <div className='statValue' style={{ color: '#9eddeb' }}>
+                        {processingPay(data).total}
+                    </div>
+                    <div className='statLabel' style={{ color: '#9eddeb' }}>
+                        Покупки
+                    </div>
+                </div>
             </div>
             <Navigator 
                 value={curent}
@@ -569,12 +693,12 @@ export default function() {
 
     return(
         <div className='AdminBase Analitic'>
-            <section className='PanelAnalytic'>
+            <section className='PanelAnalytic' style={{height:'35%'}}>
                 <TimeNavigation onChange={(range)=> useChangeRangeDay(range, 'users')} />
                 <div className='AreaWraper'>
                     { !users  
                         ? <Loader /> 
-                        : <Base data={users}/>
+                        : <BaseStatistic data={users}/>
                     }
                 </div>
             </section>
@@ -587,7 +711,7 @@ export default function() {
                     }
                 </div>
             </section>
-            <section className='PanelAnalytic' style={{height:'35%'}}>
+            <section className='PanelAnalytic'>
                 <TimeNavigation onChange={(range)=> useChangeRangeDay(range, 'pays')} />
                 <div className='AreaWraper'>
                     { !pays  

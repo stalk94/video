@@ -74,11 +74,11 @@ app.post("/getAllBot", async (req, res)=> {
         return result;
     }
     const allBots = await botManager.getAllBots();
-    const botsOmline = getBotsOnline();
+    const botsOnline = getBotsOnline();
     Object.keys(allBots).forEach((botLogin)=> {
         allBots[botLogin].isOnline = false;
     });
-    botsOmline.forEach((botLogin)=> {
+    botsOnline.forEach((botLogin)=> {
         if(allBots[botLogin]) allBots[botLogin].isOnline = true;
     });
 
@@ -142,20 +142,20 @@ app.post('/uploadAvatar', upload.single('avatar'), (req, res)=> {
 });
 app.post("/analytic", async(req, res)=> {
     let { startDate, type, options } = req.body;
-    let result;
+    let result, startLiteral;
 
-    if(!startDate || startDate === 1) startDate = 'today';
-    else startDate = `${startDate}daysAgo`;
+    if(!startDate || startDate === 1) startLiteral = 'today';
+    else startLiteral = `${startDate}daysAgo`;
 
     // статистика
     switch(type) {
         case 'events':
-            result = await getAnalyticsEvents(startDate);
+            result = await getAnalyticsEvents(startLiteral);
         break;
         case 'users':
-            const newUsers = await getTotalNewUsers(startDate);
-            const activeUsers = await getTotalActiveUsers(startDate);
-            const uniq = await getUniqueUsers(startDate);
+            const newUsers = await getTotalNewUsers(startLiteral);
+            const activeUsers = await getTotalActiveUsers(startLiteral);
+            const uniq = await getUniqueUsers(startLiteral);
 
             result = {
                 newUsers,
@@ -166,7 +166,7 @@ app.post("/analytic", async(req, res)=> {
         case 'pays':
             result = {
                 purchase: await getPays(startDate),
-                events: await getAnalyticsEvents(startDate)
+                events: await getAnalyticsEvents(startLiteral)
             }
         break;
         case 'source':
