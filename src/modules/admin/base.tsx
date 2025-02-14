@@ -413,11 +413,17 @@ const Events =({ data }: { data: EventsStatistic })=> {
             });
         });
 
-        return(
+
+        if(arrData[0]) return(
             <Histogram
                 data={arrData}
                 maxValue={total}
             />
+        );
+        else return(
+            <div style={{margin:'auto', color:'gray'}}>
+                Нет результатов
+            </div>
         );
     }
     const dataFormater =(elem)=> {
@@ -459,7 +465,7 @@ const Events =({ data }: { data: EventsStatistic })=> {
 
     return(
         <div className='BaseArea'>
-            <div className='WrapperEventList'>
+            <div className='WrapperEventList' style={{borderRight: '1px dotted gray'}}>
                 { data && processing(data).map((elem, index)=> 
                     <div key={index} className='rowStat' style={{borderBottom:'1px dotted gray'}}>
                         <var>
@@ -473,6 +479,7 @@ const Events =({ data }: { data: EventsStatistic })=> {
                         </span>
                     </div>
                 )}
+                { !processing(data)[0] && <div style={{margin:'auto', color:'gray'}}>Нет результатов</div> }
             </div>
             <Navigator 
                 value={curent}
@@ -501,6 +508,7 @@ const PayOrPurchase =({ data }: { data: PayOrPurchaseStatistic })=> {
     // внутренние покупки
     const processingPay =(data: PayOrPurchaseStatistic)=> {
         let total = 0;
+        let count = 0;
         let result = [];
 
         data.details.events.forEach((el)=> {
@@ -513,6 +521,7 @@ const PayOrPurchase =({ data }: { data: PayOrPurchaseStatistic })=> {
                 });
 
                 total += 1;
+                count += 1;
             }
             else if(el.name === 'Супер поиск') {
                 result.push({
@@ -523,6 +532,7 @@ const PayOrPurchase =({ data }: { data: PayOrPurchaseStatistic })=> {
                 });
 
                 total += 10;
+                count += 1;
             }
             else if(el.name === 'Куплен подарок') {
                 result.push({
@@ -533,21 +543,27 @@ const PayOrPurchase =({ data }: { data: PayOrPurchaseStatistic })=> {
                 });
 
                 total += 10;
+                count += 1;
             }
         });
 
         return({
             total,
-            result
+            result, 
+            count
         });
     }
     // пополнения
     const processingPurchase =(data: PayOrPurchaseStatistic)=> {
         let paidCount = 0;
         let unPaidCount = 0;
+        let totalPaid = 0;
 
         const resultPurchase = data.details.purchase.map((purchase)=> {
-            if(purchase.status === 'paid') paidCount += 1;
+            if(purchase.status === 'paid') {
+                totalPaid += purchase.detail.amount_total / 100;
+                paidCount += 1;
+            }
             else if(purchase.status === 'unpaid') unPaidCount += 1;
 
             return purchase;
@@ -556,7 +572,8 @@ const PayOrPurchase =({ data }: { data: PayOrPurchaseStatistic })=> {
         return {
             paid: paidCount,
             unPaid: unPaidCount,
-            result: resultPurchase
+            result: resultPurchase,
+            totalPaid: totalPaid
         }
     }
     const render =(curent: {value: 'purchase'|'pays'})=> {
@@ -620,7 +637,10 @@ const PayOrPurchase =({ data }: { data: PayOrPurchaseStatistic })=> {
             <div className='WrapperCellEvent' style={{height:'100%', width:'50%', flexDirection: 'row'}}>
                 <div className='CellStat'>
                     <div className='statValue' style={{ color: '#d2fa99' }}>
-                        {processingPurchase(data).paid}
+                        { processingPurchase(data).paid }
+                    </div>
+                    <div className='statAnotation'>
+                        💲{ processingPurchase(data).totalPaid }
                     </div>
                     <div className='statLabel' style={{ color: '#d2fa99' }}>
                         Завершенных
@@ -628,7 +648,7 @@ const PayOrPurchase =({ data }: { data: PayOrPurchaseStatistic })=> {
                 </div>
                 <div className='CellStat'>
                     <div className='statValue' style={{ color: '#ea887b' }}>
-                        {processingPurchase(data).unPaid}
+                        { processingPurchase(data).unPaid }
                     </div>
                     <div className='statLabel' style={{ color: '#ea887b' }}>
                         Не оплаченых
@@ -636,10 +656,13 @@ const PayOrPurchase =({ data }: { data: PayOrPurchaseStatistic })=> {
                 </div>
                 <div className='CellStat'>
                     <div className='statValue' style={{ color: '#9eddeb' }}>
-                        {processingPay(data).total}
+                        { processingPay(data).count }
+                    </div>
+                    <div className='statAnotation'>
+                        💎{ processingPay(data).total }
                     </div>
                     <div className='statLabel' style={{ color: '#9eddeb' }}>
-                        Покупки
+                        Внут. покупки
                     </div>
                 </div>
             </div>

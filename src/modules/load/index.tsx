@@ -16,6 +16,10 @@ export default function() {
     const [alarms, setAlarm] = React.useState(false);
     const [mod, setMod] = React.useState<'auth'|'reg'|'init'|'alarm'>('init');
 
+    const useChekReferal =()=> {
+        const params = new URLSearchParams(location.search); 
+        return params.get("ref");
+    }
     const useSetSex =(type: 'm'|'fem')=> {
         setSex(type);
         setMod('alarm');
@@ -40,7 +44,11 @@ export default function() {
         });
     }
     const useReg =(data: any)=> {
-        send('reg', {...data, sex: sex}, 'POST').then((res) => {
+        const refCode = useChekReferal();
+        const dataReq = {...data, sex: sex};
+        if(refCode) dataReq.ref = refCode;
+
+        send('reg', dataReq, 'POST').then((res) => {
             if(res?.error) EVENT.emit('error', { text: res.error });
             else if (!res?.error && res?.login) {
                 EVENT.emit('success', { text: 'Успешно. Теперь авторизуйтесь!' });

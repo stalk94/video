@@ -60,6 +60,7 @@ type StripeProductCatalogItem = {
 
 
 interface UserDataState {
+    ref?: string | number
     login: string
     timeshtampRegistration: number     
     timeshtamp: number                      // last online

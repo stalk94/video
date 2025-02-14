@@ -78,6 +78,16 @@
 .statLabel {
     color: silver;
 }
+.statAnotation {
+    position: absolute;
+    transform: translate(3.6em, 15%);
+    color: white;
+    font-size: 14px;
+    background: #34343472;
+    border-radius: 10px;
+    text-align: center;
+    padding: 0 15 0 10;
+}
 
 .Navigator {
     padding: 3px;

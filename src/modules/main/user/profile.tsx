@@ -7,7 +7,7 @@ import { useHookstate } from '@hookstate/core';
 import { SelectButton } from 'primereact/selectbutton';
 import { Button } from 'primereact/button';
 import { Checkbox } from 'primereact/checkbox';
-import { ScrollPanel } from 'primereact/scrollpanel';
+import { InputText } from 'primereact/inputtext';
 import { FileUpload, FileUploadHandlerEvent } from 'primereact/fileupload';
 import { OverlayPanel } from 'primereact/overlaypanel';
 import Modal from "../../../component/modal";
@@ -326,6 +326,7 @@ const Body = {
         );
     },
     Settings: ()=> {
+        const inputRef = React.useRef<HTMLInputElement>(null);
         const { t, i18n } = useTranslation();
         const settings = useHookstate(globalState.user.settings);
 
@@ -356,9 +357,32 @@ const Body = {
                 }
             });
         }
+        const copyToClipboard =()=> {
+            if(inputRef.current) {
+                inputRef.current.select();
+                navigator.clipboard.writeText(inputRef.current.value);
+                console.log(inputRef.current.value)
+            }
+        }
         
+
         return(
             <React.Fragment>
+                <div className='IoRow' style={{maxHeight: '35px', marginBottom:'15px'}}>
+                    <span className="p-float-label">
+                        <InputText ref={inputRef} id="in"
+                            style={{maxHeight: '35px', width: '250px', color: 'gray'}}
+                            value={gurl + `?ref=${globalState.user.login.get()}`}
+                        />
+                        <label htmlFor="in" style={{color: '#ffcccc'}}>
+                            { t('profile_settings_ref') }
+                        </label>
+                    </span>
+                    <Button className="p-button-outlined" style={{marginLeft:'3px'}}
+                        icon='pi pi-copy'
+                        onClick={copyToClipboard}
+                    />
+                </div>
                 <Row
                     value={settings.translate.get()}
                     setValue={(value)=> useUpdate('translate', value)}

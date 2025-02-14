@@ -6,6 +6,10 @@ import { googleAuthorize, getIp } from "../function";
 
 
 export default function({ sex }) {
+    const useChekReferal =()=> {
+        const params = new URLSearchParams(location.search); 
+        return params.get("ref");
+    }
     const useGoogle =()=> {
         googleAuthorize(()=> {
             EVENT.emit('error', { text: 'Ошибка авторизации!' });
@@ -16,7 +20,8 @@ export default function({ sex }) {
                     googleData: data,
                     peerId: globalThis.peerId,
                     ipData: ipData,
-                    sex: sex
+                    sex: sex,
+                    ref: useChekReferal()
                 });
             });
         });
