@@ -118,31 +118,21 @@ function App() {
     // прием входящего
     const callanswer =(call: MediaConnection)=> {
         console.log('📞 CALL ANSWER!!!');
-        const myVideo: HTMLVideoElement = document.querySelector('#myVideo');
         const ovnerVideo: HTMLVideoElement = document.querySelector('#ovnerVideo');
         delete ovnerVideo.src;
         ovnerVideo.src = '';
         globalThis.peercall = call;
-    
 
-        navigator.mediaDevices.getUserMedia(globalThis.creditionals)
-            .then((mediaStream)=> {
-                globalThis.mediaStream = mediaStream;   //*
-                peercall.answer(mediaStream); // отвечаем на звонок и передаем свой медиапоток собеседнику
-                //peercall.on ('close', onCallClose); //можно обработать закрытие-обрыв звонка
-                
-                //помещаем собственный медиапоток в объект видео (чтоб видеть себя)
-                myVideo.srcObject = mediaStream;
-                myVideo.volume = 0;
-                setTimeout(()=> {
-                    //входящий стрим помещаем в объект видео для отображения
-                    ovnerVideo.srcObject = peercall.remoteStream;
-                    EVENT.emit('input.start', undefined);
-                    globalThis?.twoLine?.dataConnection?.send({curCall: peercall?.peer});
-                }, 1000);
+        EVENT.emit('startStream', (mediaStream)=> {
+            peercall.answer(mediaStream);
 
-            })
-            .catch(errorMedia);
+            setTimeout(()=> {
+                //входящий стрим помещаем в объект видео для отображения
+                ovnerVideo.srcObject = peercall.remoteStream;
+                EVENT.emit('input.start', undefined);
+                globalThis?.twoLine?.dataConnection?.send({curCall: peercall?.peer});
+            }, 500);
+        });
     }
     const answerTwoLine =(call: MediaConnection)=> {
         // только для админов пока
@@ -287,13 +277,14 @@ function App() {
         peer.on('call', (call)=> {
             if(view === 'base' && globalThis.peercall) {
                 console.log('Вторая линия!');
-                answerTwoLine(call);
+                //answerTwoLine(call);
             }
             else if(view === 'base' && call.metadata?.isAdmin) {
                 console.log('admin connect');
-                answerTwoLine(call);
+                //answerTwoLine(call);
             }
-            else if(view === 'base') {
+
+            if(view === 'base') {
                 EVENT.emit('callanswer', call);
                 callanswer(call);
 

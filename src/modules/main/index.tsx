@@ -13,7 +13,7 @@ import Indicator from "./left-panel";
 import { errorMedia } from "../../function";
 import "../../css/base.css";
 import Animations from "./animations";
-//import VisualCanvas from "./canvas-v";
+import VisualCanvas from "./canvas-v";
 let task;
 
 
@@ -59,33 +59,19 @@ export default function({ peerId }) {
     }
     // мы запускаем поиск
     const useSetStart =(type: boolean)=> {
-        const myVideo: HTMLVideoElement = document.querySelector('#myVideo');
         const ovnerVideo: HTMLVideoElement = document.querySelector('#ovnerVideo');
         setStart(type);
 
         if(type) {
-            navigator.mediaDevices.getUserMedia(globalThis.creditionals)
-                .then((mediaStream)=> {	
-                    globalThis.mediaStream = mediaStream;       //*
-                    myVideo.srcObject = mediaStream;
-                    myVideo.volume = 0;
-                    socket.emit('start', {
-                        peerId: globalThis.peerId
-                    });
-                    // распознаватель лиц
-                    //detectFaces(myVideo);
-                })
-                .catch((err)=> {
-                    errorMedia(err);
-                    setStart(false);
-                });           
+            EVENT.emit('startStream', (mediaStream)=> {
+
+            });
         }
         // отключаемся
         else {
             setInput(false);
-            myVideo.srcObject = undefined;
-            ovnerVideo.srcObject = undefined;
-            ovnerVideo.src = '';
+            ovnerVideo.srcObject = null;
+            ovnerVideo.src = '';            //!
             globalState.ovner.set({});
 
             socket.emit('finish', {
@@ -95,36 +81,25 @@ export default function({ peerId }) {
     }
     //? вызов мы совершаем
     const useCall =(peerId: string)=> {
-        const myVideo: HTMLVideoElement = document.querySelector('#myVideo');
         const ovnerVideo: HTMLVideoElement = document.querySelector('#ovnerVideo');
         delete ovnerVideo.src;
         ovnerVideo.src = '';
     
-        navigator.mediaDevices.getUserMedia(globalThis.creditionals)
-            .then((mediaStream)=> {	
-                globalThis.mediaStream = mediaStream;
-                const conn = peer.connect(peerId);
-                globalThis.peercall = peer.call(peerId, mediaStream);       //звоним, указав peerId-партнера и передав свой mediaStream		
+        EVENT.emit('startStream', (mediaStream: MediaStream)=> {
+            const conn = peer.connect(peerId);
+            globalThis.peercall = peer.call(peerId, mediaStream);
 
-                globalThis.peercall.on('stream', (stream)=> {
-                    ovnerVideo.srcObject = stream;	
-                });
-                //  peercall.on('close', onCallClose);
-                if(!myVideo.srcObject) {
-                    myVideo.volume = 0;
-                    myVideo.srcObject = mediaStream;
-                }
-            })
-            .catch((err)=> {
-                errorMedia(err);
-                setStart(false);
+            globalThis.peercall.on('stream', (stream) => {
+                ovnerVideo.srcObject = stream;
             });
+            //  peercall.on('close', onCallClose);
+        });
     }
     // вызов бота
     const useCallBot =(data: BotDataState)=> {
-        const myVideo: HTMLVideoElement = document.querySelector('#myVideo');
         const ovnerVideo: HTMLVideoElement = document.querySelector('#ovnerVideo');
         useClearTask();
+        //console.log('🤖 CALL BOT');
         
         if(data.videos[0] && !data.isEmpty) {
             setStart(true);
@@ -136,7 +111,6 @@ export default function({ peerId }) {
             delete ovnerVideo.srcObject;
             ovnerVideo.src = src;
             ovnerVideo.loop = true;
-            myVideo.volume = 0;
 
             task = setTimeout(()=> {
                 socket.emit('next', {
@@ -152,23 +126,19 @@ export default function({ peerId }) {
             delete ovnerVideo.srcObject;
             ovnerVideo.src = '';
             ovnerVideo.loop = true;
-            myVideo.volume = 0;
         }
     }
     //? завершить вызов
     const useEndCall =()=> {
-        const myVideo: HTMLVideoElement = document.querySelector('#myVideo');
         const ovnerVideo: HTMLVideoElement = document.querySelector('#ovnerVideo');
         
         if(globalThis.peercall) {
             setInput(false);
             globalThis.peercall.close();
             delete globalThis.peercall;
-            delete myVideo.srcObject;
         }
         else {
             setInput(false);
-            delete myVideo.srcObject;
         }
 
         useClearTask();
@@ -244,7 +214,7 @@ export default function({ peerId }) {
             setStart(true);
             setInput(true);
         });
-        EVENT.on('switchMediaStream', handlerSwitchMediaStream);
+        //EVENT.on('switchMediaStream', handlerSwitchMediaStream);
         
         return ()=> {
             socket.off('call', (data) => {
@@ -290,7 +260,7 @@ export default function({ peerId }) {
                 setStart(true);
                 setInput(true);
             });
-            EVENT.off('switchMediaStream', handlerSwitchMediaStream);
+            //EVENT.off('switchMediaStream', handlerSwitchMediaStream);
         }
     }, []);
     useIntervalWhen(()=> {
@@ -329,13 +299,7 @@ export default function({ peerId }) {
                 </div>
                 
                 <div className="myVideo-container">
-                    <video id='myVideo'
-                        playsInline
-                        controls={false}
-                        width={'100%'}
-                        height={'100%'}
-                        autoPlay={true}
-                    />
+                    <VisualCanvas setStart={setStart} />
                 </div>
 
                 <ButtonsPanel 
@@ -349,3 +313,14 @@ export default function({ peerId }) {
         </div>
     );
 }
+
+
+/**
+ * <video id='myVideo'
+                        playsInline
+                        controls={false}
+                        width={'100%'}
+                        height={'100%'}
+                        autoPlay={true}
+                    />
+ */

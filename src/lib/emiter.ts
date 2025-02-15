@@ -22,6 +22,7 @@ interface Events {
     /** получен поток собеседника */
     'input.start': ()=> void
     'switchMediaStream': (data: {reason: ()=> void, reject: ()=> void})=> void
+    startStream: (data: MediaStream)=> void
 }
 
 
