@@ -19,6 +19,20 @@ import { useDidMount } from 'rooks';
 const UserCard =()=> {
     const user = useHookstate(globalState.user);
 
+    const chekText =(text: string)=> {
+        if(text.length > 9) return(
+            <div className='UserCartLogin marquee-container'>
+                <div className="marquee-text">
+                    { text }
+                </div>
+            </div>
+        );
+        else return(
+            <div className='UserCartLogin'>
+                { text }
+            </div>
+        );
+    }
     const useAvatar =()=> {
         const userState = user.get({ noproxy: true });
 
@@ -44,8 +58,8 @@ const UserCard =()=> {
                     height='75px'
                 />
                 <div className='UserCartInfo'>
-                    <div className='UserCartLogin'>
-                        { useChekLogin(user.get()) }
+                    <div className='UserCartLoginContainer'>
+                        { chekText(useChekLogin(user.get())) }
                     </div>
                     <div className='UserCartLike'>
                         ❤️: &ensp;{ user.get().likes }

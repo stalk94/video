@@ -13,7 +13,7 @@ const actions = require('./server/action');
 const { scheme } = require('./server/function');
 const { getPays } = require('./services/inside-analytic');
 const { getAnalyticsEvents, getTrafficSources, getUniqueUsers, getTotalNewUsers, getTotalActiveUsers } = require('./services/analytic');
-const { online, autorize, registration, googleOuth } = require('./server/online');
+const { online, autorize, registration, googleOuth, fbOuth } = require('./server/online');
 const botManager = require('./server/bot-manager');
 const { trimVideo } = require('./services/video-trimer');
 globalThis.APP = require('./server/app');
@@ -225,6 +225,22 @@ io.on('connection', (socket)=> {
             googleOuth(msg.googleData, uuid.v4(), msg.peerId, socket, msg.sex, msg.ipData, msg.ref).then((userData)=> {
                 delete userData.password;
                 
+                socket.emit('autorize.sucess', {
+                    user: userData,
+                    token: userData.token
+                });
+                socket.userInfo = {
+                    login: userData.login,
+                    peerId: userData.peerId
+                }
+            });
+        }
+    });
+    socket.on('authFb', (msg)=> {
+        if(msg) {
+            fbOuth(msg.fbData, uuid.v4(), msg.peerId, socket, msg.sex, msg.ipData, msg.ref).then((userData) => {
+                delete userData.password;
+
                 socket.emit('autorize.sucess', {
                     user: userData,
                     token: userData.token

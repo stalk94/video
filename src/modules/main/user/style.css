@@ -77,6 +77,9 @@
     display: flex;
     flex-direction: column;
 }
+.UserCartLoginContainer {
+    max-width: 86px;
+}
 .UserCartLogin {
     font-weight: 600;
     font-family: Poppins, Proxima Nova, apple, sans-serif;

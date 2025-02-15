@@ -13,6 +13,7 @@ import Indicator from "./left-panel";
 import { errorMedia } from "../../function";
 import "../../css/base.css";
 import Animations from "./animations";
+//import VisualCanvas from "./canvas-v";
 let task;
 
 
@@ -317,9 +318,7 @@ export default function({ peerId }) {
                         width={'100%'}
                         height={'100%'}
                         autoPlay={true}
-                    >
-
-                    </video>
+                    />
                     <Spiner
                         start={start}
                         input={input}
@@ -336,9 +335,7 @@ export default function({ peerId }) {
                         width={'100%'}
                         height={'100%'}
                         autoPlay={true}
-                    >
-
-                    </video>
+                    />
                 </div>
 
                 <ButtonsPanel 

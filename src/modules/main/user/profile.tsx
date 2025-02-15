@@ -370,7 +370,7 @@ const Body = {
             <React.Fragment>
                 <div className='IoRow' style={{maxHeight: '35px', marginBottom:'15px'}}>
                     <span className="p-float-label">
-                        <InputText ref={inputRef} id="in"
+                        <InputText ref={inputRef}
                             style={{maxHeight: '35px', width: '250px', color: 'gray'}}
                             value={gurl + `?ref=${globalState.user.login.get()}`}
                         />

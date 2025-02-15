@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { EVENT } from './lib/engine';
 import * as faceapi from 'face-api.js';
+import { LandmarkConnectionArray, NormalizedLandmarkList, NormalizedLandmark } from "@mediapipe/face_mesh";
 import { loadGapiInsideDOM } from 'gapi-script';
 import axios from "axios";
 
@@ -182,4 +183,9 @@ export const useUploadForm =(url: string)=> {
     };
   
     return { uploadForm, isSuccess, progress };
+}
+export const getCoordinates =(landmarks: NormalizedLandmarkList, mapMarks: LandmarkConnectionArray)=> {
+    if(!landmarks) return [];
+
+    return mapMarks.map(([index])=> landmarks[index]).filter(Boolean);
 }
