@@ -23,6 +23,7 @@ import Modal from "./component/modal";
 import Base from "./modules/main/index";
 import Loader from "./modules/load";
 import Admin from "./modules/admin/index";
+import Agreement from "./modules/load/agreement";
 import { useTranslation, I18nextProvider } from 'react-i18next';
 import "./css/index.css";
 import "./css/hearts.css";
@@ -371,6 +372,7 @@ function App() {
                         }/>
                         <Route path="/paysucess" element={ <SuccessPage /> }/>
                         <Route path="/payfailed" element={ <CancelPage /> }/>
+                        <Route path="/agreement" element={ <Agreement /> } />
                         <Route path="*" element={<Navigate to='/' replace/>} />
                     </Routes>
                 </BrowserRouter>
