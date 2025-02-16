@@ -63,6 +63,11 @@ app.post("/reg", (req, res)=> {
 app.post("/exit", (req, res)=> {
     if(req.body.peerId) APP.exit(req.body.peerId);
 });
+app.post("/error", (req, res)=> {
+    fs.appendFile("error.log", JSON.stringify(req.body, null, 2) + ",\n", {encoding:"utf-8"}, (err)=> {
+        console.log('Получены сведения о ошибке от клиента');
+    });
+});
 app.post("/getAllBot", async (req, res)=> {
     const getBotsOnline =()=> {
         const result = [];

@@ -11,7 +11,7 @@ process.on('uncaughtException', (err)=> {
     fs.appendFileSync("dead.log", JSON.stringify({
         massage: err.message,
         stack: err.stack
-    })+"\n", {encoding:"utf-8"});
+    }, null, 2)+",\n", {encoding:"utf-8"});
 });
 const chekUrl =(url)=> {
     if(url === 'localhost:3000') return 'http://localhost:3000';

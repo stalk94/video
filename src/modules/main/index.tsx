@@ -18,7 +18,6 @@ let task;
 
 
 
-
 export default function({ peerId }) {
     const [input, setInput] = React.useState(false);        // получен ли поток от собеседника
     const [start, setStart] = React.useState(false);        // нажата мной кнопка старт
@@ -270,7 +269,7 @@ export default function({ peerId }) {
         }
     }, 1500, (globalThis.peercall ? false : true) && start);
     
-    
+
     
     return(
         <div className="Base">

@@ -30,3 +30,24 @@ export async function send(url: string, data: any, metod: 'GET'|'POST') {
     const request = await fetch(window.gurl + url, dataServer);
     return request.json();
 }
+
+
+window.onerror =(message, source, lineno, colno, error)=> {
+    source = source.replace(/^https?:\/\/[^/]+/, "").replace(/\?.*$/, "");
+    const position = `${lineno}:${colno}`;
+    const data = {
+        type: 'global',
+        name: error.name,
+        message,
+        position,
+        source,
+        stack: error.stack
+    }
+    
+    send('error', { time: new Date().toUTCString(), ...data }, 'POST');
+}
+window.addEventListener("unhandledrejection", (event)=> {
+    console.error("Promise error: ", event.reason);
+
+    send('error', { time: new Date().toUTCString(), type:'promise', reason:event.reason }, 'POST');
+});

@@ -24,6 +24,7 @@ import Base from "./modules/main/index";
 import Loader from "./modules/load";
 import Admin from "./modules/admin/index";
 import Agreement from "./modules/load/agreement";
+import ErrorBoundary from './component/error';
 import { useTranslation, I18nextProvider } from 'react-i18next';
 import "./css/index.css";
 import "./css/hearts.css";
@@ -339,7 +340,7 @@ function App() {
    
 
     return(
-        <React.Fragment>
+        <ErrorBoundary>
             <HelmetProvider>
                 <I18nextProvider i18n={i18n}>
                     <Helmet>
@@ -379,7 +380,7 @@ function App() {
                 </div>
                 <div id="heart-container"></div>
             </MantineProvider>
-        </React.Fragment>
+        </ErrorBoundary>
     );
 }
 
