@@ -44,7 +44,7 @@ body {
 }
 
 
-@media only screen and (min-width: 1280px) {
+@media only screen and (min-width: 280px) {
   .root {
       width: 100%;
       height: 100%;
@@ -151,49 +151,53 @@ body {
   .st15{opacity:0.3;fill:#FFFFFF;enable-background:new    ;}
 }
 
+.TextColorDark {
+  color: #181b37;
+}
+.IconFill {
+  color: #8a717c;
+}
+.p-dialog-title {
+  color: white;
+}
+.p-confirm-dialog-message {
+  color: #ffcccc;
+  font-size: 1.6vh;
+}
 
-  .TextColorDark {
-      color: #181b37;
-  }
-  .IconFill {
-      color: #8a717c;
-  }
-  .p-dialog-title {
-      color: white;
-  }
-  .p-confirm-dialog-message {
-      color: #ffcccc;
-      font-size: 1.6vh;
+
+/* бег. строка */
+.marquee-container {
+  overflow: hidden;
+  /* Скрытие текста, который выходит за границы */
+  white-space: nowrap;
+  /* Запрет переноса строк */
+  position: relative;
+}
+.marquee-text {
+  display: inline-block;
+  padding-left: 100%;
+  /* Начинаем за пределами контейнера */
+  animation: marquee 4s linear infinite;
+  /* Анимация движения */
+}
+
+/* Определение анимации */
+@keyframes marquee {
+  from {
+    transform: translateX(0%);
   }
 
-
-  /* бег. строка */
-  .marquee-container {
-    overflow: hidden; /* Скрытие текста, который выходит за границы */
-    white-space: nowrap; /* Запрет переноса строк */
-    position: relative;
+  to {
+    transform: translateX(-100%);
   }
-  .marquee-text {
-    display: inline-block;
-    padding-left: 100%; /* Начинаем за пределами контейнера */
-    animation: marquee 4s linear infinite; /* Анимация движения */
-  }
-
-  /* Определение анимации */
-  @keyframes marquee {
-    from {
-      transform: translateX(0%);
-    }
-    to {
-      transform: translateX(-100%);
-    }
-  } 
+}
 
 
 /*#42385A*/
 @media only screen and (max-width: 1280px) {
     .rootTop {
-      background-color: #5b22de ;
+      /*background-color: #5b22de;*/
     }
     
     input, textarea, select {

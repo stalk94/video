@@ -32,6 +32,9 @@ export function getIp(clb: (data: {
         (jsonResponse)=> clb(jsonResponse)
     );
 }
+/**
+ * Обработчик ошибок getUserMedia
+ */
 export function errorMedia(err: Error) { 
     console.log(err.name + ": " + err.message);
     if(err.name === 'NotFoundError' || err.name === 'DevicesNotFoundError') {
@@ -113,6 +116,9 @@ export function googleOut() {
         });
     }
 }
+/**
+ * переводчик текстов
+ */
 export async function translateText(text: string, targetLang = 'ru') {
     if(targetLang === 'CN') targetLang = 'zh-CN';
     const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=${targetLang}&dt=t&q=${encodeURIComponent(text)}`;
@@ -135,7 +141,9 @@ export async function detectFaces(video: HTMLVideoElement, clb?:(countFace: numb
     }, 1000);
 }
 
-
+/**
+ * timeshtamp преобразует в формат даты, времени либо даты и времени
+ */
 export function convertTime(timestamp: number, format?:'TD'|'T'|'D') {
     const date = new Date(timestamp);
 
@@ -184,6 +192,9 @@ export const useUploadForm =(url: string)=> {
   
     return { uploadForm, isSuccess, progress };
 }
+/**
+ * Поиск нужных областей (mapMarks) на лице (landmarks)
+ */
 export const getCoordinates =(landmarks: NormalizedLandmarkList, mapMarks: LandmarkConnectionArray)=> {
     if(!landmarks) return [];
 

@@ -67,7 +67,7 @@ const APP = {
             user.start();
 
             const filtresBase = Object.values(online.online).filter((elem)=> 
-                elem.peerId !== myPeerId && elem.onStart && !user.story[elem.login]
+                elem.peerId !== myPeerId && elem.onStart //&& !user.story[elem.login]
             );
             const filtresFem = filtresBase.filter((elem)=> elem.sex === 'fem');
             const filtresM = filtresBase.filter((elem)=> elem.sex === 'm');

@@ -148,12 +148,15 @@ const online = {
 }
 
 
-const registration = async function(login, password, sex, ipData) {
+const registration = async function(login, password, sex, ipData, ref) {
     if(await db.has("USERS." + login)) return { error: "login is taken" };
     else {
         const user = new User(login, setPasswordHash(password));
         user.sex = sex;
+
         if(ipData) user.info = ipData;
+        if(ref) user.ref = ref; 
+
         user._create();
         await db.set('USERS.' + login, user.get());
 
@@ -185,7 +188,7 @@ const autorize = async function(login, password, sid, peerId, socket) {
     }
     else return {error:'not find user'};
 }
-const googleOuth = async function(googleData, sid, peerId, socket, sex, ipData) {
+const googleOuth = async function(googleData, sid, peerId, socket, sex, ipData, ref) {
     const id = googleData.id;
     const loginHas = await db.has('USERS.' + id);
     
@@ -208,8 +211,50 @@ const googleOuth = async function(googleData, sid, peerId, socket, sex, ipData) 
     else {
         const user = new User(id, setPasswordHash(id));
         user.sex = sex;
+
         if(ipData) user.info = ipData;
+        if(ref) user.ref = ref;
+
         user.googleData = googleData;
+        user._create();
+        user.token = sid;
+        user.peerId = peerId;
+        user.socket = socket;
+        await db.set('USERS.' + id, user.get());
+
+        online.set(peerId, user);
+
+        return user.get();
+    }
+}
+const fbOuth = async function(fbData, sid, peerId, socket, sex, ipData, ref) {
+    const id = fbData.id;
+    const loginHas = await db.has('USERS.' + id);
+    
+    if(loginHas) {
+        const data = await db.get('USERS.' + id);
+        const user = new User(id, setPasswordHash(id));
+        online.remove(id);
+        online.chekMultiOnline(id, peerId);
+        online.deleteAllSession(id, sid);
+        user._update(data);
+        user.token = sid;
+        user.peerId = peerId;
+        user.socket = socket;
+        user.googleData = fbData;
+
+        online.set(peerId, user);
+        
+        return user.get();
+    }
+    else {
+        const user = new User(id, setPasswordHash(id));
+        user.sex = sex;
+
+        if(ipData) user.info = ipData;
+        if(ref) user.ref = ref;
+
+        user.googleData = fbData;
         user._create();
         user.token = sid;
         user.peerId = peerId;
@@ -225,8 +270,9 @@ const googleOuth = async function(googleData, sid, peerId, socket, sex, ipData) 
 
 
 module.exports = {
-    online: online,
-    registration: registration,
-    autorize: autorize,
-    googleOuth: googleOuth
+    online,
+    registration,
+    autorize,
+    googleOuth,
+    fbOuth
 }

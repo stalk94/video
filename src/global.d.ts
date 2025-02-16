@@ -1,7 +1,7 @@
 import { Message } from "./modules/main/type";
 import { Socket } from "socket.io-client";
 import { Peer, MediaConnection } from "peerjs";
-import stripe from "stripe";
+
 
 
 declare global {
@@ -60,7 +60,7 @@ type StripeProductCatalogItem = {
 
 
 interface UserDataState {
-    ref?: string | number
+    ref?: string | number                   // чей реферал
     login: string
     timeshtampRegistration: number     
     timeshtamp: number                      // last online

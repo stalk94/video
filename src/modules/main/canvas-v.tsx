@@ -55,7 +55,7 @@ export default function({ setStart }) {
                 // только если запушено
                 if(globalThis.mediaStream) {
                     globalThis.mediaStream.getTracks().forEach((track)=> track.stop());
-                    globalThis.mediaStream = mask ? canvas.captureStream(60) : newMediaStream;
+                    globalThis.mediaStream = mask ? canvas.captureStream() : newMediaStream;
                     myVideo.srcObject = newMediaStream;
 
                     myVideo.onloadeddata =()=> {
@@ -67,9 +67,19 @@ export default function({ setStart }) {
                         videoPreviewRef.current.srcObject = globalThis.mediaStream;
                         videoPreviewRef.current.volume = 0;
                         myVideo.volume = 0;
-                    }
+                        myVideo.play();
 
-                    myVideo.play();
+                        // меняем трэки
+                        if(globalThis.peercall) {
+                            const senders = globalThis.peercall.peerConnection.getSenders();
+                            globalThis.mediaStream.getTracks().forEach((newTrack)=> {
+                                const sender = senders.find((s) => s.track?.kind === newTrack.kind);
+                                if(sender) {
+                                    sender.replaceTrack(newTrack);
+                                }
+                            });
+                        }
+                    }
                 }
             })
             .catch((res) => {
@@ -82,7 +92,7 @@ export default function({ setStart }) {
     const createMyMediaStream =(call)=> {
         if(!globalThis.mediaStream) navigator.mediaDevices.getUserMedia(globalThis.creditionals)
             .then((newMediaStream)=> {
-                globalThis.mediaStream = mask ? canvas.captureStream(60) : newMediaStream;
+                globalThis.mediaStream = mask ? canvas.captureStream() : newMediaStream;
                 call(globalThis.mediaStream);
 
                 myVideo.srcObject = newMediaStream;
@@ -96,9 +106,8 @@ export default function({ setStart }) {
                     videoPreviewRef.current.srcObject = globalThis.mediaStream;
                     videoPreviewRef.current.volume = 0;
                     myVideo.volume = 0;
+                    myVideo.play();
                 }
-
-                myVideo.play();
             })
             .catch((err)=> {
                 errorMedia(err);
@@ -123,7 +132,7 @@ export default function({ setStart }) {
                 }
 
                 tempCtx.closePath();
-                tempCtx.filter = "blur(8px)";
+                tempCtx.filter = "blur(15px)";
                 tempCtx.clip();
                 tempCtx.drawImage(canvas, 0, 0, tempCanvas.width, tempCanvas.height);
 
@@ -138,7 +147,7 @@ export default function({ setStart }) {
         if(isRunning) {
             requestAnimationFrame(()=> processVideo(videoElement));
         }
-     }
+    }
     const handlerPlay = async()=> {
         if(faceMesh || isRunning || !mask) {
             if(!mask) setMod(2);
