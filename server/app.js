@@ -2,7 +2,7 @@ const fs = require('fs');
 const { online } = require('./online');
 const actions = require('./action');
 const User = require('./user');
-const { chekUserLogin } = require('./function');
+const { chekUserLogin, findSourcesMap } = require('./function');
 const rand = require('random-percentage');
 const pricesConfig = JSON.parse(fs.readFileSync('config/prices.json'));
 
@@ -10,7 +10,12 @@ const pricesConfig = JSON.parse(fs.readFileSync('config/prices.json'));
 
 const APP = {
     _init() {
-        setInterval(()=> online.init(), 30000);
+        setInterval(()=> {
+            online.init();
+            findSourcesMap();
+        }, 30000);
+
+        findSourcesMap();
     },
     /**
      * Инициация вызова сторонами

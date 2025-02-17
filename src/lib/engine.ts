@@ -34,7 +34,8 @@ export async function send(url: string, data: any, metod: 'GET'|'POST') {
 
 window.onerror =(message, source, lineno, colno, error)=> {
     source = source.replace(/^https?:\/\/[^/]+/, "").replace(/\?.*$/, "");
-    const position = `${lineno}:${colno}`;
+    let position = `${lineno}:${colno}`;
+
     const data = {
         type: 'global',
         name: error.name,
@@ -47,7 +48,8 @@ window.onerror =(message, source, lineno, colno, error)=> {
     send('error', { time: new Date().toUTCString(), ...data }, 'POST');
 }
 window.addEventListener("unhandledrejection", (event)=> {
-    console.error("Promise error: ", event.reason);
-
+    console.error("❌⏳ error: ", event.reason);
     send('error', { time: new Date().toUTCString(), type:'promise', reason:event.reason }, 'POST');
+    
+    event.preventDefault();
 });

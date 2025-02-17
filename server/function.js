@@ -1,5 +1,6 @@
 const CryptoJS = require('crypto-js');
-
+const { SourceMapConsumer } = require('source-map-js');
+const fs = require('fs');
 
 exports.setPasswordHash =(pass)=> {
     return CryptoJS.AES.encrypt(pass, 'xa4ikxa4ik').toString()
@@ -38,6 +39,33 @@ exports.chekUserLogin =(userData)=> {
 exports.getFileExtension =(filename)=> {
     const match = filename.match(/\.([a-zA-Z0-9]+)$/);
     return match ? match[1].toLowerCase() : null;
+}
+exports.findSourcesMap =()=> {
+    fs.readdir('dist/assets/', (err, files)=> {
+        if(!err) {
+            const mapFiles = files.filter((file)=> file.endsWith('.js.map'));
+
+            if(mapFiles[0]) {
+                const find = `dist/assets/${mapFiles[0]}`;
+                fs.renameSync(find, 'config/source-map.js.map');
+            }
+        }
+    });
+}
+exports.findErrorSource =(position, clb)=> {
+    const arr = position.split(':');
+
+    fs.readFile('config/source-map.js.map', {encoding:'utf-8'}, (err, data)=> {
+        if(!err) {
+            const consumer = new SourceMapConsumer(JSON.parse(data));
+            const original = consumer.originalPositionFor({
+                line: +arr[0],
+                column: +arr[1],
+            });
+            
+            clb(original);
+        }
+    });
 }
 
 

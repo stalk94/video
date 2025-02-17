@@ -43,5 +43,6 @@
     "profile_settings_translate": "翻譯",
     "profile_settings_translate_text": "启用聊天消息的自动翻译。",
     "profile_settings_country": "隐藏国家",
-    "profile_settings_country_text": "隐藏您的国家可以为您的个人资料增添神秘感和隐私感。其他用户将无法看到您的国旗。"
+    "profile_settings_country_text": "隐藏您的国家可以为您的个人资料增添神秘感和隐私感。其他用户将无法看到您的国旗。",
+    "label_agreement": "使用者協定"
 }

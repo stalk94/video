@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from "react-router-dom";
 import { EVENT } from '../../../lib/engine';
 import { Button } from 'primereact/button';
 import { InputTextarea } from 'primereact/inputtextarea';
@@ -6,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 
 
 export default function() {
+    const navigate = useNavigate();
     const { t, i18n } = useTranslation();
     const [value, setValue] = React.useState();
 
@@ -23,8 +25,14 @@ export default function() {
         else EVENT.emit('error', {text: 'Слишком короткий либо слишком длинный текст'});
     }
 
+
     return(
-        <div>
+        <div style={{display:'flex', flexDirection:'column'}}>
+            <div className='agreement-link'
+                onClick={()=> navigate('/agreement')}
+            >
+                📄{ " "+ t('label_agreement') }
+            </div>
             <InputTextarea 
                 placeholder='min 12 max 300 simbol'
                 rows={5} 

@@ -10,7 +10,7 @@ const cors = require("cors");
 const path = require("path");
 const { db } = require('./server/db');
 const actions = require('./server/action');
-const { scheme } = require('./server/function');
+const { scheme, findErrorSource } = require('./server/function');
 const { getPays } = require('./services/inside-analytic');
 const { getAnalyticsEvents, getTrafficSources, getUniqueUsers, getTotalNewUsers, getTotalActiveUsers } = require('./services/analytic');
 const { online, autorize, registration, googleOuth, fbOuth } = require('./server/online');
@@ -64,7 +64,24 @@ app.post("/exit", (req, res)=> {
     if(req.body.peerId) APP.exit(req.body.peerId);
 });
 app.post("/error", (req, res)=> {
-    fs.appendFile("error.log", JSON.stringify(req.body, null, 2) + ",\n", {encoding:"utf-8"}, (err)=> {
+    if(req.body.type === 'global' && req.body.position) {
+        findErrorSource(req.body.position, (originError)=> {
+            const data = {
+                time: req.body.time,
+                type: 'global',
+                name: req.body.name,
+                message: req.body.message,
+                source: originError.source,
+                position: `${originError.line}:${originError.column}`,
+                stack: req.body.stack
+            }
+
+            fs.appendFile("error.log", JSON.stringify(data, null, 2) + ",\n", {encoding:"utf-8"}, (err)=> {
+                console.log('Получены сведения о ошибке от клиента');
+            });
+        });
+    }
+    else fs.appendFile("error.log", JSON.stringify(req.body, null, 2) + ",\n", {encoding:"utf-8"}, (err)=> {
         console.log('Получены сведения о ошибке от клиента');
     });
 });

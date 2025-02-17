@@ -35,3 +35,15 @@
     margin-top: 3px;
     padding: 0.5em;
 }
+
+
+/* пользовательское соглашение */
+.agreement-link {
+    cursor: pointer;
+    margin-bottom: 2em;
+    color: silver;
+    text-decoration: underline;
+}
+.agreement-link:hover {
+    color: white;
+}

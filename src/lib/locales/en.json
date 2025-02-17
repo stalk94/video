@@ -43,5 +43,6 @@
     "profile_settings_ref": "Referral link",
     "profile_settings_translate_text": "Enable automatic translation of chat messages.",
     "profile_settings_country": "Hide country",
-    "profile_settings_country_text": "Hiding your country adds a sense of mystery and privacy to your profile. Other users will not see your flag."
+    "profile_settings_country_text": "Hiding your country adds a sense of mystery and privacy to your profile. Other users will not see your flag.",
+    "label_agreement": "User Agreement"
 }

@@ -43,5 +43,6 @@
     "profile_settings_translate": "Übersetzung",
     "profile_settings_translate_text": "Automatische Übersetzung von Chat-Nachrichten aktivieren.",
     "profile_settings_country": "Land verbergen",
-    "profile_settings_country_text": "Das Verbergen Ihres Landes verleiht Ihrem Profil eine gewisse Mystik und Privatsphäre. Andere Nutzer werden Ihre Flagge nicht sehen."
+    "profile_settings_country_text": "Das Verbergen Ihres Landes verleiht Ihrem Profil eine gewisse Mystik und Privatsphäre. Andere Nutzer werden Ihre Flagge nicht sehen.",
+    "label_agreement": "Benutzervereinbarung"
 }

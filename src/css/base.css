@@ -1,21 +1,29 @@
 .Base {
+    box-sizing: border-box;
     display: flex;
     flex-direction: column;
     margin-left: 15%;
     width: 70%;
     height: 80%;
-    min-height: 650px;
+    min-height: 680px;
     border: 1px solid rgba(31, 30, 30, 0.4);
     box-shadow: 0px 10px 15px rgba(2, 2, 2, 0.3);
 }
 .Admin {
     background: rgb(14, 14, 14);
 }
+.Agreement {
+    overflow-y: auto;
+    height: 100%;
+    background-color: aliceblue;
+    padding: 10px;
+    padding-left: 2%;
+}
 
 header {   
     display: flex;
     flex-direction: row;
-    height: 8%;
+    max-height: 8%;
     min-height: 55px;
     width: 100%;
     z-index: 5;
@@ -25,6 +33,7 @@ header {
     box-shadow: 0px 3px 3px rgba(2, 2, 2, 0.5);
 }
 .Container {
+    box-sizing: border-box;
     background-color: rgb(239, 237, 237);
     height: 84%;
     display: flex;
@@ -39,7 +48,7 @@ footer {
     width: 100%;
     display: flex;
     flex-direction: row;
-    border-top: 3px solid #42385A;
+    border-top: 2px solid #42385a6d;
 }
 
 
@@ -133,8 +142,6 @@ footer {
     /*background-color: #42385A;*/
     background: linear-gradient(90deg, #7259ab,#42385A);
     padding: auto;
-    padding-top: 4px;
-    padding-bottom: 4px;
     position: relative;
 }
 .ButtonsMobailLeft {
@@ -159,24 +166,20 @@ footer {
         overflow: hidden;
         border: 1px solid rgba(31, 30, 30, 0.4);
         box-shadow: 0px 10px 15px rgba(2, 2, 2, 0.3);
+        min-height: 600px;
     }
 
     header {   
-        height: 4em;
-        max-height: 58px;
-        min-height: 50px;
+        min-height: 56px;
         width: 100%;
         z-index: 5;
         border: 1px solid rgb(31, 30, 30);
-        background-color: #42385A;
         box-shadow: 0px 3px 3px rgba(2, 2, 2, 0.304);
     }
-    .Container {
-        display: flex;
-        flex-direction: column;
-        position: relative;
-    }
 
+    .Container {
+        
+    }
     .myVideo-container {
         display: inline-block;
         height: 20%;
@@ -198,13 +201,15 @@ footer {
         background: #7259ab;
         box-shadow: inset 0px 0px 150px rgba(0, 0, 0, 0.3);
     }
+    
 
     footer {
         z-index: 5;
         width: 100%;
         display: flex;
+        max-height: 10%;
         flex-direction: row;
-        border-top: 3px solid #42385A;
+        border-top: 1px solid #42385a31;
     }
 }
 
@@ -220,5 +225,19 @@ footer {
         background-color: rgba(0, 0, 0, 0.5);
         border: 1px solid rgba(19, 19, 19, 0.5);
         border-radius: 5%;
+    }
+}
+
+@media screen and (max-height: 700px) {
+    header {   
+        min-height: 40px;
+        width: 100%;
+        z-index: 5;
+        border: 1px solid rgb(31, 30, 30);
+        box-shadow: 0px 3px 3px rgba(2, 2, 2, 0.304);
+    }
+
+    footer {
+        max-height: 8%;
     }
 }

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from "react-router-dom";
 import { EVENT } from '../../../lib/engine';
 import { Dropdown } from 'primereact/dropdown';
 import { SelectButton } from 'primereact/selectbutton';
@@ -14,6 +15,7 @@ const constructConfig =(deviceId: string, type: 'video' | 'audio')=> {
 
 
 export default function() {
+    const navigate = useNavigate();
     const [selectLang, setSelectLang] = React.useState('GB');
     const [selectAudios, setSelectAudios] = React.useState();
     const [selectVideos, setSelectVideos] = React.useState();
@@ -161,6 +163,11 @@ export default function() {
                     optionLabel="name" 
                     editable 
                 />
+            </div>
+            <div className='agreement-link' style={{marginBottom:'0px', marginTop:'2em', color:'gray'}}
+                onClick={()=> navigate('/agreement')}
+            >
+                📄{ " "+ t('label_agreement') }
             </div>
         </div>
     );

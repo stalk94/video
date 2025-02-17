@@ -8,7 +8,7 @@ import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { MantineProvider } from '@mantine/core';
 import React from 'react';
 import ReactGA from 'react-ga4';
-import { BrowserRouter, Routes, Route, Navigate} from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { errorMedia, getIp, translateText } from "./function";
 import { io, Socket } from "socket.io-client";
 import { EVENT, send } from "./lib/engine";

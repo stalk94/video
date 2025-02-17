@@ -11,6 +11,7 @@ import { TbMessageDots } from "react-icons/tb";
 import User from "./user/index";
 import News from "./user/news";
 import { useTranslation } from 'react-i18next';
+import { isMobile } from "../../function";
 import "../../css/header.css";
 
 
@@ -46,9 +47,7 @@ const Test =({ useCall, peerId })=> {
 const Coins =({ money }: { money: number})=> {
     return(
         <div className='CoinsContainer'>
-            <div style={{}}>
-                COINS:
-            </div>
+            COINS:
             <div style={{marginLeft:'5px'}}>
                 { money }
             </div>
@@ -101,14 +100,14 @@ const Avatar =({ setModal })=> {
             id="UserMainDropDown"
         >
             <Popover.Target>
-                <Button className="button userButton" id="user"
+                <Button className="userButton" id="user"
                     icon={
                         useAvatar()
                             ? <img style={{objectFit: 'cover'}}
                                 src={ useAvatar() }
                                 onError={(e)=> e.target.src = gurl + '/img/non-avatar.jpg'}
-                                width='50px'
-                                height='50px'
+                                width={isMobile()?'48px':'52px'}
+                                height={isMobile()?'48px':'52px'}
                             />
                             : <FiUser />
                     }
@@ -132,7 +131,7 @@ const LsButton =()=> {
             id="NewsDropDown"
         >
             <Popover.Target>
-                <Button className="button userButton" id="ls"
+                <Button className="userButton" id="ls"
                     style={{marginLeft: 'auto'}}
                     icon={ <TbMessageDots /> }
                     onClick={()=> setOpened(true)}

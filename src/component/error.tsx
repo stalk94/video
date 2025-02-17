@@ -25,9 +25,14 @@ class ErrorBoundary extends React.Component<{ children: React.ReactNode }, { has
     render() {
         if(this.state.hasError) {
             return(
-                <h2>
-                    Упс. Что-то пошло не так...
-                </h2>
+                <div style={{margin:'auto', display:'flex', flexDirection:'column'}}>
+                    <h1 style={{color: 'red'}}>
+                        Упс. Что-то пошло не так...
+                    </h1>
+                    <h3 style={{color: 'orange'}}>
+                        ↻ Перезагрузите страницу
+                    </h3>
+                </div>
             );
         }
         return this.props.children;
