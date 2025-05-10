@@ -1,0 +1,236 @@
+{
+  "time": "Fri, 09 May 2025 12:57:32 GMT",
+  "type": "global",
+  "name": "ReferenceError",
+  "message": "Uncaught ReferenceError: iconBtnStyle is not defined",
+  "source": "../../node_modules/@tensorflow/tfjs-core/dist/tf-core.esm.js",
+  "position": "17:136762",
+  "stack": "ReferenceError: iconBtnStyle is not defined\n    at default (http://localhost:3001/modules/main/canvas-v.tsx?t=1746795451158:172:63)\n    at renderWithHooks (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:11548:26)\n    at mountIndeterminateComponent (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:14926:21)\n    at beginWork (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:15914:22)\n    at HTMLUnknownElement.callCallback2 (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:3674:22)\n    at Object.invokeGuardedCallbackDev (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:3699:24)\n    at invokeGuardedCallback (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:3733:39)\n    at beginWork$1 (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:19765:15)\n    at performUnitOfWork (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:19198:20)\n    at workLoopSync (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:19137:13)"
+},
+{
+  "time": "Fri, 09 May 2025 12:57:32 GMT",
+  "type": "react",
+  "name": "ReferenceError",
+  "message": "iconBtnStyle is not defined",
+  "stack": "\n    at default (http://localhost:3001/modules/main/canvas-v.tsx?t=1746795451158:12:27)\n    at div\n    at div\n    at div\n    at default (http://localhost:3001/modules/main/index.tsx?t=1746795451158:17:27)\n    at RenderedRoute (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/react-router-dom.js?v=65da1ba4:5373:26)\n    at Routes (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/react-router-dom.js?v=65da1ba4:6103:3)\n    at Router (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/react-router-dom.js?v=65da1ba4:6046:13)\n    at BrowserRouter (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/react-router-dom.js?v=65da1ba4:8073:3)\n    at div\n    at MantineThemeProvider (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/@mantine_core.js?v=65da1ba4:4209:3)\n    at MantineProvider (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/@mantine_core.js?v=65da1ba4:4711:3)\n    at ErrorBoundary (http://localhost:3001/component/error.tsx:5:5)\n    at App (http://localhost:3001/index.tsx:43:17)"
+},
+{
+  "time": "Fri, 09 May 2025 12:57:32 GMT",
+  "type": "global",
+  "name": "ReferenceError",
+  "message": "Uncaught ReferenceError: iconBtnStyle is not defined",
+  "source": "../../node_modules/@tensorflow/tfjs-core/dist/tf-core.esm.js",
+  "position": "17:136762",
+  "stack": "ReferenceError: iconBtnStyle is not defined\n    at default (http://localhost:3001/modules/main/canvas-v.tsx?t=1746795451158:172:63)\n    at renderWithHooks (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:11548:26)\n    at mountIndeterminateComponent (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:14926:21)\n    at beginWork (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:15914:22)\n    at HTMLUnknownElement.callCallback2 (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:3674:22)\n    at Object.invokeGuardedCallbackDev (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:3699:24)\n    at invokeGuardedCallback (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:3733:39)\n    at beginWork$1 (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:19765:15)\n    at performUnitOfWork (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:19198:20)\n    at workLoopSync (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:19137:13)"
+},
+{
+  "time": "Fri, 09 May 2025 12:57:36 GMT",
+  "type": "global",
+  "name": "ReferenceError",
+  "message": "Uncaught ReferenceError: iconBtnStyle is not defined",
+  "source": "../../node_modules/@tensorflow/tfjs-core/dist/tf-core.esm.js",
+  "position": "17:136762",
+  "stack": "ReferenceError: iconBtnStyle is not defined\n    at default (http://localhost:3001/modules/main/canvas-v.tsx?t=1746795455311:172:63)\n    at renderWithHooks (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:11548:26)\n    at mountIndeterminateComponent (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:14926:21)\n    at beginWork (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:15914:22)\n    at HTMLUnknownElement.callCallback2 (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:3674:22)\n    at Object.invokeGuardedCallbackDev (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:3699:24)\n    at invokeGuardedCallback (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:3733:39)\n    at beginWork$1 (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:19765:15)\n    at performUnitOfWork (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:19198:20)\n    at workLoopSync (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:19137:13)"
+},
+{
+  "time": "Fri, 09 May 2025 12:57:36 GMT",
+  "type": "react",
+  "name": "ReferenceError",
+  "message": "iconBtnStyle is not defined",
+  "stack": "\n    at default (http://localhost:3001/modules/main/canvas-v.tsx?t=1746795455311:12:27)\n    at div\n    at div\n    at div\n    at default (http://localhost:3001/modules/main/index.tsx?t=1746795455311:17:27)\n    at RenderedRoute (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/react-router-dom.js?v=65da1ba4:5373:26)\n    at Routes (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/react-router-dom.js?v=65da1ba4:6103:3)\n    at Router (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/react-router-dom.js?v=65da1ba4:6046:13)\n    at BrowserRouter (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/react-router-dom.js?v=65da1ba4:8073:3)\n    at div\n    at MantineThemeProvider (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/@mantine_core.js?v=65da1ba4:4209:3)\n    at MantineProvider (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/@mantine_core.js?v=65da1ba4:4711:3)\n    at ErrorBoundary (http://localhost:3001/component/error.tsx:5:5)\n    at App (http://localhost:3001/index.tsx:43:17)"
+},
+{
+  "time": "Fri, 09 May 2025 12:57:36 GMT",
+  "type": "global",
+  "name": "ReferenceError",
+  "message": "Uncaught ReferenceError: iconBtnStyle is not defined",
+  "source": "../../node_modules/@tensorflow/tfjs-core/dist/tf-core.esm.js",
+  "position": "17:136762",
+  "stack": "ReferenceError: iconBtnStyle is not defined\n    at default (http://localhost:3001/modules/main/canvas-v.tsx?t=1746795455311:172:63)\n    at renderWithHooks (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:11548:26)\n    at mountIndeterminateComponent (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:14926:21)\n    at beginWork (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:15914:22)\n    at HTMLUnknownElement.callCallback2 (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:3674:22)\n    at Object.invokeGuardedCallbackDev (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:3699:24)\n    at invokeGuardedCallback (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:3733:39)\n    at beginWork$1 (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:19765:15)\n    at performUnitOfWork (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:19198:20)\n    at workLoopSync (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:19137:13)"
+},
+{
+  "time": "Fri, 09 May 2025 13:01:32 GMT",
+  "type": "global",
+  "name": "ReferenceError",
+  "message": "Uncaught ReferenceError: iconBtnStyle is not defined",
+  "source": "../../node_modules/@tensorflow/tfjs-core/dist/tf-core.esm.js",
+  "position": "17:136762",
+  "stack": "ReferenceError: iconBtnStyle is not defined\n    at default (http://localhost:3001/modules/main/canvas-v.tsx?t=1746795691329:195:63)\n    at renderWithHooks (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:11548:26)\n    at mountIndeterminateComponent (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:14926:21)\n    at beginWork (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:15914:22)\n    at HTMLUnknownElement.callCallback2 (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:3674:22)\n    at Object.invokeGuardedCallbackDev (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:3699:24)\n    at invokeGuardedCallback (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:3733:39)\n    at beginWork$1 (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:19765:15)\n    at performUnitOfWork (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:19198:20)\n    at workLoopSync (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:19137:13)"
+},
+{
+  "time": "Fri, 09 May 2025 13:01:32 GMT",
+  "type": "react",
+  "name": "ReferenceError",
+  "message": "iconBtnStyle is not defined",
+  "stack": "\n    at default (http://localhost:3001/modules/main/canvas-v.tsx?t=1746795691329:35:27)\n    at div\n    at div\n    at div\n    at default (http://localhost:3001/modules/main/index.tsx?t=1746795691329:17:27)\n    at RenderedRoute (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/react-router-dom.js?v=65da1ba4:5373:26)\n    at Routes (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/react-router-dom.js?v=65da1ba4:6103:3)\n    at Router (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/react-router-dom.js?v=65da1ba4:6046:13)\n    at BrowserRouter (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/react-router-dom.js?v=65da1ba4:8073:3)\n    at div\n    at MantineThemeProvider (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/@mantine_core.js?v=65da1ba4:4209:3)\n    at MantineProvider (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/@mantine_core.js?v=65da1ba4:4711:3)\n    at ErrorBoundary (http://localhost:3001/component/error.tsx:5:5)\n    at App (http://localhost:3001/index.tsx:43:17)"
+},
+{
+  "time": "Fri, 09 May 2025 13:01:32 GMT",
+  "type": "global",
+  "name": "ReferenceError",
+  "message": "Uncaught ReferenceError: iconBtnStyle is not defined",
+  "source": "../../node_modules/@tensorflow/tfjs-core/dist/tf-core.esm.js",
+  "position": "17:136762",
+  "stack": "ReferenceError: iconBtnStyle is not defined\n    at default (http://localhost:3001/modules/main/canvas-v.tsx?t=1746795691329:195:63)\n    at renderWithHooks (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:11548:26)\n    at mountIndeterminateComponent (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:14926:21)\n    at beginWork (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:15914:22)\n    at HTMLUnknownElement.callCallback2 (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:3674:22)\n    at Object.invokeGuardedCallbackDev (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:3699:24)\n    at invokeGuardedCallback (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:3733:39)\n    at beginWork$1 (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:19765:15)\n    at performUnitOfWork (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:19198:20)\n    at workLoopSync (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:19137:13)"
+},
+{
+  "time": "Fri, 09 May 2025 13:01:36 GMT",
+  "type": "global",
+  "name": "ReferenceError",
+  "message": "Uncaught ReferenceError: iconBtnStyle is not defined",
+  "source": "../../node_modules/@tensorflow/tfjs-core/dist/tf-core.esm.js",
+  "position": "17:136762",
+  "stack": "ReferenceError: iconBtnStyle is not defined\n    at default (http://localhost:3001/modules/main/canvas-v.tsx?t=1746795695342:195:63)\n    at renderWithHooks (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:11548:26)\n    at mountIndeterminateComponent (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:14926:21)\n    at beginWork (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:15914:22)\n    at HTMLUnknownElement.callCallback2 (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:3674:22)\n    at Object.invokeGuardedCallbackDev (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:3699:24)\n    at invokeGuardedCallback (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:3733:39)\n    at beginWork$1 (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:19765:15)\n    at performUnitOfWork (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:19198:20)\n    at workLoopSync (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:19137:13)"
+},
+{
+  "time": "Fri, 09 May 2025 13:01:36 GMT",
+  "type": "react",
+  "name": "ReferenceError",
+  "message": "iconBtnStyle is not defined",
+  "stack": "\n    at default (http://localhost:3001/modules/main/canvas-v.tsx?t=1746795695342:35:27)\n    at div\n    at div\n    at div\n    at default (http://localhost:3001/modules/main/index.tsx?t=1746795695342:17:27)\n    at RenderedRoute (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/react-router-dom.js?v=65da1ba4:5373:26)\n    at Routes (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/react-router-dom.js?v=65da1ba4:6103:3)\n    at Router (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/react-router-dom.js?v=65da1ba4:6046:13)\n    at BrowserRouter (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/react-router-dom.js?v=65da1ba4:8073:3)\n    at div\n    at MantineThemeProvider (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/@mantine_core.js?v=65da1ba4:4209:3)\n    at MantineProvider (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/@mantine_core.js?v=65da1ba4:4711:3)\n    at ErrorBoundary (http://localhost:3001/component/error.tsx:5:5)\n    at App (http://localhost:3001/index.tsx:43:17)"
+},
+{
+  "time": "Fri, 09 May 2025 13:01:36 GMT",
+  "type": "global",
+  "name": "ReferenceError",
+  "message": "Uncaught ReferenceError: iconBtnStyle is not defined",
+  "source": "../../node_modules/@tensorflow/tfjs-core/dist/tf-core.esm.js",
+  "position": "17:136762",
+  "stack": "ReferenceError: iconBtnStyle is not defined\n    at default (http://localhost:3001/modules/main/canvas-v.tsx?t=1746795695342:195:63)\n    at renderWithHooks (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:11548:26)\n    at mountIndeterminateComponent (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:14926:21)\n    at beginWork (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:15914:22)\n    at HTMLUnknownElement.callCallback2 (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:3674:22)\n    at Object.invokeGuardedCallbackDev (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:3699:24)\n    at invokeGuardedCallback (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:3733:39)\n    at beginWork$1 (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:19765:15)\n    at performUnitOfWork (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:19198:20)\n    at workLoopSync (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:19137:13)"
+},
+{
+  "time": "Fri, 09 May 2025 13:01:42 GMT",
+  "type": "global",
+  "name": "ReferenceError",
+  "message": "Uncaught ReferenceError: peerId is not defined",
+  "source": "../../node_modules/@tensorflow/tfjs-core/dist/tf-core.esm.js",
+  "position": "17:141467",
+  "stack": "ReferenceError: peerId is not defined\n    at http://localhost:3001/index.tsx:294:18\n    at http://localhost:3001/@vite/client:582:16"
+},
+{
+  "time": "Fri, 09 May 2025 13:01:43 GMT",
+  "type": "global",
+  "name": "ReferenceError",
+  "message": "Uncaught ReferenceError: iconBtnStyle is not defined",
+  "source": "../../node_modules/@tensorflow/tfjs-core/dist/tf-core.esm.js",
+  "position": "17:136762",
+  "stack": "ReferenceError: iconBtnStyle is not defined\n    at default (http://localhost:3001/modules/main/canvas-v.tsx?t=1746795702119:195:63)\n    at renderWithHooks (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:11548:26)\n    at mountIndeterminateComponent (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:14926:21)\n    at beginWork (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:15914:22)\n    at HTMLUnknownElement.callCallback2 (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:3674:22)\n    at Object.invokeGuardedCallbackDev (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:3699:24)\n    at invokeGuardedCallback (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:3733:39)\n    at beginWork$1 (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:19765:15)\n    at performUnitOfWork (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:19198:20)\n    at workLoopSync (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:19137:13)"
+},
+{
+  "time": "Fri, 09 May 2025 13:01:43 GMT",
+  "type": "react",
+  "name": "ReferenceError",
+  "message": "iconBtnStyle is not defined",
+  "stack": "\n    at default (http://localhost:3001/modules/main/canvas-v.tsx?t=1746795702119:35:27)\n    at div\n    at div\n    at div\n    at default (http://localhost:3001/modules/main/index.tsx?t=1746795702119:17:27)\n    at RenderedRoute (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/react-router-dom.js?v=65da1ba4:5373:26)\n    at Routes (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/react-router-dom.js?v=65da1ba4:6103:3)\n    at Router (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/react-router-dom.js?v=65da1ba4:6046:13)\n    at BrowserRouter (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/react-router-dom.js?v=65da1ba4:8073:3)\n    at div\n    at MantineThemeProvider (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/@mantine_core.js?v=65da1ba4:4209:3)\n    at MantineProvider (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/@mantine_core.js?v=65da1ba4:4711:3)\n    at ErrorBoundary (http://localhost:3001/component/error.tsx:5:5)\n    at App (http://localhost:3001/index.tsx:43:17)"
+},
+{
+  "time": "Fri, 09 May 2025 13:01:43 GMT",
+  "type": "global",
+  "name": "ReferenceError",
+  "message": "Uncaught ReferenceError: iconBtnStyle is not defined",
+  "source": "../../node_modules/@tensorflow/tfjs-core/dist/tf-core.esm.js",
+  "position": "17:136762",
+  "stack": "ReferenceError: iconBtnStyle is not defined\n    at default (http://localhost:3001/modules/main/canvas-v.tsx?t=1746795702119:195:63)\n    at renderWithHooks (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:11548:26)\n    at mountIndeterminateComponent (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:14926:21)\n    at beginWork (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:15914:22)\n    at HTMLUnknownElement.callCallback2 (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:3674:22)\n    at Object.invokeGuardedCallbackDev (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:3699:24)\n    at invokeGuardedCallback (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:3733:39)\n    at beginWork$1 (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:19765:15)\n    at performUnitOfWork (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:19198:20)\n    at workLoopSync (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:19137:13)"
+},
+{
+  "time": "Fri, 09 May 2025 13:04:28 GMT",
+  "type": "global",
+  "name": "ReferenceError",
+  "message": "Uncaught ReferenceError: iconBtnStyle is not defined",
+  "source": "../../node_modules/@tensorflow/tfjs-core/dist/tf-core.esm.js",
+  "position": "17:136762",
+  "stack": "ReferenceError: iconBtnStyle is not defined\n    at default (http://localhost:3001/modules/main/canvas-v.tsx?t=1746795867617:195:63)\n    at renderWithHooks (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:11548:26)\n    at mountIndeterminateComponent (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:14926:21)\n    at beginWork (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:15914:22)\n    at HTMLUnknownElement.callCallback2 (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:3674:22)\n    at Object.invokeGuardedCallbackDev (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:3699:24)\n    at invokeGuardedCallback (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:3733:39)\n    at beginWork$1 (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:19765:15)\n    at performUnitOfWork (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:19198:20)\n    at workLoopSync (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:19137:13)"
+},
+{
+  "time": "Fri, 09 May 2025 13:04:28 GMT",
+  "type": "react",
+  "name": "ReferenceError",
+  "message": "iconBtnStyle is not defined",
+  "stack": "\n    at default (http://localhost:3001/modules/main/canvas-v.tsx?t=1746795867617:35:27)\n    at div\n    at div\n    at div\n    at default (http://localhost:3001/modules/main/index.tsx?t=1746795867617:17:27)\n    at RenderedRoute (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/react-router-dom.js?v=65da1ba4:5373:26)\n    at Routes (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/react-router-dom.js?v=65da1ba4:6103:3)\n    at Router (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/react-router-dom.js?v=65da1ba4:6046:13)\n    at BrowserRouter (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/react-router-dom.js?v=65da1ba4:8073:3)\n    at div\n    at MantineThemeProvider (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/@mantine_core.js?v=65da1ba4:4209:3)\n    at MantineProvider (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/@mantine_core.js?v=65da1ba4:4711:3)\n    at ErrorBoundary (http://localhost:3001/component/error.tsx:5:5)\n    at App (http://localhost:3001/index.tsx:43:17)"
+},
+{
+  "time": "Fri, 09 May 2025 13:04:28 GMT",
+  "type": "global",
+  "name": "ReferenceError",
+  "message": "Uncaught ReferenceError: iconBtnStyle is not defined",
+  "source": "../../node_modules/@tensorflow/tfjs-core/dist/tf-core.esm.js",
+  "position": "17:136762",
+  "stack": "ReferenceError: iconBtnStyle is not defined\n    at default (http://localhost:3001/modules/main/canvas-v.tsx?t=1746795867617:195:63)\n    at renderWithHooks (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:11548:26)\n    at mountIndeterminateComponent (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:14926:21)\n    at beginWork (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:15914:22)\n    at HTMLUnknownElement.callCallback2 (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:3674:22)\n    at Object.invokeGuardedCallbackDev (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:3699:24)\n    at invokeGuardedCallback (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:3733:39)\n    at beginWork$1 (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:19765:15)\n    at performUnitOfWork (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:19198:20)\n    at workLoopSync (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:19137:13)"
+},
+{
+  "time": "Fri, 09 May 2025 13:11:28 GMT",
+  "type": "global",
+  "name": "ReferenceError",
+  "message": "Uncaught ReferenceError: poi is not defined",
+  "source": "../../node_modules/@tensorflow/tfjs-core/dist/tf-core.esm.js",
+  "position": "17:136030",
+  "stack": "ReferenceError: poi is not defined\n    at default (http://localhost:3001/modules/main/canvas-v.tsx?t=1746796287058:164:5)\n    at renderWithHooks (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:11548:26)\n    at mountIndeterminateComponent (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:14926:21)\n    at beginWork (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:15914:22)\n    at HTMLUnknownElement.callCallback2 (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:3674:22)\n    at Object.invokeGuardedCallbackDev (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:3699:24)\n    at invokeGuardedCallback (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:3733:39)\n    at beginWork$1 (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:19765:15)\n    at performUnitOfWork (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:19198:20)\n    at workLoopSync (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:19137:13)"
+},
+{
+  "time": "Fri, 09 May 2025 13:11:29 GMT",
+  "type": "react",
+  "name": "ReferenceError",
+  "message": "poi is not defined",
+  "stack": "\n    at default (http://localhost:3001/modules/main/canvas-v.tsx?t=1746796287058:12:27)\n    at div\n    at div\n    at div\n    at default (http://localhost:3001/modules/main/index.tsx?t=1746796287058:17:27)\n    at RenderedRoute (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/react-router-dom.js?v=65da1ba4:5373:26)\n    at Routes (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/react-router-dom.js?v=65da1ba4:6103:3)\n    at Router (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/react-router-dom.js?v=65da1ba4:6046:13)\n    at BrowserRouter (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/react-router-dom.js?v=65da1ba4:8073:3)\n    at div\n    at MantineThemeProvider (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/@mantine_core.js?v=65da1ba4:4209:3)\n    at MantineProvider (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/@mantine_core.js?v=65da1ba4:4711:3)\n    at ErrorBoundary (http://localhost:3001/component/error.tsx:5:5)\n    at App (http://localhost:3001/index.tsx:43:17)"
+},
+{
+  "time": "Fri, 09 May 2025 13:11:29 GMT",
+  "type": "global",
+  "name": "ReferenceError",
+  "message": "Uncaught ReferenceError: poi is not defined",
+  "source": "../../node_modules/@tensorflow/tfjs-core/dist/tf-core.esm.js",
+  "position": "17:136030",
+  "stack": "ReferenceError: poi is not defined\n    at default (http://localhost:3001/modules/main/canvas-v.tsx?t=1746796287058:164:5)\n    at renderWithHooks (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:11548:26)\n    at mountIndeterminateComponent (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:14926:21)\n    at beginWork (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:15914:22)\n    at HTMLUnknownElement.callCallback2 (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:3674:22)\n    at Object.invokeGuardedCallbackDev (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:3699:24)\n    at invokeGuardedCallback (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:3733:39)\n    at beginWork$1 (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:19765:15)\n    at performUnitOfWork (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:19198:20)\n    at workLoopSync (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:19137:13)"
+},
+{
+  "time": "Fri, 09 May 2025 13:17:59 GMT",
+  "type": "global",
+  "name": "ReferenceError",
+  "message": "Uncaught ReferenceError: zIndex is not defined",
+  "source": "../../node_modules/@tensorflow/tfjs-core/dist/tf-core.esm.js",
+  "position": "17:135819",
+  "stack": "ReferenceError: zIndex is not defined\n    at default (http://localhost:3001/modules/main/canvas-v.tsx?t=1746796678894:152:117)\n    at renderWithHooks (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:11548:26)\n    at mountIndeterminateComponent (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:14926:21)\n    at beginWork (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:15914:22)\n    at HTMLUnknownElement.callCallback2 (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:3674:22)\n    at Object.invokeGuardedCallbackDev (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:3699:24)\n    at invokeGuardedCallback (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:3733:39)\n    at beginWork$1 (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:19765:15)\n    at performUnitOfWork (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:19198:20)\n    at workLoopSync (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:19137:13)"
+},
+{
+  "time": "Fri, 09 May 2025 13:18:00 GMT",
+  "type": "react",
+  "name": "ReferenceError",
+  "message": "zIndex is not defined",
+  "stack": "\n    at default (http://localhost:3001/modules/main/canvas-v.tsx?t=1746796678894:12:27)\n    at div\n    at div\n    at div\n    at default (http://localhost:3001/modules/main/index.tsx?t=1746796678894:17:27)\n    at RenderedRoute (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/react-router-dom.js?v=65da1ba4:5373:26)\n    at Routes (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/react-router-dom.js?v=65da1ba4:6103:3)\n    at Router (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/react-router-dom.js?v=65da1ba4:6046:13)\n    at BrowserRouter (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/react-router-dom.js?v=65da1ba4:8073:3)\n    at div\n    at MantineThemeProvider (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/@mantine_core.js?v=65da1ba4:4209:3)\n    at MantineProvider (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/@mantine_core.js?v=65da1ba4:4711:3)\n    at ErrorBoundary (http://localhost:3001/component/error.tsx:5:5)\n    at App (http://localhost:3001/index.tsx:43:17)"
+},
+{
+  "time": "Fri, 09 May 2025 13:17:59 GMT",
+  "type": "global",
+  "name": "ReferenceError",
+  "message": "Uncaught ReferenceError: zIndex is not defined",
+  "source": "../../node_modules/@tensorflow/tfjs-core/dist/tf-core.esm.js",
+  "position": "17:135819",
+  "stack": "ReferenceError: zIndex is not defined\n    at default (http://localhost:3001/modules/main/canvas-v.tsx?t=1746796678894:152:117)\n    at renderWithHooks (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:11548:26)\n    at mountIndeterminateComponent (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:14926:21)\n    at beginWork (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:15914:22)\n    at HTMLUnknownElement.callCallback2 (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:3674:22)\n    at Object.invokeGuardedCallbackDev (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:3699:24)\n    at invokeGuardedCallback (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:3733:39)\n    at beginWork$1 (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:19765:15)\n    at performUnitOfWork (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:19198:20)\n    at workLoopSync (http://localhost:3001/@fs/C:/Users/pigso/Desktop/video/node_modules/.vite/deps/chunk-UDYA5IEK.js?v=65da1ba4:19137:13)"
+},
+{
+  "time": "Fri, 09 May 2025 13:20:22 GMT",
+  "type": "global",
+  "name": "ReferenceError",
+  "message": "Uncaught ReferenceError: peerId is not defined",
+  "source": "../../node_modules/@tensorflow/tfjs-core/dist/tf-core.esm.js",
+  "position": "17:141467",
+  "stack": "ReferenceError: peerId is not defined\n    at http://localhost:3001/index.tsx:294:18\n    at http://localhost:3001/@vite/client:582:16"
+},
+{
+  "time": "Fri, 09 May 2025 13:37:33 GMT",
+  "type": "global",
+  "name": "ReferenceError",
+  "message": "Uncaught ReferenceError: peerId is not defined",
+  "source": "../../node_modules/@tensorflow/tfjs-core/dist/tf-core.esm.js",
+  "position": "17:141467",
+  "stack": "ReferenceError: peerId is not defined\n    at http://localhost:3001/index.tsx:294:18\n    at http://localhost:3001/@vite/client:582:16"
+},
+{
+  "time": "Fri, 09 May 2025 13:43:25 GMT",
+  "type": "global",
+  "name": "ReferenceError",
+  "message": "Uncaught ReferenceError: peerId is not defined",
+  "source": "../../node_modules/@tensorflow/tfjs-core/dist/tf-core.esm.js",
+  "position": "17:141467",
+  "stack": "ReferenceError: peerId is not defined\n    at http://localhost:3001/index.tsx:294:18\n    at http://localhost:3001/@vite/client:582:16"
+},

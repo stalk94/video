@@ -10,7 +10,12 @@
         "node_modules": true,
         "package-lock.json": true,
         "server/db.js": true,
-        "uploads": true
+        "uploads": true,
+        "services/dom.js": true,
+        "src/models": true,
+        "src/temp": true,
+        "src\\lib/dataList.jsx": true,
+        "src\\lib/list.jsx": true
     },
     "explorerExclude.backup": {}
 }

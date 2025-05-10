@@ -11,6 +11,7 @@
     max-height: none;
     min-height: 50px;
     min-width: 50px;
+    pointer-events: auto;
 }
 .buttonLike {
     border: 1px solid rgba(0, 0, 0, 0.2);
@@ -38,6 +39,22 @@
     backgroundColor: #2b253a7a;
 }
 
+.icon-button {
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    padding: 8px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s ease-in-out;
+}
+
+.icon-button:hover {
+    opacity: 0.8;
+}
 
 .userButton {
     padding: 0;

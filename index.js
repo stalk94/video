@@ -51,7 +51,14 @@ app.get("/", (req, res)=> {
 app.post("/reg", (req, res)=> {
     if(scheme.data.login.test(req.body.login) && scheme.data.password.test(req.body.password)) {
         if(req.body.sex === 'm' || req.body.sex === 'fem') {
-            registration(req.body.login, req.body.password, req.body.sex, req.body.ipData, req.body.ref).then((data)=> {
+            registration(
+                req.body.login, 
+                req.body.password, 
+                req.body.sex, 
+                req.body.ipData, 
+                req.body.email,
+                req.body.ref
+            ).then((data)=> {
                 res.send(data);
             });
         }

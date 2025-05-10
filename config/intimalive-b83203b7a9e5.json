@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "intimalive",
+  "private_key_id": "b83203b7a9e549bc53f61f07e719cab622c4a5ac",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCiX/opdHm9Mhrm\nY5qcZFpy7R8JwG0gR2eOglKCtI5ECm2WK4vw4DsSYKFoW5mNntXivrrupQ/DYMCq\nRm0ySQB7Db5ouZiF5UAz65UYtPSjcAp683iRTaHMAYEQff3n9iMExeH2sV41NJvC\n2cwcD/ynmfokvOeHFulphk1M5BrUR8D2vhbyRnMLH7zH7l6zksBnzrtjpkFyS3CX\nSjKwrqOqHXqbmRW6YNlmSB9uo5/ohl3NJHqzOMYa3wcYVmOXr7XWFTjDh/R7WHWJ\niq8Ti9hg37k3aXKC+7bAkk8iUbdAcFjBb7x7G2ODetYFH5OHl23eGpV9vuPotbo4\nFocyeLJ1AgMBAAECggEAEyA5/7sMAeiOeZe+5O//JW1fzA7B69ztSkB4hpPM9B/E\nU71yYN+QpbQDHx83AZL1f51WuHhx2GIjn4rnHtaxe00doglGeXMM8nCr4bqi3EN8\nwInAKGFcDwMYWEB28WUxL8U9PgkbXyoAtN1hqOaLLJS6/avQm71rpfXfUhDGRj2z\nYri1wZxe1XaHz3yI67eR2+1jAGVnOQ9+OcQ7qbYLXMrC8VjsCXt/0WNB9LYyMox9\npLZ3HlUuK6HXHWet45p6lSBQxrKa1Um/ll8CCrGPl1ikCIJevNMrhS0ZL4o0BMei\nSEDu0/ISXoQmbckVoKD17zMW89lNLtSqkJD3RZZPawKBgQDS1cmyuZABIkKpP520\ntN6oXDhgDyQHgy+AxnCM5g6wZbOGhM2jNboFtMsC1TJdrTH42VD0dOxrdApoR/Du\nSVmsiV0HvB/h0Bj3gwBeyiDmbBcmBrbf+TqoZi1EKyxsRCdc95Gnco0XXpkRIDqz\nnkN+2klewJmac/5l8lbSc1a8CwKBgQDFKKDwKGRzrDrePUXbJn/G8iBy6oHOzYqO\n7BQENS+92PIg6+c1WkS4s9t7R7Ut2FlhBBKKDBR1SaBQgjSRCYtW3SnPdrAq8phS\nqUiOAzmwYUBQKc2KycLm2EKTII2Wf2fW5hC4EMzU/MEbCVsnDho6dHQrrlz7ldnJ\n7R7OPzzbfwKBgQCCl63RqKMMML59u0viLM5mFolM5tP4W0fHSiNZAv9CQByNTCFb\n4OGSu0OsQ4ZpA+iaLXG5mdr/S+dOZJFV59VFy+f17I8K/i0Y0uodzLHISFemVC5e\nWS/+MxwCx4NCpIyFR0vPHmNKgGvrcb0qmPNR1b/wkvgR9Zs0ZoFk5dBptQKBgEDM\nCJDFhbYqnbJayvGqpoYZH6cFAaKZFPfCCRYU8NrhSTqerX9wanOV0QWkXJxzpXRo\nJTuvmq2tg/3RvTsJuvzSdSJVLLMAxiUss8bQso4QeFWgV4hMpTy/SKoYIdCbkOIk\n/Mux4dACPekH2yhrzxz1FxUgGjkpV8mwn9ZDHFo7AoGAOjBx0IwS8qIMalN8Zs72\nZ3k7MQi1h5XhXTox79QeiIZPwDJQY4NuN+23+dLGvwSC729Enu7apWjiLfZcaz/O\nZWTJP1EkJ8HbJrD11Mlj462InCDURHrWCsdbjz1HIdsqvliYSXSd5dmEAd3RtTF/\n3Tru8W9FJSWQVMPTMMZzl/I=\n-----END PRIVATE KEY-----\n",
+  "client_email": "analitic@intimalive.iam.gserviceaccount.com",
+  "client_id": "108362939801895227591",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/analitic%40intimalive.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}

@@ -148,12 +148,13 @@ const online = {
 }
 
 
-const registration = async function(login, password, sex, ipData, ref) {
+const registration = async function(login, password, sex, ipData, email, ref) {
     if(await db.has("USERS." + login)) return { error: "login is taken" };
     else {
         const user = new User(login, setPasswordHash(password));
         user.sex = sex;
 
+        if(email) user.email = email;
         if(ipData) user.info = ipData;
         if(ref) user.ref = ref; 
 

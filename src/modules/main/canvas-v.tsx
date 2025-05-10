@@ -8,7 +8,7 @@ import { Results, FaceMesh,
     LandmarkConnectionArray, NormalizedLandmarkList, NormalizedLandmark
 } from "@mediapipe/face_mesh";
 import { errorMedia, getCoordinates } from "../../function";
-
+import { FaMicrophoneSlash, FaVolumeMute, FaMicrophone, FaVolumeUp, FaSyncAlt } from 'react-icons/fa';
 
 
 //////////////////////////////////////////////////////////
@@ -23,9 +23,15 @@ let isRunning = false;
 //////////////////////////////////////////////////////////
 
 
+
 export default function({ setStart }) {
     const [mod, setMod] = React.useState<0|1|2>(0);
+    const [micOn, setMicOn] = React.useState(true);
+    const [volOn, setVolOn] = React.useState(true);
+    const [videoDevices, setVideoDevices] = React.useState<MediaDeviceInfo[]>([]);
+    const [currentDeviceIndex, setCurrentDeviceIndex] = React.useState(0);
     const videoPreviewRef = React.useRef<HTMLVideoElement>(null);
+
 
     const stopFaceMesh = async()=> {
         if(faceMesh) {
@@ -174,8 +180,49 @@ export default function({ setStart }) {
         processVideo(myVideo);
         setMod(1);
     }
+    // обработчик микрофона, громкости и камеры
+    const handlerSwitchInputs =(type: 'mic'|'volume')=> {
+        // отключаем/включаем микрофон
+        if(type === 'mic') {
+            const newMicState = !micOn;
+            setMicOn(newMicState);
+
+            if (globalThis.mediaStream) {
+                globalThis.mediaStream.getAudioTracks().forEach((track) => {
+                    track.enabled = newMicState;
+                });
+            }
+        }
+        // отключаем/включаем звук
+        else if(type === 'volume') {
+            const newVolume = !volOn;
+            setVolOn(newVolume);
+            const ovner: HTMLVideoElement = document.querySelector('.ovnerVideo');
+
+            ovner.volume = newVolume ? 1 : 0;
+        } 
+    }
+    // ! возмоно надо сохранять в localstorage
+    const switchCamera = () => {
+        const nextIndex = (currentDeviceIndex + 1) % videoDevices.length;
+        setCurrentDeviceIndex(nextIndex);
+
+        const nextDeviceId = videoDevices[nextIndex]?.deviceId;
+        if (!nextDeviceId) return;
+
+        // Обновляем глобальный конфиг
+        globalThis.creditionals.video = { deviceId: { exact: nextDeviceId } };
+
+        // Перезапускаем стрим
+        handlerSwitchMediaStream({
+            reason: () => console.log('Camera switched'),
+            reject: () => console.log('Camera switch error'),
+        });
+    }
+
 
     React.useEffect(()=> {
+        // слушаем событие смены медиа стрима
         EVENT.on('switchMediaStream', handlerSwitchMediaStream);
         EVENT.on('startStream', createMyMediaStream);
         myVideo.addEventListener('play', handlerPlay);
@@ -194,29 +241,62 @@ export default function({ setStart }) {
             }
         }
     }, []);
-    
+    //? составит список всех устройств ввода (камера)
+    React.useEffect(() => {
+        navigator.mediaDevices.enumerateDevices().then((devices) => {
+            const videos = devices.filter((d) => d.kind === 'videoinput');
+            setVideoDevices(videos);
+        });
+    }, []);
+
 
     return(
-        <React.Fragment>
-            <Button className={`p-button-rounded p-button-text ${mod===2 && 'p-button-secondary'} ${mod===1 && 'p-button-success'}`}
+        <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+            <div style={{
+                position: 'absolute',
+                bottom: 0,
+                zIndex: 666,
+                left: '50%',
+                transform: 'translateX(-50%)',
+                background: 'rgba(29, 29, 73, 0.545)',
+                padding: '0px 12px',
+                borderRadius: 20,
+                display: 'flex',
+                gap: 5,
+                alignItems: 'center',
+                pointerEvents: 'auto',
+            }}>
+                <button className="icon-button" onClick={() => handlerSwitchInputs('mic')}>
+                    {micOn ? <FaMicrophone size={20} color="#ccc" /> : <FaMicrophoneSlash size={20} color="#ccc" />}
+                </button>
+                <button className="icon-button" onClick={() => handlerSwitchInputs('volume')}>
+                    {volOn ? <FaVolumeUp size={20} color="#ccc" /> : <FaVolumeMute size={20} color="#ccc" />}
+                </button>
+                <button className="icon-button" onClick={switchCamera}>
+                    <FaSyncAlt size={17} color="#ccc" />
+                </button>
+            </div>
+
+            {/* превью */}
+            <video ref={videoPreviewRef} 
+                id='myVideo'
+                playsInline
+                controls={false}
+                autoPlay={true}
+            />
+        </div>
+    );
+}
+
+
+/**
+ * <Button className={`p-button-rounded p-button-text ${mod===2 && 'p-button-secondary'} ${mod===1 && 'p-button-success'}`}
                 icon={`pi ${mod===0 && 'pi-times'} ${mod===2 && 'pi-eye'} ${mod===1 && 'pi-eye-slash'}`}
                 style={{position:'absolute', zIndex:'6'}}
                 disabled={mod===0 ? true : false}
                 onClick={()=> handlerSwitchRender(mask ? false : true)}
             />
-            <video ref={videoPreviewRef} 
-                id='myVideo'
-                playsInline
-                controls={false}
-                width={'100%'}
-                height={'100%'}
-                autoPlay={true}
-            />
-        </React.Fragment>
-    );
-}
-
-
+ */
 /**
  * { mask 
                 ? <canvas id='myVideoCanvas'

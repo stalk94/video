@@ -106,9 +106,11 @@ footer {
     height: 100%;
 }
 #myVideo {
-    -o-object-fit: fill;
-    object-fit: fill;
-    display: inline-block;
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    display: block;
+    z-index: 2;
 }
 
 
@@ -121,6 +123,7 @@ footer {
     z-index: 6;
     top: 89%;
     width: 100%;
+    pointer-events: none;
 }
 .RightPanelButtons {
     position: absolute;

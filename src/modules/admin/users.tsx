@@ -109,9 +109,9 @@ export default function() {
                 />
             }
             <DataTable 
-                lazy
-                scrollable
-                virtualScrollerOptions={{ itemSize: 10 }}
+                //lazy
+                //scrollable
+                //virtualScrollerOptions={{ itemSize: 10 }}
                 scrollHeight="78vh"
                 value={useFiltre(login)}
                 header={
