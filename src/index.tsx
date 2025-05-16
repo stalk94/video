@@ -117,7 +117,7 @@ function App() {
         // токена нет в хранилище
         else setView('load');
     }
-    // прием входящего
+    // LINK - прием входящего
     const callanswer =(call: MediaConnection)=> {
         console.log('📞 CALL ANSWER!!!');
         const ovnerVideo: HTMLVideoElement = document.querySelector('#ovnerVideo');
@@ -197,7 +197,7 @@ function App() {
                 category: 'Основное'
             });
         });
-        // настройки изменены
+        // применены измненения настроек
         EVENT.on('inputChange', ()=> {
             
         });

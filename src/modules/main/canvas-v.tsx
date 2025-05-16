@@ -52,6 +52,7 @@ export default function({ setStart }) {
             reject: ()=> console.error('error toogle preview') 
         });
     }
+    
     // смена настроек ввода
     const handlerSwitchMediaStream =(cfg: { reason: ()=> void, reject: ()=> void })=> {
         navigator.mediaDevices.getUserMedia(globalThis.creditionals)
@@ -202,7 +203,7 @@ export default function({ setStart }) {
             ovner.volume = newVolume ? 1 : 0;
         } 
     }
-    // ! возмоно надо сохранять в localstorage
+    // ! если будет не валидное устройство то откат будет на предыдушее
     const switchCamera = () => {
         const nextIndex = (currentDeviceIndex + 1) % videoDevices.length;
         setCurrentDeviceIndex(nextIndex);

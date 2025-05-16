@@ -1,5 +1,5 @@
 .AdminBase {
-    background: rgb(199, 130, 214);
+    background: #2b2b2b;
     width: 100vw;
     height: 100vh;
     z-index: 2;
@@ -7,7 +7,7 @@
 }
 
 .TabMenu {
-    background-color: rgba(117, 117, 117, 0.5);
+    background-color: rgb(21, 21, 21);
     border-bottom: 1px solid rgb(31, 30, 30);
     box-shadow: 0px 3px 3px rgba(2, 2, 2, 0.304);
     padding: 15px;

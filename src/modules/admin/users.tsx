@@ -1,9 +1,11 @@
 import { UserDataState } from "../../global.d.ts";
 import React from 'react';
+import * as XLSX from 'xlsx';
 import { EVENT, send } from "../../lib/engine";
 import ModerateUser from "./video-moderate";
 import { Checkbox } from 'primereact/checkbox';
-import { DataTable } from 'primereact/datatable';
+//import { DataTable } from 'primereact/datatable';
+import DataTable from './data-table';
 import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
@@ -11,9 +13,11 @@ import { InputNumber } from 'primereact/inputnumber';
 import { IoMdFemale, IoMdMale } from "react-icons/io";
 import { WiMoonAltNew } from "react-icons/wi";
 import { useDidMount } from 'rooks';
+import { FaFileExport } from "react-icons/fa";
 
 
 
+// ! надо сделать либо кэширование данных либо запрос частями (lazy load)
 export default function() {
     const [login, setLogin] = React.useState<string>();
     const [country, setCountry] = React.useState<string>();
@@ -21,6 +25,22 @@ export default function() {
     const [viewModeratePanel, setViewModeratePanel] = React.useState();
     const [products, setProducts] = React.useState<UserDataState[] | []>([]);
 
+
+    const exportUsers = () => {
+        const rows = products
+            .filter(user => !!user.googleData?.email) // фильтрация по наличию email
+            .map(user => ({
+                sex: user.sex,
+                login: user.login,
+                email: user.googleData!.email,
+            }));
+
+        const worksheet = XLSX.utils.json_to_sheet(rows);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Users');
+
+        XLSX.writeFile(workbook, 'users.xlsx');
+    }
     const chek =(userData: UserDataState)=> {
         if(userData.googleData) {
             return `${userData.googleData.name} ${userData.googleData.familyName}`;
@@ -99,6 +119,7 @@ export default function() {
     });
 
 
+
     return(
         <div className='AdminBase'>
             { viewModeratePanel &&
@@ -112,14 +133,36 @@ export default function() {
                 //lazy
                 //scrollable
                 //virtualScrollerOptions={{ itemSize: 10 }}
-                scrollHeight="78vh"
+                
                 value={useFiltre(login)}
                 header={
-                    <InputText className='Filter'
-                        placeholder='Поиск'
-                        value={login}
-                        onChange={(e)=> setLogin(e.target.value)}
-                    />
+                    <div
+                        style={{display: 'flex', flexDirection:'row'}}
+                    >
+                        <InputText 
+                            style={{height: 38}}
+                            className='Filter'
+                            placeholder='Поиск'
+                            value={login}
+                            onChange={(e)=> setLogin(e.target.value)}
+                        />
+                        {/* вывод количества по sex */}
+                        <div style={{ margin: '10px 10%' }}>
+                            👨 Мужчин: {products.filter(user => user.sex === 'm').length} &nbsp; 
+                            | &nbsp; 👩 Женщин: {products.filter(user => user.sex === 'fem').length}
+                        </div>
+
+                        <div style={{marginLeft: 'auto'}}>
+                            <Button
+                                style={{height: 38}}
+                                className="p-button-outlined"
+                                onClick={exportUsers}
+                            >
+                                <FaFileExport />
+                                XSL
+                            </Button>
+                        </div>
+                    </div>
                 }
             >
                 <Column field="avatar" 
@@ -130,7 +173,7 @@ export default function() {
                         />
                     }
                     body={(data: UserDataState)=>
-                        <div>
+                        <div style={{ position: 'relative', display: 'inline-block' }}>
                             { data.isOnline && <WiMoonAltNew className="OnlineIcon" style={{color:'green',position:'absolute'}}/> }
                             <img style={{border:'1px solid #97919157',borderRadius:'5px',maxHeight:'85px'}}
                                 src={ useAvatar(data) }
