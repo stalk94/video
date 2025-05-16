@@ -279,3 +279,12 @@
   "position": "17:141467",
   "stack": "ReferenceError: peerId is not defined\n    at http://localhost:3001/index.tsx:294:18\n    at http://localhost:3001/@vite/client:582:16"
 },
+{
+  "time": "Fri, 16 May 2025 21:13:46 GMT",
+  "type": "global",
+  "name": "ReferenceError",
+  "message": "Uncaught ReferenceError: peerId is not defined",
+  "source": "../../node_modules/@tensorflow/tfjs-core/dist/tf-core.esm.js",
+  "position": "17:141467",
+  "stack": "ReferenceError: peerId is not defined\n    at http://localhost:3001/index.tsx:294:18\n    at http://localhost:3001/@vite/client:582:16"
+},

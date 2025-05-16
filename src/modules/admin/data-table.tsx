@@ -113,7 +113,7 @@ const StyledTableWrapper = styled.div<{
  */
 export default function DataTableCustom({ value, children, header, footer, fontSizeHead, styles, style, ...props }: DataTablePropsWrapper) {
     const tableRef = useRef<DataTable<DataTableValueArray>>(null);
-    const [scrollHeight, setScrollHeight] = useState<string>('auto');
+    const [scrollHeight, setScrollHeight] = useState<string>('100%');
     const [height, setHeight] = useState<number>();
     
     
@@ -167,7 +167,7 @@ export default function DataTableCustom({ value, children, header, footer, fontS
 
         const debouncedUpdate = () => {
             if (timeoutId) clearTimeout(timeoutId);
-            timeoutId = setTimeout(updateHeight, 60);
+            timeoutId = setTimeout(updateHeight, 2000);
         };
 
         const resizeObserver = new ResizeObserver(debouncedUpdate);
